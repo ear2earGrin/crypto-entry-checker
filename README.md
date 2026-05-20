@@ -1,16 +1,38 @@
-# React + Vite
+# Crypto Entry Checker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A deterministic pre-trade gating tool for crypto. Blocks bad trades; it does not find trades. Pulls Binance public data (no API keys), scores macro + BTC-led derivatives stress, sizes the position, and approximates liquidation. Built with React + Vite + lightweight-charts.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Execution-mode-aware checks (MARKET vs LIMIT) with timeframe-specific edge proximity and R:R thresholds.
+- Macro catalyst scoring (FOMC, CPI, NFP, etc.) with time-to-event and density multipliers.
+- BTC-led derivatives stress (funding rate, OI 24h delta, long/short ratio) from Binance futures.
+- Position sizing + liquidation approximation + stop-to-liq buffer enforcement.
+- Embedded chart with click-to-set Entry / Stop / Target.
+- One-click journal note for trade-log discipline.
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Build:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run build
+npm run preview
+```
+
+The Vite config proxies:
+- `/binance-spot` → `https://api.binance.com`
+- `/binance-fut` → `https://fapi.binance.com`
+
+## Docs
+
+- [Claude Code + TradingView MCP setup guide](./docs/CLAUDE_TRADINGVIEW_GUIDE.md) — optional power-user workflow for chart-aware AI technical analysis alongside this checker.
+
+## Disclaimer
+
+Analysis output is for educational use. Liquidation math is an approximation. Markets are risky — size accordingly.

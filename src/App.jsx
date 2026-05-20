@@ -837,6 +837,95 @@ export default function App() {
     alert("Copied to clipboard.");
   }
 
+  const claudePrompt = useMemo(() => {
+    if (!res) return "";
+    const m = res.metrics?.macro;
+    const d = res.metrics?.derivsScore;
+    const tfp = res.metrics?.tfp;
+    const sz = res.metrics?.sizing;
+    const symbol = binanceSymbol(f.asset, f.quote);
+
+    const activeMacro = m?.contributions?.length
+      ? m.contributions.map((c) => `${c.label} (${c.time})`).join(", ")
+      : "none";
+
+    const lines = [
+      "Act as an elite quantitative trader and technical analyst with full access to my TradingView environment via the TradingView MCP (tv_health_check).",
+      "",
+      "Below is the state of my pre-trade checker. Use it as ground truth for my intent, then validate or refute it against live chart structure.",
+      "",
+      "CONTEXT — proposed trade:",
+      `- Symbol: ${symbol}`,
+      `- Direction: ${f.direction}`,
+      `- Primary timeframe: ${f.timeframe} (bucket: ${tfp?.bucket || "-"}, min R:R ≈ ${tfp?.minRR ?? "-"})`,
+      `- Execution mode: ${f.executionMode}`,
+      `- Regime (user-tagged): ${f.regime}`,
+      `- Trigger: ${f.trigger}`,
+      `- Confirmation: ${f.confirmation}`,
+      `- Mental state: ${f.mental}`,
+      "",
+      "LEVELS:",
+      `- Intended entry: ${f.price || "-"}`,
+      `- Support: ${f.support || "-"}`,
+      `- Resistance: ${f.resistance || "-"}`,
+      `- Stop: ${f.stop || "-"}`,
+      `- Target: ${f.target || "-"}`,
+      `- Planned R:R: ${format(res.metrics?.rr, 2)}`,
+      "",
+      "SIZING / RISK:",
+      `- Equity: ${format(sz?.equityUSDT, 2)} USDT`,
+      `- Risk: ${format(sz?.riskUSDT, 2)} USDT (${format(sz?.riskPct, 2)}%)`,
+      `- Leverage: ${format(sz?.leverage, 0)}x`,
+      `- Qty: ${format(sz?.qty, 6)} ${f.asset}`,
+      `- Notional: ${format(sz?.notional, 2)} USDT`,
+      `- Liq (approx): ${format(sz?.liqPriceApprox, 2)}`,
+      `- Stop→Liq buffer: ${format(sz?.stopToLiqBufferPct, 2)}%`,
+      "",
+      "BTC-LED DERIVS CONTEXT:",
+      `- Funding: ${f.derivs.fundingRate !== null ? `${format(f.derivs.fundingRate * 100, 4)}%` : "n/a"}`,
+      `- OI 24h Δ: ${f.derivs.oiChange24hPct !== null ? `${format(f.derivs.oiChange24hPct, 2)}%` : "n/a"}`,
+      `- L/S ratio: ${f.derivs.longShortRatio !== null ? format(f.derivs.longShortRatio, 2) : "n/a"}`,
+      `- Stress level: ${d?.level || "-"}`,
+      "",
+      "MACRO:",
+      `- Level: ${m?.level || "-"} (score≈${format(m?.score, 2)})`,
+      `- Active events: ${activeMacro}`,
+      "",
+      `CHECKER VERDICT: ${res.verdict} (score ${res.score}/10)`,
+    ];
+
+    if (res.warnings?.length) {
+      lines.push("Checker warnings:");
+      res.warnings.forEach((w) => lines.push(`- ${w}`));
+    }
+
+    lines.push(
+      "",
+      "TASK:",
+      `1. Open ${symbol} on TradingView via MCP and analyze 5m, 15m, 1H, 4H, 1D.`,
+      "2. Validate or refute my entry, stop, and target against live structure, liquidity, and momentum.",
+      "3. Mark any liquidity pools / stop clusters / manipulation zones near my stop.",
+      "4. Check momentum and volume on the primary TF and one above.",
+      "5. Evaluate confluence across timeframes.",
+      "",
+      "Then deliver:",
+      "- A decisive verdict: AGREE, ADJUST, or REJECT.",
+      "- If ADJUST: exact alternative entry / stop / target with reasoning.",
+      "- Highest-probability setup right now (if different from mine).",
+      "- Invalidation point.",
+      "",
+      "Be decisive. Avoid generic statements. If no high-quality setup exists, say \"no trade\" and explain why.",
+    );
+
+    return lines.join("\n");
+  }, [f, res]);
+
+  async function copyClaudePrompt() {
+    if (!claudePrompt) return;
+    await navigator.clipboard.writeText(claudePrompt);
+    alert("Claude Code prompt copied. Paste into Claude Code with TradingView MCP running.");
+  }
+
   return (
     <div style={styles.page}>
       <div style={styles.header}>
@@ -1055,9 +1144,12 @@ export default function App() {
               <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>CHECKS</div>
               <ul style={{ marginTop: 8 }}>{res.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul>
 
-              <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 12 }}>
+              <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 12, flexWrap: "wrap" }}>
                 <button style={styles.btn} onClick={copyJournal} type="button">COPY JOURNAL NOTE</button>
-                <div style={{ opacity: 0.7, fontSize: 12 }}>(includes macro + derivs + sizing)</div>
+                <button style={styles.btn} onClick={copyClaudePrompt} type="button">COPY CLAUDE CODE PROMPT</button>
+                <div style={{ opacity: 0.7, fontSize: 12 }}>
+                  Journal logs the check; Claude prompt feeds the TradingView MCP analyst (see <code>docs/CLAUDE_TRADINGVIEW_GUIDE.md</code>).
+                </div>
               </div>
 
               <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>JOURNAL PREVIEW</div>
