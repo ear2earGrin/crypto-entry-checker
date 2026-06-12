@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Nav from './components/Nav.jsx'
 import LorePage from './pages/LorePage.jsx'
 import LoreArticle from './pages/LoreArticle.jsx'
+import Scanner from './pages/Scanner.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')).render(
       <Nav />
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/scanner" element={<Scanner />} />
         <Route path="/lore" element={<LorePage />} />
         <Route path="/lore/:slug" element={<LoreArticle />} />
       </Routes>
