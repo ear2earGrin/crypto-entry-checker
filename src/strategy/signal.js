@@ -28,6 +28,8 @@ function bbExtensionVeto(close, basis, upper, lower, sigmas) {
 export function computeSignal(dailyCandles, regimeState, params = SIGNAL_PARAMS) {
   const len = dailyCandles.length;
   const closes = dailyCandles.map((c) => c.close);
+  // regimeState may be a single state string or a per-bar array of states
+  const stateAt = Array.isArray(regimeState) ? (i) => regimeState[i] : () => regimeState;
 
   const entry = donchianCloses(closes, params.donchianEntry);
   const exit = donchianCloses(closes, params.donchianExit);
@@ -69,7 +71,7 @@ export function computeSignal(dailyCandles, regimeState, params = SIGNAL_PARAMS)
     let reason = "no breakout";
     let stop = null;
 
-    if (breakoutUp && regimeState === "LONG_OK") {
+    if (breakoutUp && stateAt(i) === "LONG_OK") {
       if (veto && veto.extendedUp) {
         action = "VETO";
         reason = "long breakout but price extended above upper BB band";
@@ -82,7 +84,7 @@ export function computeSignal(dailyCandles, regimeState, params = SIGNAL_PARAMS)
         action = "LONG";
         reason = `daily close ${close} broke 20-day high ${prevEntryUpper.toFixed(2)}`;
       }
-    } else if (breakoutDown && regimeState === "SHORT_OK") {
+    } else if (breakoutDown && stateAt(i) === "SHORT_OK") {
       if (veto && veto.extendedDown) {
         action = "VETO";
         reason = "short breakout but price extended below lower BB band";
@@ -97,7 +99,7 @@ export function computeSignal(dailyCandles, regimeState, params = SIGNAL_PARAMS)
       }
     } else if (breakoutUp || breakoutDown) {
       action = "NONE";
-      reason = `breakout against regime (${regimeState})`;
+      reason = `breakout against regime (${stateAt(i)})`;
     }
 
     series[i] = {

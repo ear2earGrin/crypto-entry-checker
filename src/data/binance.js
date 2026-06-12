@@ -58,6 +58,33 @@ export async function fetchKlines({ asset, quote = "USDT", timeframe, limit = 30
   return toCandles(raw);
 }
 
+export async function fetchKlinesRange({ asset, quote = "USDT", timeframe, startTime, endTime = Date.now() }) {
+  const symbol = binanceSymbol(asset, quote);
+  const interval = tfToBinanceInterval(timeframe);
+  const all = [];
+  let cursor = startTime;
+
+  // Binance caps klines at 1000 per request; page forward until endTime
+  for (let guard = 0; guard < 50; guard++) {
+    const url = `${SPOT}/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&startTime=${cursor}&limit=1000`;
+    const raw = await fetchJson(url);
+    const batch = toCandles(raw);
+    if (batch.length === 0) break;
+
+    all.push(...batch);
+    const lastCloseMs = (batch[batch.length - 1].closeTime || batch[batch.length - 1].time) * 1000;
+    if (batch.length < 1000 || lastCloseMs >= endTime) break;
+    cursor = lastCloseMs + 1;
+  }
+
+  const seen = new Set();
+  return all.filter((c) => {
+    if (seen.has(c.time)) return false;
+    seen.add(c.time);
+    return true;
+  });
+}
+
 export function dropUnclosedCandle(candles) {
   if (candles.length === 0) return candles;
   const now = Math.floor(Date.now() / 1000);

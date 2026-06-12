@@ -21,6 +21,7 @@ function findLastClosedWeeklyIdx(weekly, t) {
 }
 
 export function backtestOne({
+  asset = "ASSET",
   weekly,
   daily,
   startEquity = 100000,
@@ -43,15 +44,7 @@ export function backtestOne({
     dailyRegime[i] = wIdx >= 0 ? regime.series[wIdx]?.state || "WARMUP" : "WARMUP";
   }
 
-  const signalSeries = (() => {
-    const out = new Array(daily.length).fill(null);
-    for (let i = 0; i < daily.length; i++) {
-      if (dailyRegime[i] === "WARMUP") continue;
-      const s = computeSignal(daily.slice(0, i + 1), dailyRegime[i], signalParams);
-      out[i] = s.latest;
-    }
-    return out;
-  })();
+  const signalSeries = computeSignal(daily, dailyRegime, signalParams).series;
 
   for (let i = 0; i < daily.length; i++) {
     const bar = daily[i];
@@ -129,7 +122,7 @@ export function backtestOne({
         });
         if (sz.ok && Number.isFinite(sz.qty) && sz.qty > 0) {
           pos = {
-            asset: "ASSET",
+            asset,
             direction: sig.action,
             entry: sig.close,
             initialStop: sig.stop,
