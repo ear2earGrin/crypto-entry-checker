@@ -10,6 +10,7 @@ If you're a person picking this up after a break, or an AI assistant continuing 
 1. **[docs/STRATEGY-SPEC.md](docs/STRATEGY-SPEC.md)** — the rules, in detail. Single source of truth. If code conflicts with this doc, the code has a bug.
 2. **[docs/AGENT-HANDOFF.md](docs/AGENT-HANDOFF.md)** — instructions for the next AI assistant. Captures design rationale, known traps, and what's deliberately *not* implemented.
 3. **[docs/ROUTINE.md](docs/ROUTINE.md)** — the owner's daily / weekly checklist. Mechanical trading only works if you mechanically run it.
+4. **[docs/INTEGRATION-INTO-PM-BRIEF.md](docs/INTEGRATION-INTO-PM-BRIEF.md)** — porting guide for embedding this app as a subsection of pm-brief.com (or any other host app). Includes framework-specific adaptations and the CORS-proxy gotcha.
 
 ## Routes
 
