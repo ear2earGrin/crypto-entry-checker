@@ -4,6 +4,7 @@ const NAV_LINKS = [
   { to: '/', label: 'CHECKER' },
   { to: '/scanner', label: 'SCANNER' },
   { to: '/backtest', label: 'BACKTEST' },
+  { to: '/log', label: 'TRADE LOG' },
   { to: '/lore', label: 'WORLD LORE' },
 ];
 
