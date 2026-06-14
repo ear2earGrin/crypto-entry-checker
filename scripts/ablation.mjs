@@ -68,13 +68,25 @@ const VARIANTS = [
 
 // Right-tail capture: what share of gross profit came from the top-5 winners, and
 // the single biggest R-multiple. Trend systems must keep the big winners.
-function rightTail(trades) {
+function rightTail(trades, startEquity) {
   const wins = trades.filter((t) => t.pnl > 0).sort((a, b) => b.pnl - a.pnl);
   const grossProfit = wins.reduce((s, t) => s + t.pnl, 0);
   const top5 = wins.slice(0, 5).reduce((s, t) => s + t.pnl, 0);
   const top5Share = grossProfit > 0 ? (top5 / grossProfit) * 100 : 0;
   const biggestR = trades.reduce((m, t) => Math.max(m, t.rMultiple || -Infinity), -Infinity);
-  return { top5Share, biggestR: Number.isFinite(biggestR) ? biggestR : 0 };
+
+  // Net P&L if you had MISSED the single best and the best-5 trades. If a variant's
+  // edge evaporates without its top handful of trades, it is fragile, not robust.
+  const totalNet = trades.reduce((s, t) => s + t.pnl, 0);
+  const sorted = trades.slice().sort((a, b) => b.pnl - a.pnl);
+  const exTop1 = totalNet - (sorted[0]?.pnl || 0);
+  const exTop5 = totalNet - sorted.slice(0, 5).reduce((s, t) => s + t.pnl, 0);
+  return {
+    top5Share,
+    biggestR: Number.isFinite(biggestR) ? biggestR : 0,
+    retExTop1Pct: (exTop1 / startEquity) * 100,
+    retExTop5Pct: (exTop5 / startEquity) * 100,
+  };
 }
 
 async function main() {
@@ -117,14 +129,14 @@ async function main() {
       eq += bt.finalEquity - args.equity;
     }
     const m = computeMetrics({ trades: allTrades, equityCurve: curve, startEquity: args.equity });
-    const rt = rightTail(allTrades);
+    const rt = rightTail(allTrades, args.equity);
     rows.push({ name: v.name, m, rt });
   }
 
-  const header = "| Variant | Trades | Win% | Exp(R) | PF | Top5 winners share | Biggest R |";
-  const sep = "|---|---|---|---|---|---|---|";
+  const header = "| Variant | Trades | Win% | Exp(R) | PF | Top5 share | Biggest R | Ret ex-top1 | Ret ex-top5 |";
+  const sep = "|---|---|---|---|---|---|---|---|---|";
   const body = rows.map((r) =>
-    `| ${r.name} | ${r.m.numTrades} | ${pct(r.m.winRate * 100)} | ${f(r.m.expectancyR, 2)} | ${r.m.profitFactor === Infinity ? "∞" : f(r.m.profitFactor, 2)} | ${pct(r.rt.top5Share)} | ${f(r.rt.biggestR, 1)} |`,
+    `| ${r.name} | ${r.m.numTrades} | ${pct(r.m.winRate * 100)} | ${f(r.m.expectancyR, 2)} | ${r.m.profitFactor === Infinity ? "∞" : f(r.m.profitFactor, 2)} | ${pct(r.rt.top5Share)} | ${f(r.rt.biggestR, 1)} | ${pct(r.rt.retExTop1Pct)} | ${pct(r.rt.retExTop5Pct)} |`,
   );
 
   const md = [

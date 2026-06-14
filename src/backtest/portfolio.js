@@ -80,6 +80,7 @@ export function backtestPortfolio({
 
   let equity = startEquity;
   let openPositions = {};            // asset -> position
+  const pendingEntries = {};          // asset -> { action, stop } armed for next bar's open
   const trades = [];
   const recentlyStopped = [];         // [{ asset, time }]
   const equityCurve = [];
@@ -92,6 +93,30 @@ export function backtestPortfolio({
     if (t !== lastDay) {
       entriesToday = 0;
       lastDay = t;
+    }
+
+    // --- 0. Fill pending entries (armed by the PREVIOUS bar's signal) at this
+    // bar's open. A signal is only known at its close, so the fill happens on the
+    // next bar — never at the signal bar's own close.
+    for (const asset of Object.keys(pendingEntries)) {
+      if (openPositions[asset]) { delete pendingEntries[asset]; continue; }
+      const ps = perAsset[asset];
+      const idx = ps.barIdx.get(t);
+      if (idx === undefined) continue; // asset has no bar today; keep pending
+      const pe = pendingEntries[asset];
+      const bar = ps.daily[idx];
+      const side = pe.action === "LONG" ? "buy" : "sell";
+      const entryFill = slip(bar.open, side, slippagePct);
+      const sz = sizePosition({ equity, riskPct, entry: entryFill, stop: pe.stop, direction: pe.action });
+      if (sz.ok && Number.isFinite(sz.qty) && sz.qty > 0) {
+        openPositions[asset] = {
+          asset, direction: pe.action,
+          entry: entryFill, initialStop: pe.stop, stop: pe.stop,
+          qty: sz.qty, riskAmount: sz.riskDollar, riskPct,
+          entryTime: bar.time, entryIdx: idx,
+        };
+      }
+      delete pendingEntries[asset];
     }
 
     // --- 1. Update + check exits on open positions ---
@@ -159,10 +184,11 @@ export function backtestPortfolio({
       recentlyStopped.push({ asset, time: bar.time });
     }
 
-    // --- 2. Look for new entries (only if portfolio rules allow) ---
+    // --- 2. Arm new entries from THIS bar's signals (filled at next bar's open).
+    // Gating is applied now, at decision time; the fill happens on the next bar.
     const candidates = [];
     for (const asset of Object.keys(perAsset)) {
-      if (openPositions[asset]) continue;
+      if (openPositions[asset] || pendingEntries[asset]) continue;
       const ps = perAsset[asset];
       const idx = ps.barIdx.get(t);
       if (idx === undefined) continue;
@@ -184,35 +210,26 @@ export function backtestPortfolio({
     for (const cand of candidates) {
       if (entriesToday >= portfolioParams.maxEntriesPerDay) break;
 
-      const entryFill = slip(cand.sig.close, cand.sig.action === "LONG" ? "buy" : "sell", slippagePct);
-      const sz = sizePosition({
-        equity, riskPct,
-        entry: entryFill, stop: cand.sig.stop, direction: cand.sig.action,
-      });
-      if (!sz.ok || !Number.isFinite(sz.qty) || sz.qty <= 0) continue;
-
-      const openList = Object.entries(openPositions).map(([asset, p]) => ({
-        asset, direction: p.direction, riskPct: p.riskPct,
-      }));
+      // Concurrency/correlation gating counts both open positions AND already-armed
+      // pendings, so we never over-commit between arm and fill.
+      const committed = [
+        ...Object.entries(openPositions).map(([asset, p]) => ({ asset, direction: p.direction, riskPct: p.riskPct })),
+        ...Object.entries(pendingEntries).map(([asset, p]) => ({ asset, direction: p.action, riskPct })),
+      ];
       const stoppedRecent = recentlyStopped
         .filter((r) => (t - r.time) / 86400 < portfolioParams.reentryCooldownDays + 1)
         .map((r) => ({ asset: r.asset, daysSince: (t - r.time) / 86400 }));
 
       const allow = checkPortfolioAllows({
         candidate: { asset: cand.asset, direction: cand.sig.action, riskPct },
-        openPositions: openList,
+        openPositions: committed,
         recentlyStopped: stoppedRecent,
         todayEntries: entriesToday,
         params: portfolioParams,
       });
       if (!allow.allowed) continue;
 
-      openPositions[cand.asset] = {
-        asset: cand.asset, direction: cand.sig.action,
-        entry: entryFill, initialStop: cand.sig.stop, stop: cand.sig.stop,
-        qty: sz.qty, riskAmount: sz.riskDollar, riskPct,
-        entryTime: cand.bar.time, entryIdx: cand.idx,
-      };
+      pendingEntries[cand.asset] = { action: cand.sig.action, stop: cand.sig.stop };
       entriesToday++;
     }
 

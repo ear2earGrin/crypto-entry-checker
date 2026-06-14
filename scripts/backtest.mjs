@@ -100,6 +100,24 @@ async function main() {
   const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
   const portMetrics = computeMetrics(port);
 
+  // Realized (closed) vs forced END_OF_DATA: report them separately so an open
+  // winner isn't dressed up as a completed trade.
+  const realizedTrades = port.trades.filter((t) => t.exitReason !== "end of data");
+  const forcedClosed = port.trades.length - realizedTrades.length;
+  const realizedMetrics = computeMetrics({ trades: realizedTrades, equityCurve: port.equityCurve, startEquity: args.equity });
+
+  // Cost sensitivity: rerun the portfolio at 0 / expected / stressed slippage.
+  // A system that only survives the optimistic assumption has no real edge.
+  const scenarios = [
+    { name: "0 bps (diagnostic)", slip: 0 },
+    { name: `expected (${args.slip}%)`, slip: args.slip },
+    { name: `stressed (${(args.slip * 3).toFixed(2)}%)`, slip: args.slip * 3 },
+  ].map((s) => {
+    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip });
+    const m = computeMetrics(p);
+    return `| ${s.name} | ${m.numTrades} | ${f(m.expectancyR, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} |`;
+  });
+
   // walk-forward per asset
   const wfRows = [];
   for (const asset of loaded) {
@@ -120,6 +138,23 @@ async function main() {
     `- Universe: ${loaded.join(", ")}`,
     `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
     "",
+    "## Execution assumptions (read before trusting any number)",
+    "",
+    "```",
+    "Signal candles:    Binance spot, UTC daily / weekly",
+    "Weekly regime:     last FULLY COMPLETED weekly candle only (no partial week)",
+    "Donchian lookback: EXCLUDES the current signal candle (uses bars up to i-1)",
+    "Signal evaluation: at daily close",
+    "Entry fill:        NEXT bar's open + adverse slippage (never the signal close)",
+    "Exit fill:         next executable price, gap-aware (worse of stop vs open) + slippage",
+    `Fees:              ${args.fee}% round-trip`,
+    `Slippage:          ${args.slip}% per fill (see cost-sensitivity table)`,
+    "Same-bar order:    stop checked BEFORE regime-flip (pessimistic, deterministic)",
+    "Funding:           NOT modeled yet (perp funding over multi-day holds is excluded)",
+    "End-of-data:       open positions marked to market and tagged 'end of data',",
+    "                   reported separately from realized closed trades",
+    "```",
+    "",
     "## Single-asset results",
     "",
     "| Asset | Trades | Win% | Exp(R) | PF | Return% | MaxDD% | CAGR |",
@@ -135,6 +170,19 @@ async function main() {
     `- Total return: ${pct(portMetrics.totalReturnPct)}`,
     `- CAGR: ${pct(portMetrics.cagr)}`,
     `- Max drawdown: ${pct(portMetrics.maxDDPct)} over ${f(portMetrics.maxDDDays, 0)} days`,
+    "",
+    `Realized closed trades only (excluding ${forcedClosed} forced end-of-data closes): `
+      + `${realizedMetrics.numTrades} trades, win ${pct(realizedMetrics.winRate * 100)}, `
+      + `expectancy ${f(realizedMetrics.expectancyR, 2)}R, PF `
+      + `${realizedMetrics.profitFactor === Infinity ? "∞" : f(realizedMetrics.profitFactor, 2)}.`,
+    "",
+    "## Cost sensitivity (portfolio)",
+    "",
+    "If the edge only survives the optimistic row, it is not a real edge.",
+    "",
+    "| Slippage scenario | Trades | Exp(R) | Return% | MaxDD% |",
+    "|---|---|---|---|---|",
+    ...scenarios,
     "",
     "## Walk-forward (per asset, 2y in-sample / 6mo out-of-sample)",
     "",

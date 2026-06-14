@@ -46,6 +46,10 @@ export function backtestOne({
 
   let equity = startEquity;
   let pos = null;
+  // A signal is only KNOWN at the close of its bar, so the order is filled at the
+  // NEXT bar's open (plus slippage), never at the signal bar's own close. This slot
+  // carries a signal from bar i to be executed at bar i+1. Causality, not just cost.
+  let pendingEntry = null;
   const trades = [];
   const equityCurve = [];
   let dailyRegime = new Array(daily.length).fill("WARMUP");
@@ -60,6 +64,29 @@ export function backtestOne({
   for (let i = 0; i < daily.length; i++) {
     const bar = daily[i];
     const regimeState = dailyRegime[i];
+
+    // 1. Fill a pending entry from the previous bar's signal, at THIS bar's open.
+    if (!pos && pendingEntry) {
+      const side = pendingEntry.action === "LONG" ? "buy" : "sell";
+      const entryFill = slip(bar.open, side, slippagePct);
+      const sz = sizePosition({
+        equity, riskPct, entry: entryFill, stop: pendingEntry.stop, direction: pendingEntry.action,
+      });
+      if (sz.ok && Number.isFinite(sz.qty) && sz.qty > 0) {
+        pos = {
+          asset,
+          direction: pendingEntry.action,
+          entry: entryFill,
+          initialStop: pendingEntry.stop,
+          stop: pendingEntry.stop,
+          qty: sz.qty,
+          riskAmount: sz.riskDollar,
+          entryTime: bar.time,
+          entryIdx: i,
+        };
+      }
+      pendingEntry = null;
+    }
 
     if (pos) {
       if (i > 0) {
@@ -125,30 +152,11 @@ export function backtestOne({
       }
     }
 
-    if (!pos) {
+    // 3. If flat, arm an entry from THIS bar's signal to be filled NEXT bar's open.
+    if (!pos && !pendingEntry) {
       const sig = signalSeries[i];
       if (sig && (sig.action === "LONG" || sig.action === "SHORT")) {
-        const entryFill = slip(sig.close, sig.action === "LONG" ? "buy" : "sell", slippagePct);
-        const sz = sizePosition({
-          equity,
-          riskPct,
-          entry: entryFill,
-          stop: sig.stop,
-          direction: sig.action,
-        });
-        if (sz.ok && Number.isFinite(sz.qty) && sz.qty > 0) {
-          pos = {
-            asset,
-            direction: sig.action,
-            entry: entryFill,
-            initialStop: sig.stop,
-            stop: sig.stop,
-            qty: sz.qty,
-            riskAmount: sz.riskDollar,
-            entryTime: bar.time,
-            entryIdx: i,
-          };
-        }
+        pendingEntry = { action: sig.action, stop: sig.stop, signalIdx: i };
       }
     }
 
