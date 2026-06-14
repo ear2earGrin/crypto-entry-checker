@@ -33,97 +33,26 @@ import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { walkForward } from "../src/backtest/walkforward.js";
 import { computeMetrics } from "../src/backtest/metrics.js";
 import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
+import { UNIVERSE, loadAsset, synth, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPORTS_DIR = join(__dirname, "..", "reports");
 
-const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
-const BINANCE = "https://api.binance.com";
-
 // ---------- args ----------
 function parseArgs(argv) {
-  const a = { from: 2020, risk: 1, fee: 0.08, equity: 100000, asset: null, selftest: false };
+  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--selftest") a.selftest = true;
     else if (k === "--from") a.from = Number(argv[++i]);
     else if (k === "--risk") a.risk = Number(argv[++i]);
     else if (k === "--fee") a.fee = Number(argv[++i]);
+    else if (k === "--slip") a.slip = Number(argv[++i]);
     else if (k === "--equity") a.equity = Number(argv[++i]);
     else if (k === "--asset") a.asset = String(argv[++i]).toUpperCase();
   }
   return a;
 }
-
-// ---------- data ----------
-function toCandles(raw) {
-  return raw
-    .map((k) => ({
-      time: Math.floor(Number(k[0]) / 1000),
-      open: Number(k[1]),
-      high: Number(k[2]),
-      low: Number(k[3]),
-      close: Number(k[4]),
-      volume: Number(k[5]),
-      closeTime: Math.floor(Number(k[6]) / 1000),
-      takerBuyBase: Number(k[9]),
-    }))
-    .filter((c) => Number.isFinite(c.close));
-}
-
-async function fetchKlinesRange(symbol, interval, startMs, endMs = Date.now()) {
-  const all = [];
-  let cursor = startMs;
-  for (let guard = 0; guard < 80; guard++) {
-    const url = `${BINANCE}/api/v3/klines?symbol=${symbol}&interval=${interval}&startTime=${cursor}&limit=1000`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 120)}`);
-    const batch = toCandles(await res.json());
-    if (batch.length === 0) break;
-    all.push(...batch);
-    const lastMs = (batch[batch.length - 1].closeTime || batch[batch.length - 1].time) * 1000;
-    if (batch.length < 1000 || lastMs >= endMs) break;
-    cursor = lastMs + 1;
-  }
-  const seen = new Set();
-  return all.filter((c) => (seen.has(c.time) ? false : (seen.add(c.time), true)));
-}
-
-function dropUnclosed(candles) {
-  if (!candles.length) return candles;
-  const now = Math.floor(Date.now() / 1000);
-  const last = candles[candles.length - 1];
-  return last.closeTime && last.closeTime > now ? candles.slice(0, -1) : candles;
-}
-
-async function loadAsset(asset, fromYear) {
-  const symbol = `${asset}USDT`;
-  const start = Date.UTC(fromYear, 0, 1);
-  const weeklyStart = start - 55 * 7 * 86400 * 1000; // warm the 50W SMA
-  const [weekly, daily] = await Promise.all([
-    fetchKlinesRange(symbol, "1w", weeklyStart),
-    fetchKlinesRange(symbol, "1d", start),
-  ]);
-  return { weekly: dropUnclosed(weekly), daily: dropUnclosed(daily) };
-}
-
-// ---------- synthetic data for --selftest ----------
-function synth(asset, seed) {
-  const ONE_DAY = 86400, ONE_WEEK = ONE_DAY * 7;
-  const wn = 230, dn = 1500; // > 913 days so walk-forward produces folds in self-test
-  const wk = Array.from({ length: wn }, (_, i) => 100 + i * 2 + Math.sin(i / 4 + seed) * 9);
-  const dl = Array.from({ length: dn }, (_, i) => 100 + i * 0.3 + Math.sin(i / 12 + seed) * 13);
-  const t0 = Date.UTC(2020, 0, 1);
-  const mk = (arr, step, base) => arr.map((c, i) => ({
-    time: base + i * step, closeTime: base + (i + 1) * step - 1,
-    open: c, high: c * 1.01, low: c * 0.99, close: c, volume: 1000, takerBuyBase: 550,
-  }));
-  return { weekly: mk(wk, ONE_WEEK, t0), daily: mk(dl, ONE_DAY, t0) };
-}
-
-// ---------- formatting ----------
-const f = (n, d = 2) => (Number.isFinite(n) ? n.toLocaleString("en-US", { maximumFractionDigits: d }) : "-");
-const pct = (n, d = 1) => (Number.isFinite(n) ? `${n.toFixed(d)}%` : "-");
 
 function metricsRow(asset, m) {
   return `| ${asset} | ${m.numTrades} | ${pct(m.winRate * 100)} | ${f(m.expectancyR, 2)} | ${m.profitFactor === Infinity ? "∞" : f(m.profitFactor, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} | ${pct(m.cagr)} |`;
@@ -136,7 +65,7 @@ async function main() {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
   console.log(`\nBacktest harness — ${args.selftest ? "SELF-TEST (synthetic)" : "Binance data"}`);
-  console.log(`Universe: ${assets.join(", ")} | from ${args.from} | risk ${args.risk}% | fee ${args.fee}%\n`);
+  console.log(`Universe: ${assets.join(", ")} | from ${args.from} | risk ${args.risk}% | fee ${args.fee}% | slip ${args.slip}%\n`);
 
   const data = {};
   for (let i = 0; i < assets.length; i++) {
@@ -159,7 +88,7 @@ async function main() {
   const singleRows = [];
   const single = {};
   for (const asset of loaded) {
-    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee });
+    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
     const m = computeMetrics(bt);
     single[asset] = { metrics: m, trades: bt.trades };
     singleRows.push(metricsRow(asset, m));
@@ -168,13 +97,13 @@ async function main() {
   // portfolio
   const dailyByAsset = {}, weeklyByAsset = {};
   for (const asset of loaded) { dailyByAsset[asset] = data[asset].daily; weeklyByAsset[asset] = data[asset].weekly; }
-  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee });
+  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
   const portMetrics = computeMetrics(port);
 
   // walk-forward per asset
   const wfRows = [];
   for (const asset of loaded) {
-    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee });
+    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
     const s = wf.summary;
     wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} | ${s.degradation === null ? "-" : pct(s.degradation)} |`);
   }
@@ -189,7 +118,7 @@ async function main() {
     "",
     `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}`,
     `- Universe: ${loaded.join(", ")}`,
-    `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Start equity: ${f(args.equity, 0)}`,
+    `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
     "",
     "## Single-asset results",
     "",

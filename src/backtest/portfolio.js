@@ -30,12 +30,18 @@ import { checkPortfolioAllows, PORTFOLIO_PARAMS } from "../strategy/portfolio.js
  * @param {object} [opts.signalParams=SIGNAL_PARAMS]
  * @returns {{ trades, equityCurve, finalEquity, startEquity, perAsset }}
  */
+function slip(price, side, slippagePct) {
+  const s = (slippagePct || 0) / 100;
+  return side === "buy" ? price * (1 + s) : price * (1 - s);
+}
+
 export function backtestPortfolio({
   dailyByAsset,
   weeklyByAsset,
   startEquity = 100000,
   riskPct = 1,
   feePct = 0.08,
+  slippagePct = 0,
   portfolioParams = PORTFOLIO_PARAMS,
   signalParams = SIGNAL_PARAMS,
 }) {
@@ -110,11 +116,13 @@ export function backtestPortfolio({
 
       let exited = false, exitPrice = null, exitReason = null;
       if (pos.direction === "LONG" && bar.low <= pos.stop) {
-        exitPrice = pos.stop;
+        const raw = bar.open < pos.stop ? bar.open : pos.stop;
+        exitPrice = slip(raw, "sell", slippagePct);
         exitReason = "trailing stop hit";
         exited = true;
       } else if (pos.direction === "SHORT" && bar.high >= pos.stop) {
-        exitPrice = pos.stop;
+        const raw = bar.open > pos.stop ? bar.open : pos.stop;
+        exitPrice = slip(raw, "buy", slippagePct);
         exitReason = "trailing stop hit";
         exited = true;
       }
@@ -122,7 +130,7 @@ export function backtestPortfolio({
         const flipLong = pos.direction === "LONG" && regimeState !== "LONG_OK";
         const flipShort = pos.direction === "SHORT" && regimeState !== "SHORT_OK";
         if (flipLong || flipShort) {
-          exitPrice = bar.close;
+          exitPrice = slip(bar.close, pos.direction === "LONG" ? "sell" : "buy", slippagePct);
           exitReason = `regime flipped to ${regimeState}`;
           exited = true;
         }
@@ -176,9 +184,10 @@ export function backtestPortfolio({
     for (const cand of candidates) {
       if (entriesToday >= portfolioParams.maxEntriesPerDay) break;
 
+      const entryFill = slip(cand.sig.close, cand.sig.action === "LONG" ? "buy" : "sell", slippagePct);
       const sz = sizePosition({
         equity, riskPct,
-        entry: cand.sig.close, stop: cand.sig.stop, direction: cand.sig.action,
+        entry: entryFill, stop: cand.sig.stop, direction: cand.sig.action,
       });
       if (!sz.ok || !Number.isFinite(sz.qty) || sz.qty <= 0) continue;
 
@@ -200,7 +209,7 @@ export function backtestPortfolio({
 
       openPositions[cand.asset] = {
         asset: cand.asset, direction: cand.sig.action,
-        entry: cand.sig.close, initialStop: cand.sig.stop, stop: cand.sig.stop,
+        entry: entryFill, initialStop: cand.sig.stop, stop: cand.sig.stop,
         qty: sz.qty, riskAmount: sz.riskDollar, riskPct,
         entryTime: cand.bar.time, entryIdx: cand.idx,
       };
@@ -227,14 +236,15 @@ export function backtestPortfolio({
     const pos = openPositions[asset];
     const last = ps.daily[ps.daily.length - 1];
     const dir = pos.direction === "LONG" ? 1 : -1;
-    const gross = dir * pos.qty * (last.close - pos.entry);
-    const fees = (Math.abs(pos.entry) + Math.abs(last.close)) * pos.qty * (feePct / 100);
+    const exitFill = slip(last.close, pos.direction === "LONG" ? "sell" : "buy", slippagePct);
+    const gross = dir * pos.qty * (exitFill - pos.entry);
+    const fees = (Math.abs(pos.entry) + Math.abs(exitFill)) * pos.qty * (feePct / 100);
     const net = gross - fees;
     equity += net;
     trades.push({
       asset, direction: pos.direction,
       entryTime: pos.entryTime, entry: pos.entry, initialStop: pos.initialStop,
-      exitTime: last.time, exit: last.close, exitReason: "end of data",
+      exitTime: last.time, exit: exitFill, exitReason: "end of data",
       qty: pos.qty, pnl: net, pnlPct: (net / startEquity) * 100,
       rMultiple: net / pos.riskAmount,
       barsHeld: ps.daily.length - 1 - pos.entryIdx,
