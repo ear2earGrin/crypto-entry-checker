@@ -42,11 +42,22 @@ their math directly. This is the load-bearing separation — keep it.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm test           # 100+ tests, all should pass
-npm run build      # production build
+npm run dev               # http://localhost:5173
+npm test                  # 115 tests, all should pass
+npm run build             # production build
 npm run lint
+npm run backtest          # headless wind-tunnel: whole universe, walk-forward,
+                          # monte carlo → writes reports/backtest-<date>.md + .json
+npm run backtest -- --from 2021 --asset BTC --risk 0.5   # flags pass through
+npm run backtest:selftest # synthetic data, no network — proves the pipeline runs
 ```
+
+The headless backtest (`scripts/backtest.mjs`) imports the **same** pure
+indicator/strategy/backtest modules the UI uses, so there is zero drift between
+what you validate and what the Scanner shows live. It runs single-asset +
+portfolio backtests, per-asset walk-forward (with degradation), and Monte Carlo
+(outcome distribution + edge p-value), then writes a Markdown + JSON report.
+This is the "wind tunnel": run it before trusting any signal.
 
 ## Methodological guarantees
 

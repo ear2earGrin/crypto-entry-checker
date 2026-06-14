@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Backtest reports are local artifacts; commit a baseline manually if you want one
+reports/*.md
+reports/*.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

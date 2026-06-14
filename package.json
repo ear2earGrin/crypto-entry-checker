@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "backtest": "node scripts/backtest.mjs",
+    "backtest:selftest": "node scripts/backtest.mjs --selftest"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",
