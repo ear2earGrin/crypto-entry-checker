@@ -197,6 +197,55 @@ Anything magic in the code that a successor model might want to "clean up" — d
 | `reentryCooldownDays = 3` | portfolio | Long enough that revenge fades, short enough you don't miss a real re-entry. |
 | `riskPct = 1` | live default | 10-loss streak ≈ 10% DD. Acceptable, not aggressive. |
 
+## 11b. Orthogonal context axes (EXPERIMENTAL — context only, not yet gating)
+
+Added in v1.1. These are DISPLAYED in the Scanner and attached to each proposed
+entry, but they do **not** alter the mechanical signal yet. They follow the
+"one indicator per independent information axis, each a different job" principle:
+each adds genuinely new information that price-derived oscillators cannot see.
+
+Promotion rule: an axis becomes a hard entry gate ONLY after walk-forward shows it
+improves out-of-sample expectancy. Until then it is decision-support, not a rule.
+
+### Volume / flow — CVD (`src/indicators/cvd.js`)
+
+Cumulative Volume Delta from taker-buy volume (already in Binance klines, field 9).
+Per-bar delta = 2*takerBuyBase - volume; CVD is the running sum. `cvdSlope` is the
+normalized change over the last 10 daily bars. Positive = net aggressor buying.
+
+Why it's not redundant: price can rise while net aggressor buying falls — a
+divergence invisible to RSI/MACD/%b, which are deterministic functions of candles.
+Fully backtestable (historical taker volume is in klines).
+
+### Derivatives positioning (`src/strategy/derivatives.js`)
+
+`assessDerivatives({ direction, fundingRate, oiChangePct, cvdSlope })` returns a
+grade — CONFIRMED / NEUTRAL / CAUTION / CROWDED — plus a `standDown` flag. Its one
+job: tell you when NOT to add to a trade because the crowd is already maxed there.
+
+- **Funding rate**: positive = longs pay shorts = longs crowded. Extreme funding in
+  the trade's direction → stand down. Funding on the opposite side → favorable
+  (contrarian to crowd). Thresholds in `DERIVATIVES_PARAMS`. Backtestable
+  (`fetchFundingHistory`).
+- **Open interest**: rising = new conviction; falling = unwind / short-covering.
+  **NOT backtestable from free Binance** — `openInterestHist` only covers ~30 days.
+  Live context only unless paid data (Coinglass/Glassnode) is added.
+- **CVD slope**: aggressor flow alignment with the trade direction.
+
+### Data availability constraint (important)
+
+| Signal | Live | Backtestable from free Binance |
+|---|---|---|
+| CVD / volume delta | yes | yes (taker volume in klines) |
+| Funding rate | yes | yes (`fundingRate` history goes back years) |
+| Open interest | yes | no (~30-day public history cap) |
+| Basis / term structure | possible | partial |
+| Liquidation clusters | no (needs paid) | no |
+| On-chain | no (needs paid) | no |
+
+Do not pretend an OI-based gate is validated by backtest unless paid historical OI
+data is wired in. This honesty is load-bearing.
+
 ## 12. Known non-goals
 
 - **No optimization of parameters per asset.** If we tune Donchian to 23 for BTC and 17 for ETH because backtests improved, we're curve-fitting.
@@ -212,3 +261,7 @@ If any rule in §3–§8 changes, bump the strategy version in this doc (top of 
 ## Change log
 
 - `v1.0` (2026-06-13): Initial spec. Donchian-20 entry, Donchian-10 trail, weekly 4-condition regime, 1% fixed-fractional, portfolio rules per §8.
+- `v1.1` (2026-06-14): Added orthogonal context axes (§11b) — CVD volume/flow and
+  derivatives positioning (funding/OI). CONTEXT ONLY: displayed in Scanner and
+  attached to proposed entries, but the mechanical entry/exit signal is unchanged.
+  No promotion to hard gate until walk-forward validation. Core rules §3–§8 untouched.

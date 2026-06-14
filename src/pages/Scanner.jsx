@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchKlines, dropUnclosedCandle, binanceSymbol } from "../data/binance.js";
+import { fetchKlines, dropUnclosedCandle, binanceSymbol, fetchDerivsContext } from "../data/binance.js";
 import { runOne } from "../strategy/runOne.js";
 
 const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
@@ -8,7 +8,14 @@ const WEEKLY_LIMIT = 200;
 const DAILY_LIMIT = 200;
 
 const LS_KEY = "scanner.config.v1";
-const DEFAULT_CFG = { equity: 100000, riskPct: 1 };
+const DEFAULT_CFG = { equity: 100000, riskPct: 1, fetchDerivs: false };
+
+const GRADE_COLORS = {
+  CONFIRMED: { bg: "#0d3a25", fg: "#7cffb1" },
+  NEUTRAL: { bg: "#1a1a1a", fg: "#999" },
+  CAUTION: { bg: "#3a2a0d", fg: "#ffd17c" },
+  CROWDED: { bg: "#3a0d1f", fg: "#ff7c9c" },
+};
 
 function loadCfg() {
   try {
@@ -44,14 +51,20 @@ const ACTION_COLORS = {
   WAIT: { bg: "#1a1a1a", fg: "#666" },
 };
 
-async function scanAsset(asset, equity, riskPct) {
+async function scanAsset(asset, equity, riskPct, fetchDerivs) {
   const [weekly, daily] = await Promise.all([
     fetchKlines({ asset, quote: QUOTE, timeframe: "1W", limit: WEEKLY_LIMIT }),
     fetchKlines({ asset, quote: QUOTE, timeframe: "1D", limit: DAILY_LIMIT }),
   ]);
   const w = dropUnclosedCandle(weekly);
   const d = dropUnclosedCandle(daily);
-  return runOne({ asset, weekly: w, daily: d, equity, riskPct });
+  // Derivatives are best-effort and only fetched when toggled on (adds ~4 requests
+  // per asset). A failure here must not break the price-based scan.
+  let derivs = null;
+  if (fetchDerivs) {
+    try { derivs = await fetchDerivsContext(asset); } catch { derivs = null; }
+  }
+  return runOne({ asset, weekly: w, daily: d, equity, riskPct, derivs });
 }
 
 export default function Scanner() {
@@ -65,7 +78,7 @@ export default function Scanner() {
   async function runScan() {
     setStatus({ state: "loading", message: `Scanning ${UNIVERSE.length} assets...` });
     const results = await Promise.allSettled(
-      UNIVERSE.map((asset) => scanAsset(asset, Number(cfg.equity) || 0, Number(cfg.riskPct) || 0)),
+      UNIVERSE.map((asset) => scanAsset(asset, Number(cfg.equity) || 0, Number(cfg.riskPct) || 0, cfg.fetchDerivs)),
     );
     const next = results.map((r, i) => {
       if (r.status === "fulfilled") return { ok: true, ...r.value };
@@ -134,6 +147,19 @@ export default function Scanner() {
             {fmt((Number(cfg.equity) || 0) * (Number(cfg.riskPct) || 0) / 100, 2)} USDT
           </div>
         </div>
+        <div style={styles.controlField}>
+          <label style={styles.label}>DERIVATIVES (FUNDING / OI)</label>
+          <label style={{ ...styles.readonly, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={!!cfg.fetchDerivs}
+              onChange={(e) => setCfg({ ...cfg, fetchDerivs: e.target.checked })}
+            />
+            <span style={{ fontSize: 12, opacity: 0.85 }}>
+              {cfg.fetchDerivs ? "On — fetches positioning per asset (slower)" : "Off — price/flow only"}
+            </span>
+          </label>
+        </div>
       </div>
 
       <div style={styles.summary}>
@@ -168,6 +194,10 @@ export default function Scanner() {
                 <th style={styles.th}>W ADX</th>
                 <th style={styles.th}>W RSI</th>
                 <th style={styles.th}>D RSI</th>
+                <th style={styles.th}>Flow</th>
+                <th style={styles.th}>Funding</th>
+                <th style={styles.th}>OI 24h</th>
+                <th style={styles.th}>Derivs</th>
               </tr>
             </thead>
             <tbody>
@@ -192,7 +222,7 @@ function Row({ row }) {
     return (
       <tr>
         <td style={styles.td}>{row.asset}</td>
-        <td style={styles.td} colSpan={13}>
+        <td style={styles.td} colSpan={17}>
           <span style={{ color: "#ff7c9c" }}>error: {row.error}</span>
         </td>
       </tr>
@@ -201,6 +231,9 @@ function Row({ row }) {
   const sig = row.signal || {};
   const rl = row.regimeLatest || {};
   const sz = row.sizing;
+  const d = row.derivs || {};
+  const flow = row.flowSlope;
+  const da = row.derivsAssessment;
 
   return (
     <tr>
@@ -223,8 +256,23 @@ function Row({ row }) {
       <td style={styles.td}>{fmt(rl.adx, 1)}</td>
       <td style={styles.td}>{fmt(rl.rsi, 1)}</td>
       <td style={styles.td}>{fmt(sig.rsi, 1)}</td>
+      <td style={{ ...styles.td, color: flow > 0 ? "#7cffb1" : flow < 0 ? "#ff7c9c" : "#888" }} title="CVD slope over last 10 days (aggressor flow)">
+        {flow === null || flow === undefined ? "-" : `${flow > 0 ? "▲" : "▼"} ${fmt(Math.abs(flow) * 100, 1)}`}
+      </td>
+      <td style={{ ...styles.td, color: d.fundingRate > 0 ? "#ff7c9c" : d.fundingRate < 0 ? "#7cffb1" : "#888" }}>
+        {Number.isFinite(d.fundingRate) ? `${fmt(d.fundingRate * 100, 4)}%` : "-"}
+      </td>
+      <td style={{ ...styles.td, color: d.oiChange24hPct > 0 ? "#7cffb1" : d.oiChange24hPct < 0 ? "#ff7c9c" : "#888" }}>
+        {Number.isFinite(d.oiChange24hPct) ? `${fmt(d.oiChange24hPct, 1)}%` : "-"}
+      </td>
+      <td style={styles.td}>{da ? <GradeBadge grade={da.grade} reasons={da.reasons} /> : "-"}</td>
     </tr>
   );
+}
+
+function GradeBadge({ grade, reasons }) {
+  const c = GRADE_COLORS[grade] || GRADE_COLORS.NEUTRAL;
+  return <span title={(reasons || []).join("\n")} style={{ ...styles.badge, background: c.bg, color: c.fg }}>{grade}</span>;
 }
 
 function StateBadge({ state }) {
