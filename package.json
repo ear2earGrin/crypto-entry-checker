@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "backtest": "node scripts/backtest.mjs",
-    "backtest:selftest": "node scripts/backtest.mjs --selftest"
+    "backtest:selftest": "node scripts/backtest.mjs --selftest",
+    "ablation": "node scripts/ablation.mjs",
+    "ablation:selftest": "node scripts/ablation.mjs --selftest"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",
