@@ -241,10 +241,29 @@ job: tell you when NOT to add to a trade because the crowd is already maxed ther
 | Open interest | yes | no (~30-day public history cap) |
 | Basis / term structure | possible | partial |
 | Liquidation clusters | no (needs paid) | no |
-| On-chain | no (needs paid) | no |
+| On-chain | see BlockHorizon note | possibly (BTC only, unverified) |
 
 Do not pretend an OI-based gate is validated by backtest unless paid historical OI
 data is wired in. This honesty is load-bearing.
+
+### Candidate free on-chain source: BlockHorizon (unverified)
+
+`charts.blockhorizon.io` (announced by PlanB, mid-2026) claims free full-history
+BTC on-chain metrics with CSV/XLS/JSON export: MVRV-style realized prices, supply
+in profit, UTXO age bands, S2F, etc. If real, it covers the BTC on-chain slot that
+was previously "paid only."
+
+Rules of engagement before ANY use:
+1. **Verify first**: spot-check exported history against independently published
+   values (e.g., realized price at known dates). New free services can be wrong.
+2. **Snapshot, don't depend**: download and version datasets locally (data/
+   snapshots with retrieval date + checksum). Free services die or add paywalls;
+   a live dependency is a fragility, a snapshot is an asset.
+3. **BTC-only, regime-only**: could inform a market-wide regime overlay (e.g.
+   MVRV euphoria zones), never per-asset entries.
+4. **Same promotion bar as everything else**: walk-forward improvement in
+   out-of-sample expectancy, or it stays out of the rules. Phase 4+ work —
+   after the price-only baseline is validated.
 
 ## 12. Known non-goals
 
