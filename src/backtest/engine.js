@@ -39,6 +39,10 @@ export function backtestOne({
   feePct = 0.08,
   slippagePct = 0,
   funding = null,
+  // Ablation switch: the regime-flip exit force-closes on any weekly regime change.
+  // Weekly MACD histogram can flicker mid-trend, so this rule may repeatedly eject
+  // us from trades the Donchian-10 trail would have ridden. false = trail-only exits.
+  exitOnRegimeFlip = true,
   signalParams = SIGNAL_PARAMS,
   regimeParams = REGIME_PARAMS,
 }) {
@@ -120,7 +124,7 @@ export function backtestOne({
         exited = true;
       }
 
-      if (!exited) {
+      if (!exited && exitOnRegimeFlip) {
         const flipLong = pos.direction === "LONG" && regimeState !== "LONG_OK";
         const flipShort = pos.direction === "SHORT" && regimeState !== "SHORT_OK";
         if (flipLong || flipShort) {

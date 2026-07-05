@@ -43,10 +43,14 @@ function parseArgs(argv) {
 }
 
 // Build a (regimeParams, signalParams) pair from a compact spec.
-function variant(name, { use = null, ignoreRegime = false, rsiVeto = false, bbVeto = false }) {
+function variant(name, { use = null, ignoreRegime = false, rsiVeto = false, bbVeto = false, exitOnRegimeFlip = true, donchian = null }) {
   const regimeParams = { ...REGIME_PARAMS, use: use || { sma: false, macd: false, rsi: false, adx: false } };
   const signalParams = { ...SIGNAL_PARAMS, ignoreRegime, useRsiVeto: rsiVeto, useBbVeto: bbVeto };
-  return { name, regimeParams, signalParams };
+  if (donchian) {
+    signalParams.donchianEntry = donchian[0];
+    signalParams.donchianExit = donchian[1];
+  }
+  return { name, regimeParams, signalParams, exitOnRegimeFlip };
 }
 
 // PREDECLARED variants — do not expand this list during a run (that would be fishing).
@@ -64,6 +68,11 @@ const VARIANTS = [
   variant("10. Prod minus MACD", { use: { sma: true, macd: false, rsi: true, adx: true }, rsiVeto: true, bbVeto: true }),
   variant("11. Prod minus RSI(regime)", { use: { sma: true, macd: true, rsi: false, adx: true }, rsiVeto: true, bbVeto: true }),
   variant("12. Prod minus ADX", { use: { sma: true, macd: true, rsi: true, adx: false }, rsiVeto: true, bbVeto: true }),
+  // Exit-rule ablation: weekly MACD hist can flicker mid-trend; does force-closing
+  // on regime flips protect us, or eject us from trades the trail would have ridden?
+  variant("13. Prod, trail-only exit (no regime-flip exit)", { use: { sma: true, macd: true, rsi: true, adx: true }, rsiVeto: true, bbVeto: true, exitOnRegimeFlip: false }),
+  // Slower Turtle family — the only alternate parameter set predeclared for comparison.
+  variant("14. Prod with Donchian 55/20", { use: { sma: true, macd: true, rsi: true, adx: true }, rsiVeto: true, bbVeto: true, donchian: [55, 20] }),
 ];
 
 // Right-tail capture: what share of gross profit came from the top-5 winners, and
@@ -122,6 +131,7 @@ async function main() {
         asset, ...data[asset],
         startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip,
         regimeParams: v.regimeParams, signalParams: v.signalParams,
+        exitOnRegimeFlip: v.exitOnRegimeFlip,
       });
       allTrades = allTrades.concat(bt.trades);
       // chain per-asset curves only for a rough pooled equity proxy
