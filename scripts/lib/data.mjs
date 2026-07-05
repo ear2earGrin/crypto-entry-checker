@@ -3,6 +3,7 @@
 
 export const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 const BINANCE = "https://api.binance.com";
+const FAPI = "https://fapi.binance.com";
 
 function toCandles(raw) {
   return raw
@@ -55,6 +56,45 @@ export async function loadAsset(asset, fromYear) {
   return { weekly: dropUnclosed(weekly), daily: dropUnclosed(daily) };
 }
 
+/**
+ * Historical funding for the asset's USDT-M perp, paginated (8h settlements).
+ * Returns [{ time: unixSecs, fundingRate }]. Perps often listed later than spot —
+ * records simply start when the perp existed; earlier holds accrue zero funding,
+ * which is correct (there was no perp to pay funding on).
+ */
+export async function loadFunding(asset, fromYear) {
+  const symbol = `${asset}USDT`;
+  const all = [];
+  let cursor = Date.UTC(fromYear, 0, 1);
+  for (let guard = 0; guard < 80; guard++) {
+    const url = `${FAPI}/fapi/v1/fundingRate?symbol=${symbol}&startTime=${cursor}&limit=1000`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 120)}`);
+    const raw = await res.json();
+    if (!Array.isArray(raw) || raw.length === 0) break;
+    for (const r of raw) {
+      const t = Math.floor(Number(r.fundingTime) / 1000);
+      const fr = Number(r.fundingRate);
+      if (Number.isFinite(t) && Number.isFinite(fr)) all.push({ time: t, fundingRate: fr });
+    }
+    const lastMs = Number(raw[raw.length - 1].fundingTime);
+    if (raw.length < 1000 || lastMs >= Date.now()) break;
+    cursor = lastMs + 1;
+  }
+  return all;
+}
+
+// Synthetic funding matching the synth() daily timeline: mildly positive on
+// average (crypto's historical norm), one aggregated record per day.
+export function synthFunding(dn = 1500) {
+  const ONE_DAY = 86400;
+  const t0 = Math.floor(Date.UTC(2020, 0, 1) / 1000);
+  return Array.from({ length: dn }, (_, i) => ({
+    time: t0 + i * ONE_DAY,
+    fundingRate: 0.0003 + Math.sin(i / 9) * 0.0002,
+  }));
+}
+
 // Synthetic data for --selftest (no network). Numbers are meaningless; this only
 // proves the pipeline runs end to end.
 export function synth(asset, seed, dn = 1500) {
@@ -62,7 +102,8 @@ export function synth(asset, seed, dn = 1500) {
   const wn = Math.ceil(dn / 6.5);
   const wk = Array.from({ length: wn }, (_, i) => 100 + i * 2 + Math.sin(i / 4 + seed) * 9);
   const dl = Array.from({ length: dn }, (_, i) => 100 + i * 0.3 + Math.sin(i / 12 + seed) * 13);
-  const t0 = Date.UTC(2020, 0, 1);
+  // Unix SECONDS — must match real kline timestamps so day-keyed funding aligns.
+  const t0 = Math.floor(Date.UTC(2020, 0, 1) / 1000);
   const mk = (arr, step, base) => arr.map((c, i) => ({
     time: base + i * step, closeTime: base + (i + 1) * step - 1,
     open: c, high: c * 1.01, low: c * 0.99, close: c, volume: 1000, takerBuyBase: 550,

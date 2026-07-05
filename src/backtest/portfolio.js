@@ -3,6 +3,7 @@ import { computeSignal, SIGNAL_PARAMS } from "../strategy/signal.js";
 import { donchianCloses } from "../indicators/donchian.js";
 import { sizePosition } from "../strategy/sizing.js";
 import { checkPortfolioAllows, PORTFOLIO_PARAMS } from "../strategy/portfolio.js";
+import { buildDailyFundingMap, accrueFunding, dayKey } from "./funding.js";
 
 /**
  * Multi-asset portfolio backtest.
@@ -42,10 +43,15 @@ export function backtestPortfolio({
   riskPct = 1,
   feePct = 0.08,
   slippagePct = 0,
+  fundingByAsset = null,
   portfolioParams = PORTFOLIO_PARAMS,
   signalParams = SIGNAL_PARAMS,
 }) {
   const assets = Object.keys(dailyByAsset);
+  const fundingMaps = {};
+  for (const a of assets) {
+    fundingMaps[a] = buildDailyFundingMap(fundingByAsset?.[a] || null);
+  }
 
   // Pre-compute regimes, signals, trail series per asset.
   const perAsset = {};
@@ -170,13 +176,14 @@ export function backtestPortfolio({
       const dir = pos.direction === "LONG" ? 1 : -1;
       const gross = dir * pos.qty * (exitPrice - pos.entry);
       const fees = (Math.abs(pos.entry) + Math.abs(exitPrice)) * pos.qty * (feePct / 100);
-      const net = gross - fees;
+      const fundingCost = pos.fundingCost || 0;
+      const net = gross - fees - fundingCost;
       equity += net;
       trades.push({
         asset, direction: pos.direction,
         entryTime: pos.entryTime, entry: pos.entry, initialStop: pos.initialStop,
         exitTime: bar.time, exit: exitPrice, exitReason,
-        qty: pos.qty, pnl: net, pnlPct: (net / startEquity) * 100,
+        qty: pos.qty, pnl: net, fundingCost, pnlPct: (net / startEquity) * 100,
         rMultiple: net / pos.riskAmount,
         barsHeld: idx - pos.entryIdx,
       });
@@ -233,7 +240,7 @@ export function backtestPortfolio({
       entriesToday++;
     }
 
-    // --- 3. Mark-to-market equity ---
+    // --- 3. Accrue funding on held positions, then mark to market ---
     let unrealized = 0;
     for (const asset of Object.keys(openPositions)) {
       const ps = perAsset[asset];
@@ -241,8 +248,11 @@ export function backtestPortfolio({
       if (idx === undefined) continue;
       const close = ps.daily[idx].close;
       const pos = openPositions[asset];
+      const rateSum = fundingMaps[asset]?.get(dayKey(t)) || 0;
+      pos.fundingCost = (pos.fundingCost || 0) +
+        accrueFunding({ direction: pos.direction, qty: pos.qty, markPrice: close, rateSum });
       const dir = pos.direction === "LONG" ? 1 : -1;
-      unrealized += dir * pos.qty * (close - pos.entry);
+      unrealized += dir * pos.qty * (close - pos.entry) - pos.fundingCost;
     }
     equityCurve.push({ time: t, equity: equity + unrealized, openCount: Object.keys(openPositions).length });
   }
@@ -256,13 +266,14 @@ export function backtestPortfolio({
     const exitFill = slip(last.close, pos.direction === "LONG" ? "sell" : "buy", slippagePct);
     const gross = dir * pos.qty * (exitFill - pos.entry);
     const fees = (Math.abs(pos.entry) + Math.abs(exitFill)) * pos.qty * (feePct / 100);
-    const net = gross - fees;
+    const fundingCost = pos.fundingCost || 0;
+    const net = gross - fees - fundingCost;
     equity += net;
     trades.push({
       asset, direction: pos.direction,
       entryTime: pos.entryTime, entry: pos.entry, initialStop: pos.initialStop,
       exitTime: last.time, exit: exitFill, exitReason: "end of data",
-      qty: pos.qty, pnl: net, pnlPct: (net / startEquity) * 100,
+      qty: pos.qty, pnl: net, fundingCost, pnlPct: (net / startEquity) * 100,
       rMultiple: net / pos.riskAmount,
       barsHeld: ps.daily.length - 1 - pos.entryIdx,
     });

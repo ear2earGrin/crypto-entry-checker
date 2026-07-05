@@ -169,6 +169,13 @@ Implementation: `src/backtest/engine.js::backtestOne`.
 - Trailing stop, intrabar stop hit, regime flip — in that order — checked each bar.
 - Open position is closed at end-of-data at `close[last]` with reason `"end of data"` so metrics aren't biased by unfinished trades.
 - Fees: round-trip `feePct` applied as `(entry + exit) * qty * feePct/100`. Default 0.08%.
+- Slippage: `slippagePct` per fill, adverse direction (buys fill higher, sells lower).
+  Entry fills at the NEXT bar's open after the signal bar closes (causal ordering).
+  Stop fills are gap-aware (worse of stop vs open).
+- Funding: optional `funding` history (`backtest/funding.js`). Settlement rates are
+  summed per UTC day and charged against notional at that day's close while a
+  position is held — longs pay positive funding, shorts receive it. Charged at exit
+  as part of trade P&L; accrued value reduces mark-to-market equity while open.
 
 ## 10. Metrics
 

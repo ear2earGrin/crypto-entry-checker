@@ -82,6 +82,7 @@ export function walkForward({
   riskPct = 1,
   feePct = 0.08,
   slippagePct = 0,
+  funding = null,
   asset = "ASSET",
 }) {
   if (!daily?.length || !weekly?.length) {
@@ -118,7 +119,7 @@ export function walkForward({
       const sp = { ...SIGNAL_PARAMS, ...p };
       const bt = backtestOne({
         asset, weekly: weeklyIS, daily: dailyIS,
-        startEquity: equity, riskPct, feePct, slippagePct, signalParams: sp,
+        startEquity: equity, riskPct, feePct, slippagePct, funding, signalParams: sp,
       });
       const m = computeMetrics(bt);
       const score = objective(m, objKind);
@@ -128,7 +129,7 @@ export function walkForward({
     const oosSp = { ...SIGNAL_PARAMS, ...best.params };
     const oosBt = backtestOne({
       asset, weekly: weeklyOOS, daily: dailyOOS,
-      startEquity: equity, riskPct, feePct, slippagePct, signalParams: oosSp,
+      startEquity: equity, riskPct, feePct, slippagePct, funding, signalParams: oosSp,
     });
     const oosMetrics = computeMetrics(oosBt);
 

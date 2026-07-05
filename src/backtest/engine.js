@@ -2,6 +2,7 @@ import { computeRegime, REGIME_PARAMS } from "../strategy/regime.js";
 import { computeSignal, SIGNAL_PARAMS } from "../strategy/signal.js";
 import { donchianCloses } from "../indicators/donchian.js";
 import { sizePosition } from "../strategy/sizing.js";
+import { buildDailyFundingMap, accrueFunding, dayKey } from "./funding.js";
 
 // Slippage applied to fills. A buy (long entry, short cover) fills WORSE = higher;
 // a sell (long exit, short entry) fills worse = lower. In 24/7 crypto there is no
@@ -37,10 +38,12 @@ export function backtestOne({
   riskPct = 1,
   feePct = 0.08,
   slippagePct = 0,
+  funding = null,
   signalParams = SIGNAL_PARAMS,
   regimeParams = REGIME_PARAMS,
 }) {
   const regime = computeRegime(weekly, regimeParams);
+  const fundingByDay = buildDailyFundingMap(funding);
   const closes = daily.map((c) => c.close);
   const trail10 = donchianCloses(closes, signalParams.donchianExit);
 
@@ -131,7 +134,8 @@ export function backtestOne({
         const dir = pos.direction === "LONG" ? 1 : -1;
         const gross = dir * pos.qty * (exitPrice - pos.entry);
         const fees = (Math.abs(pos.entry) + Math.abs(exitPrice)) * pos.qty * (feePct / 100);
-        const net = gross - fees;
+        const fundingCost = pos.fundingCost || 0;
+        const net = gross - fees - fundingCost;
         equity += net;
         trades.push({
           asset: pos.asset,
@@ -144,6 +148,7 @@ export function backtestOne({
           exitReason,
           qty: pos.qty,
           pnl: net,
+          fundingCost,
           pnlPct: net / startEquity * 100,
           rMultiple: net / pos.riskAmount,
           barsHeld: i - pos.entryIdx,
@@ -160,10 +165,15 @@ export function backtestOne({
       }
     }
 
+    // Accrue funding for any position held through this bar's close, then
+    // mark to market net of accrued funding.
     let unrealized = 0;
     if (pos) {
+      const rateSum = fundingByDay.get(dayKey(bar.time)) || 0;
+      pos.fundingCost = (pos.fundingCost || 0) +
+        accrueFunding({ direction: pos.direction, qty: pos.qty, markPrice: bar.close, rateSum });
       const dir = pos.direction === "LONG" ? 1 : -1;
-      unrealized = dir * pos.qty * (bar.close - pos.entry);
+      unrealized = dir * pos.qty * (bar.close - pos.entry) - pos.fundingCost;
     }
     equityCurve.push({ time: bar.time, equity: equity + unrealized, hasPosition: !!pos });
   }
@@ -174,7 +184,8 @@ export function backtestOne({
     const exitFill = slip(last.close, pos.direction === "LONG" ? "sell" : "buy", slippagePct);
     const gross = dir * pos.qty * (exitFill - pos.entry);
     const fees = (Math.abs(pos.entry) + Math.abs(exitFill)) * pos.qty * (feePct / 100);
-    const net = gross - fees;
+    const fundingCost = pos.fundingCost || 0;
+    const net = gross - fees - fundingCost;
     equity += net;
     trades.push({
       asset: pos.asset,
@@ -187,6 +198,7 @@ export function backtestOne({
       exitReason: "end of data",
       qty: pos.qty,
       pnl: net,
+      fundingCost,
       pnlPct: net / startEquity * 100,
       rMultiple: net / pos.riskAmount,
       barsHeld: daily.length - 1 - pos.entryIdx,

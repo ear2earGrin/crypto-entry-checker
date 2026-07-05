@@ -33,7 +33,7 @@ import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { walkForward } from "../src/backtest/walkforward.js";
 import { computeMetrics } from "../src/backtest/metrics.js";
 import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
-import { UNIVERSE, loadAsset, synth, f, pct } from "./lib/data.mjs";
+import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPORTS_DIR = join(__dirname, "..", "reports");
@@ -68,6 +68,7 @@ async function main() {
   console.log(`Universe: ${assets.join(", ")} | from ${args.from} | risk ${args.risk}% | fee ${args.fee}% | slip ${args.slip}%\n`);
 
   const data = {};
+  const fundingByAsset = {};
   for (let i = 0; i < assets.length; i++) {
     const asset = assets[i];
     try {
@@ -75,6 +76,17 @@ async function main() {
       console.log(`  loaded ${asset}: ${data[asset].daily.length} daily, ${data[asset].weekly.length} weekly`);
     } catch (e) {
       console.error(`  FAILED ${asset}: ${e.message}`);
+      continue;
+    }
+    // Funding is best-effort: a perp may be younger than the spot history, or the
+    // endpoint may fail — either way the price backtest still runs, with funding
+    // coverage disclosed in the report.
+    try {
+      fundingByAsset[asset] = args.selftest ? synthFunding() : await loadFunding(asset, args.from);
+      console.log(`    funding ${asset}: ${fundingByAsset[asset].length} settlements`);
+    } catch (e) {
+      fundingByAsset[asset] = null;
+      console.error(`    funding ${asset} unavailable: ${e.message}`);
     }
   }
 
@@ -88,7 +100,7 @@ async function main() {
   const singleRows = [];
   const single = {};
   for (const asset of loaded) {
-    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
+    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset] });
     const m = computeMetrics(bt);
     single[asset] = { metrics: m, trades: bt.trades };
     singleRows.push(metricsRow(asset, m));
@@ -97,8 +109,26 @@ async function main() {
   // portfolio
   const dailyByAsset = {}, weeklyByAsset = {};
   for (const asset of loaded) { dailyByAsset[asset] = data[asset].daily; weeklyByAsset[asset] = data[asset].weekly; }
-  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
+  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset });
   const portMetrics = computeMetrics(port);
+
+  // Funding coverage + totals, long/short split, and buy-and-hold benchmarks —
+  // the external audits asked for all three before any go/no-go reading.
+  const totalFunding = port.trades.reduce((s, t) => s + (t.fundingCost || 0), 0);
+  const fundingCovered = loaded.filter((a) => fundingByAsset[a]?.length).length;
+
+  const longTrades = port.trades.filter((t) => t.direction === "LONG");
+  const shortTrades = port.trades.filter((t) => t.direction === "SHORT");
+  const longM = computeMetrics({ trades: longTrades, equityCurve: port.equityCurve, startEquity: args.equity });
+  const shortM = computeMetrics({ trades: shortTrades, equityCurve: port.equityCurve, startEquity: args.equity });
+
+  const benchRows = loaded.map((a) => {
+    const d = data[a].daily;
+    const ret = d.length > 1 ? ((d[d.length - 1].close / d[0].close) - 1) * 100 : 0;
+    return { a, ret };
+  });
+  const eqWeightRet = benchRows.reduce((s, b) => s + b.ret, 0) / (benchRows.length || 1);
+  const btcRet = benchRows.find((b) => b.a === "BTC")?.ret ?? null;
 
   // Realized (closed) vs forced END_OF_DATA: report them separately so an open
   // winner isn't dressed up as a completed trade.
@@ -113,7 +143,7 @@ async function main() {
     { name: `expected (${args.slip}%)`, slip: args.slip },
     { name: `stressed (${(args.slip * 3).toFixed(2)}%)`, slip: args.slip * 3 },
   ].map((s) => {
-    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip });
+    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip, fundingByAsset });
     const m = computeMetrics(p);
     return `| ${s.name} | ${m.numTrades} | ${f(m.expectancyR, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} |`;
   });
@@ -121,7 +151,7 @@ async function main() {
   // walk-forward per asset
   const wfRows = [];
   for (const asset of loaded) {
-    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip });
+    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset] });
     const s = wf.summary;
     wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} | ${s.degradation === null ? "-" : pct(s.degradation)} |`);
   }
@@ -150,7 +180,9 @@ async function main() {
     `Fees:              ${args.fee}% round-trip`,
     `Slippage:          ${args.slip}% per fill (see cost-sensitivity table)`,
     "Same-bar order:    stop checked BEFORE regime-flip (pessimistic, deterministic)",
-    "Funding:           NOT modeled yet (perp funding over multi-day holds is excluded)",
+    "Funding:           Binance USDT-M perp funding history, summed per UTC day and",
+    "                   charged against notional at that day's close while held",
+    "                   (longs pay positive funding, shorts receive it)",
     "End-of-data:       open positions marked to market and tagged 'end of data',",
     "                   reported separately from realized closed trades",
     "```",
@@ -175,6 +207,28 @@ async function main() {
       + `${realizedMetrics.numTrades} trades, win ${pct(realizedMetrics.winRate * 100)}, `
       + `expectancy ${f(realizedMetrics.expectancyR, 2)}R, PF `
       + `${realizedMetrics.profitFactor === Infinity ? "∞" : f(realizedMetrics.profitFactor, 2)}.`,
+    "",
+    `Funding: covered on ${fundingCovered}/${loaded.length} assets. Net funding paid across all `
+      + `trades: ${f(totalFunding, 0)} USDT (positive = drag on returns).`,
+    "",
+    "## Long vs short (judge separately — crypto is not symmetric)",
+    "",
+    "| Book | Trades | Win% | Exp(R) | PF | Net P&L |",
+    "|---|---|---|---|---|---|",
+    `| LONG | ${longM.numTrades} | ${pct(longM.winRate * 100)} | ${f(longM.expectancyR, 2)} | ${longM.profitFactor === Infinity ? "∞" : f(longM.profitFactor, 2)} | ${f(longTrades.reduce((s, t) => s + t.pnl, 0), 0)} |`,
+    `| SHORT | ${shortM.numTrades} | ${pct(shortM.winRate * 100)} | ${f(shortM.expectancyR, 2)} | ${shortM.profitFactor === Infinity ? "∞" : f(shortM.profitFactor, 2)} | ${f(shortTrades.reduce((s, t) => s + t.pnl, 0), 0)} |`,
+    "",
+    "A valid outcome is one side working and the other not. Do not keep the losing",
+    "side for symmetry's sake.",
+    "",
+    "## Benchmarks (same period, buy-and-hold)",
+    "",
+    `- BTC buy-and-hold: ${btcRet === null ? "n/a" : pct(btcRet)}`,
+    `- Equal-weight universe buy-and-hold: ${pct(eqWeightRet)}`,
+    `- This system (portfolio, all costs): ${pct(portMetrics.totalReturnPct)} with ${pct(portMetrics.maxDDPct)} max DD`,
+    "",
+    "The system must beat these on a RISK-ADJUSTED basis (return vs drawdown), not",
+    "necessarily on raw return — otherwise just hold and skip the work.",
     "",
     "## Cost sensitivity (portfolio)",
     "",
