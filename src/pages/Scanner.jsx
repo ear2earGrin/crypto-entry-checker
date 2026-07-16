@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchKlines, dropUnclosedCandle, binanceSymbol, fetchDerivsContext } from "../data/binance.js";
 import { runOne } from "../strategy/runOne.js";
+import { estimateLiquidation, stopToLiqBufferPct, maxSafeLeverage } from "../strategy/liquidation.js";
 
 const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 const QUOTE = "USDT";
@@ -8,7 +9,7 @@ const WEEKLY_LIMIT = 200;
 const DAILY_LIMIT = 200;
 
 const LS_KEY = "scanner.config.v1";
-const DEFAULT_CFG = { equity: 100000, riskPct: 1, fetchDerivs: false };
+const DEFAULT_CFG = { equity: 100000, riskPct: 1, fetchDerivs: false, leverage: 5, mmrPct: 0.5 };
 
 const GRADE_COLORS = {
   CONFIRMED: { bg: "#0d3a25", fg: "#7cffb1" },
@@ -148,6 +149,16 @@ export default function Scanner() {
           </div>
         </div>
         <div style={styles.controlField}>
+          <label style={styles.label}>LEVERAGE (ISOLATED)</label>
+          <select
+            value={String(cfg.leverage)}
+            onChange={(e) => setCfg({ ...cfg, leverage: Number(e.target.value) })}
+            style={styles.input}
+          >
+            {[1, 2, 3, 5, 8, 10, 15, 20, 25].map((l) => <option key={l} value={l}>{l}x</option>)}
+          </select>
+        </div>
+        <div style={styles.controlField}>
           <label style={styles.label}>DERIVATIVES (FUNDING / OI)</label>
           <label style={{ ...styles.readonly, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
             <input
@@ -189,6 +200,10 @@ export default function Scanner() {
                 <th style={styles.th}>Stop dist</th>
                 <th style={styles.th}>Qty</th>
                 <th style={styles.th}>Notional</th>
+                <th style={styles.th}>Margin</th>
+                <th style={styles.th}>Liq ≈</th>
+                <th style={styles.th}>Stop→Liq</th>
+                <th style={styles.th}>Max lev</th>
                 <th style={styles.th}>50W SMA</th>
                 <th style={styles.th}>W MACD hist</th>
                 <th style={styles.th}>W ADX</th>
@@ -202,7 +217,7 @@ export default function Scanner() {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <Row key={r.asset} row={r} />
+                <Row key={r.asset} row={r} leverage={Number(cfg.leverage) || 5} mmrPct={Number(cfg.mmrPct) || 0.5} />
               ))}
             </tbody>
           </table>
@@ -217,12 +232,12 @@ export default function Scanner() {
   );
 }
 
-function Row({ row }) {
+function Row({ row, leverage, mmrPct }) {
   if (!row.ok) {
     return (
       <tr>
         <td style={styles.td}>{row.asset}</td>
-        <td style={styles.td} colSpan={17}>
+        <td style={styles.td} colSpan={21}>
           <span style={{ color: "#ff7c9c" }}>error: {row.error}</span>
         </td>
       </tr>
@@ -234,6 +249,20 @@ function Row({ row }) {
   const d = row.derivs || {};
   const flow = row.flowSlope;
   const da = row.derivsAssessment;
+
+  // Leverage / liquidation math for actionable signals only.
+  const hasSignal = sig.action === "LONG" || sig.action === "SHORT";
+  const liq = hasSignal
+    ? estimateLiquidation({ entry: sig.close, direction: sig.action, leverage, mmrPct })
+    : null;
+  const liqBuf = hasSignal
+    ? stopToLiqBufferPct({ entry: sig.close, stop: sig.stop, direction: sig.action, leverage, mmrPct })
+    : null;
+  const safeLev = hasSignal
+    ? maxSafeLeverage({ entry: sig.close, stop: sig.stop, direction: sig.action, mmrPct })
+    : null;
+  const margin = hasSignal && sz?.ok ? sz.notional / leverage : null;
+  const liqDanger = liqBuf !== null && liqBuf < 2;
 
   return (
     <tr>
@@ -249,6 +278,15 @@ function Row({ row }) {
       <td style={styles.td}>{sz?.ok ? `${fmt(sz.stopDistPct, 2)}%` : "-"}</td>
       <td style={styles.td}>{sz?.ok ? fmt(sz.qty, 6) : "-"}</td>
       <td style={styles.td}>{sz?.ok ? fmt(sz.notional, 0) : "-"}</td>
+      <td style={styles.td}>{margin !== null ? fmt(margin, 0) : "-"}</td>
+      <td style={styles.td}>{liq !== null ? fmt(liq, 4) : "-"}</td>
+      <td style={{ ...styles.td, color: liqDanger ? "#ff7c9c" : liqBuf !== null ? "#7cffb1" : "#888", fontWeight: liqDanger ? 800 : 400 }}
+        title="Distance from stop to estimated liquidation. Below 2% = a wick can liquidate you before your stop fires — lower the leverage.">
+        {liqBuf !== null ? `${fmt(liqBuf, 1)}%${liqDanger ? " ⚠" : ""}` : "-"}
+      </td>
+      <td style={styles.td} title="Largest leverage that keeps the stop ≥2% inside liquidation">
+        {safeLev !== null ? `${safeLev}x` : hasSignal ? "none" : "-"}
+      </td>
       <td style={styles.td}>{fmt(rl.sma, 2)}</td>
       <td style={{ ...styles.td, color: rl.hist > 0 ? "#7cffb1" : rl.hist < 0 ? "#ff7c9c" : "#888" }}>
         {fmt(rl.hist, 3)}
@@ -310,7 +348,7 @@ const styles = {
     boxShadow: "0 10px 25px #00000088",
   },
   controls: {
-    display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 14,
+    display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginTop: 14,
     padding: 14, borderRadius: 18, border: "1px solid #2cff9c22", background: "#06120e",
   },
   controlField: { display: "grid", gap: 6 },
