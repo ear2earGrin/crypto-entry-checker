@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   loadTrades, addTrade, closeTrade, updateTrade, deleteTrade,
   exportTradesJSON, importTrades,
@@ -14,9 +14,6 @@ function fmt(n, d = 2) {
 function ymd(unix) {
   if (!unix) return "-";
   return new Date(unix * 1000).toISOString().slice(0, 10);
-}
-function todayUnix() {
-  return Math.floor(Date.now() / 1000);
 }
 
 export default function TradeLog() {

@@ -156,9 +156,12 @@ export function walkForward({
   const validFolds = folds.filter((f) => f.isMetrics && f.oosMetrics && f.isMetrics.numTrades > 0);
   let degradation = null;
   if (validFolds.length) {
-    const avgIs = validFolds.reduce((s, f) => s + objective(f.isMetrics, objKind), 0) / validFolds.length;
-    const avgOos = validFolds.reduce((s, f) => s + objective(f.oosMetrics, objKind), 0) / validFolds.length;
-    if (Number.isFinite(avgIs) && avgIs !== 0) {
+    // A fold with zero trades expressed no edge — score it 0, not -Infinity,
+    // or one empty OOS window poisons the whole average.
+    const objOrZero = (m) => (m && m.numTrades > 0 ? objective(m, objKind) : 0);
+    const avgIs = validFolds.reduce((s, f) => s + objOrZero(f.isMetrics), 0) / validFolds.length;
+    const avgOos = validFolds.reduce((s, f) => s + objOrZero(f.oosMetrics), 0) / validFolds.length;
+    if (Number.isFinite(avgIs) && Number.isFinite(avgOos) && avgIs !== 0) {
       degradation = ((avgIs - avgOos) / Math.abs(avgIs)) * 100;
     }
   }

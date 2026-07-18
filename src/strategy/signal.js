@@ -22,6 +22,10 @@ export const SIGNAL_PARAMS = {
   // When true, breakouts fire regardless of weekly regime — the bare-Donchian
   // baseline for ablation. Production keeps this false.
   ignoreRegime: false,
+  // Direction switches. The predeclared long/short decision rule says: if one
+  // book fails after costs, cut it rather than keep it for symmetry.
+  allowLong: true,
+  allowShort: true,
 };
 
 function bbExtensionVeto(close, basis, upper, lower, sigmas) {
@@ -79,8 +83,8 @@ export function computeSignal(dailyCandles, regimeState, params = SIGNAL_PARAMS)
     let reason = "no breakout";
     let stop = null;
 
-    const longAllowed = params.ignoreRegime || stateAt(i) === "LONG_OK";
-    const shortAllowed = params.ignoreRegime || stateAt(i) === "SHORT_OK";
+    const longAllowed = params.allowLong !== false && (params.ignoreRegime || stateAt(i) === "LONG_OK");
+    const shortAllowed = params.allowShort !== false && (params.ignoreRegime || stateAt(i) === "SHORT_OK");
 
     if (breakoutUp && longAllowed) {
       if (params.useBbVeto && veto && veto.extendedUp) {

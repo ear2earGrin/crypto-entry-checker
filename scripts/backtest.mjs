@@ -33,6 +33,7 @@ import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { walkForward } from "../src/backtest/walkforward.js";
 import { computeMetrics } from "../src/backtest/metrics.js";
 import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
+import { SIGNAL_PARAMS } from "../src/strategy/signal.js";
 import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -40,10 +41,11 @@ const REPORTS_DIR = join(__dirname, "..", "reports");
 
 // ---------- args ----------
 function parseArgs(argv) {
-  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false };
+  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--selftest") a.selftest = true;
+    else if (k === "--long-only") a.longOnly = true;
     else if (k === "--from") a.from = Number(argv[++i]);
     else if (k === "--risk") a.risk = Number(argv[++i]);
     else if (k === "--fee") a.fee = Number(argv[++i]);
@@ -61,6 +63,7 @@ function metricsRow(asset, m) {
 // ---------- main ----------
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  const sigParams = args.longOnly ? { ...SIGNAL_PARAMS, allowShort: false } : SIGNAL_PARAMS;
   const assets = args.asset ? [args.asset] : UNIVERSE;
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
@@ -100,7 +103,7 @@ async function main() {
   const singleRows = [];
   const single = {};
   for (const asset of loaded) {
-    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset] });
+    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams });
     const m = computeMetrics(bt);
     single[asset] = { metrics: m, trades: bt.trades };
     singleRows.push(metricsRow(asset, m));
@@ -109,7 +112,7 @@ async function main() {
   // portfolio
   const dailyByAsset = {}, weeklyByAsset = {};
   for (const asset of loaded) { dailyByAsset[asset] = data[asset].daily; weeklyByAsset[asset] = data[asset].weekly; }
-  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset });
+  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset, signalParams: sigParams });
   const portMetrics = computeMetrics(port);
 
   // Funding coverage + totals, long/short split, and buy-and-hold benchmarks —
@@ -143,7 +146,7 @@ async function main() {
     { name: `expected (${args.slip}%)`, slip: args.slip },
     { name: `stressed (${(args.slip * 3).toFixed(2)}%)`, slip: args.slip * 3 },
   ].map((s) => {
-    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip, fundingByAsset });
+    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip, fundingByAsset, signalParams: sigParams });
     const m = computeMetrics(p);
     return `| ${s.name} | ${m.numTrades} | ${f(m.expectancyR, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} |`;
   });
@@ -151,7 +154,7 @@ async function main() {
   // walk-forward per asset
   const wfRows = [];
   for (const asset of loaded) {
-    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset] });
+    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams });
     const s = wf.summary;
     wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} | ${s.degradation === null ? "-" : pct(s.degradation)} |`);
   }
@@ -164,7 +167,7 @@ async function main() {
   const md = [
     `# Backtest report — ${stamp}`,
     "",
-    `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}`,
+    `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}${args.longOnly ? " — LONG-ONLY (shorts disabled)" : ""}`,
     `- Universe: ${loaded.join(", ")}`,
     `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
     "",

@@ -43,9 +43,9 @@ function parseArgs(argv) {
 }
 
 // Build a (regimeParams, signalParams) pair from a compact spec.
-function variant(name, { use = null, ignoreRegime = false, rsiVeto = false, bbVeto = false, exitOnRegimeFlip = true, donchian = null }) {
+function variant(name, { use = null, ignoreRegime = false, rsiVeto = false, bbVeto = false, exitOnRegimeFlip = true, donchian = null, allowShort = true }) {
   const regimeParams = { ...REGIME_PARAMS, use: use || { sma: false, macd: false, rsi: false, adx: false } };
-  const signalParams = { ...SIGNAL_PARAMS, ignoreRegime, useRsiVeto: rsiVeto, useBbVeto: bbVeto };
+  const signalParams = { ...SIGNAL_PARAMS, ignoreRegime, useRsiVeto: rsiVeto, useBbVeto: bbVeto, allowShort };
   if (donchian) {
     signalParams.donchianEntry = donchian[0];
     signalParams.donchianExit = donchian[1];
@@ -73,6 +73,9 @@ const VARIANTS = [
   variant("13. Prod, trail-only exit (no regime-flip exit)", { use: { sma: true, macd: true, rsi: true, adx: true }, rsiVeto: true, bbVeto: true, exitOnRegimeFlip: false }),
   // Slower Turtle family — the only alternate parameter set predeclared for comparison.
   variant("14. Prod with Donchian 55/20", { use: { sma: true, macd: true, rsi: true, adx: true }, rsiVeto: true, bbVeto: true, donchian: [55, 20] }),
+  // Follows the predeclared long/short decision rule after the first real-data
+  // report showed the short book at PF 0.93: measure the long-only book cleanly.
+  variant("15. Prod LONG-ONLY", { use: { sma: true, macd: true, rsi: true, adx: true }, rsiVeto: true, bbVeto: true, allowShort: false }),
 ];
 
 // Right-tail capture: what share of gross profit came from the top-5 winners, and

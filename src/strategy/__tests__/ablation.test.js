@@ -37,6 +37,15 @@ describe("signal ablation flags", () => {
     expect(off.latest.action).toBe("LONG");
   });
 
+  it("allowShort=false suppresses short signals even in SHORT_OK regime", () => {
+    const noisy = Array.from({ length: 30 }, (_, i) => 100 + Math.sin(i / 2) * 3);
+    const candles = buildCandles([...noisy, 96]);
+    const withShorts = computeSignal(candles, "SHORT_OK", { ...baseSignal() });
+    const noShorts = computeSignal(candles, "SHORT_OK", { ...baseSignal(), allowShort: false });
+    expect(withShorts.latest.action).toBe("SHORT");
+    expect(noShorts.latest.action).not.toBe("SHORT");
+  });
+
   it("disabling the RSI veto allows an overbought breakout that the veto would block", () => {
     const ramp = Array.from({ length: 40 }, (_, i) => 100 + i * 2); // drives RSI high
     const candles = buildCandles(ramp);
