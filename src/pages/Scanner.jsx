@@ -175,8 +175,8 @@ export default function Scanner() {
       </div>
 
       <div style={styles.summary}>
-        <Pill color="#0d3a25" text={`LONG-OK: ${summary.longOk}`} />
-        <Pill color="#3a0d1f" text={`SHORT-OK: ${summary.shortOk}`} />
+        <Pill color="#0d3a25" text={`BULL (longs allowed): ${summary.longOk}`} />
+        <Pill color="#3a0d1f" text={`BEAR (stand aside): ${summary.shortOk}`} />
         <Pill color="#1a1a1a" text={`FLAT: ${summary.flat}`} />
         <Pill color="#0d2f3a" text={`SIGNALS: ${summary.entries}`} />
         <Pill color="#3a2a0d" text={`VETOES: ${summary.vetoes}`} />
@@ -320,7 +320,13 @@ function GradeBadge({ grade, reasons }) {
 
 function StateBadge({ state }) {
   const c = STATE_COLORS[state] || STATE_COLORS.FLAT;
-  return <span style={{ ...styles.badge, background: c.bg, color: c.fg }}>{state}</span>;
+  // v2.0 is long-only: a bear regime does NOT mean "go short" — it means buying
+  // is forbidden. Label it as the instruction, not the raw state.
+  const label = state === "SHORT_OK" ? "BEAR — NO LONGS" : state === "LONG_OK" ? "BULL — LONGS OK" : state;
+  const title = state === "SHORT_OK"
+    ? "Price is below the 50W SMA. System is long-only: DO NOT buy, DO NOT short. Stand aside."
+    : state === "LONG_OK" ? "Price is above the 50W SMA. Breakout signals may fire." : "";
+  return <span title={title} style={{ ...styles.badge, background: c.bg, color: c.fg }}>{label}</span>;
 }
 function ActionBadge({ action, reason }) {
   const c = ACTION_COLORS[action] || ACTION_COLORS.NONE;
