@@ -17,7 +17,9 @@
     "paper": "node scripts/papertrade.mjs",
     "paper:selftest": "node scripts/papertrade.mjs --selftest",
     "paper:install": "node scripts/paper-install.mjs",
-    "paper:uninstall": "node scripts/paper-install.mjs --uninstall"
+    "paper:uninstall": "node scripts/paper-install.mjs --uninstall",
+    "dashboard:install": "node scripts/dashboard-install.mjs",
+    "dashboard:uninstall": "node scripts/dashboard-install.mjs --uninstall"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",
