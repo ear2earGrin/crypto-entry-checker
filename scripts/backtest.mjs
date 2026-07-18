@@ -80,7 +80,10 @@ async function main() {
     ? " — PRESET v2 PRODUCTION (SMA-only regime, long-only, trail-only exit, no vetoes)"
     : " — PRESET v1 (legacy spec: full regime, both directions, vetoes)";
   if (args.longOnly) sigParams = { ...sigParams, allowShort: false };
-  const assets = args.asset ? [args.asset] : UNIVERSE;
+  // --asset accepts a comma list: --asset BTC,SOL,HYPE. Any symbol is tried as
+  // <SYMBOL>USDT on Binance spot; unknown listings simply FAIL that asset and the
+  // run continues with the rest.
+  const assets = args.asset ? args.asset.split(",").map((x) => x.trim().toUpperCase()).filter(Boolean) : UNIVERSE;
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
   console.log(`\nBacktest harness — ${args.selftest ? "SELF-TEST (synthetic)" : "Binance data"}`);
