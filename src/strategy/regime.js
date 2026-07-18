@@ -1,7 +1,7 @@
 import { sma } from "../indicators/sma.js";
 import { macd } from "../indicators/macd.js";
 import { rsi } from "../indicators/rsi.js";
-import { adx } from "../indicators/adx.js";
+import { adx } from "../indicators/dmi.js";
 
 export const REGIME_PARAMS = {
   smaPeriod: 50,
