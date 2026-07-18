@@ -13,7 +13,11 @@
     "backtest": "node scripts/backtest.mjs",
     "backtest:selftest": "node scripts/backtest.mjs --selftest",
     "ablation": "node scripts/ablation.mjs",
-    "ablation:selftest": "node scripts/ablation.mjs --selftest"
+    "ablation:selftest": "node scripts/ablation.mjs --selftest",
+    "paper": "node scripts/papertrade.mjs",
+    "paper:selftest": "node scripts/papertrade.mjs --selftest",
+    "paper:install": "node scripts/paper-install.mjs",
+    "paper:uninstall": "node scripts/paper-install.mjs --uninstall"
   },
   "dependencies": {
     "lightweight-charts": "^4.2.0",

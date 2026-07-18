@@ -26,3 +26,6 @@ reports/*.json
 *.njsproj
 *.sln
 *.sw?
+
+# Paper-trading daemon state (local artifacts)
+data/paper/

@@ -259,6 +259,10 @@ export function backtestPortfolio({
     equityCurve.push({ time: t, equity: equity + unrealized, openCount: Object.keys(openPositions).length });
   }
 
+  // Snapshot live open positions (with their CURRENT trailing stops) before the
+  // end-of-data force-close — the paper-trading daemon needs them as real state.
+  const openAtEnd = Object.values(openPositions).map((p) => ({ ...p }));
+
   // Close any remaining positions at the last bar's close.
   for (const asset of Object.keys(openPositions)) {
     const ps = perAsset[asset];
@@ -281,7 +285,7 @@ export function backtestPortfolio({
     });
   }
 
-  return { trades, equityCurve, finalEquity: equity, startEquity, perAsset: Object.keys(perAsset) };
+  return { trades, equityCurve, finalEquity: equity, startEquity, perAsset: Object.keys(perAsset), openPositions: openAtEnd };
 }
 
 function findLastClosedWeeklyIdx(weekly, t) {

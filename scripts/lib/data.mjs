@@ -20,7 +20,7 @@ function toCandles(raw) {
     .filter((c) => Number.isFinite(c.close));
 }
 
-async function fetchKlinesRange(symbol, interval, startMs, endMs = Date.now()) {
+export async function fetchKlinesRange(symbol, interval, startMs, endMs = Date.now()) {
   const all = [];
   let cursor = startMs;
   for (let guard = 0; guard < 80; guard++) {
@@ -38,7 +38,7 @@ async function fetchKlinesRange(symbol, interval, startMs, endMs = Date.now()) {
   return all.filter((c) => (seen.has(c.time) ? false : (seen.add(c.time), true)));
 }
 
-function dropUnclosed(candles) {
+export function dropUnclosed(candles) {
   if (!candles.length) return candles;
   const now = Math.floor(Date.now() / 1000);
   const last = candles[candles.length - 1];
