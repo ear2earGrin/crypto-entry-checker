@@ -16,6 +16,26 @@ function ymd(unix) {
   return new Date(unix * 1000).toISOString().slice(0, 10);
 }
 
+// Two lanes, two scorecards. "system" = mechanical v2.0 signals followed to the
+// dot; "discretionary" = Market Cipher / judgment trades. Legacy values map:
+// scanner->system, manual->discretionary.
+function laneOf(t) {
+  const s = (t.systemSource || "").toLowerCase();
+  return s === "manual" || s === "discretionary" ? "DISCRETIONARY" : "SYSTEM";
+}
+
+function laneStats(trades) {
+  if (!trades.length) return { count: 0, wins: 0, losses: 0, pnl: 0, avgR: 0 };
+  let pnl = 0, wins = 0, losses = 0, rSum = 0;
+  for (const t of trades) {
+    const p = t.exit ? (t.direction === "LONG" ? 1 : -1) * t.entry.qty * (t.exit.price - t.entry.price) : 0;
+    pnl += p;
+    if (p > 0) wins++; else losses++;
+    if (t.entry?.riskDollar) rSum += p / t.entry.riskDollar;
+  }
+  return { count: trades.length, wins, losses, pnl, avgR: rSum / trades.length };
+}
+
 export default function TradeLog() {
   const [trades, setTrades] = useState(loadTrades());
   const [editing, setEditing] = useState(null);
@@ -27,18 +47,8 @@ export default function TradeLog() {
   const open = useMemo(() => trades.filter((t) => t.status === "OPEN"), [trades]);
   const closed = useMemo(() => trades.filter((t) => t.status === "CLOSED"), [trades]);
 
-  const stats = useMemo(() => {
-    const c = closed;
-    if (!c.length) return { count: 0, wins: 0, losses: 0, pnl: 0, avgR: 0 };
-    let pnl = 0, wins = 0, losses = 0, rSum = 0;
-    for (const t of c) {
-      const p = t.exit ? (t.direction === "LONG" ? 1 : -1) * t.entry.qty * (t.exit.price - t.entry.price) : 0;
-      pnl += p;
-      if (p > 0) wins++; else losses++;
-      if (t.entry?.riskDollar) rSum += p / t.entry.riskDollar;
-    }
-    return { count: c.length, wins, losses, pnl, avgR: rSum / c.length };
-  }, [closed]);
+  const sysStats = useMemo(() => laneStats(closed.filter((t) => laneOf(t) === "SYSTEM")), [closed]);
+  const discStats = useMemo(() => laneStats(closed.filter((t) => laneOf(t) === "DISCRETIONARY")), [closed]);
 
   function downloadJSON() {
     const blob = new Blob([exportTradesJSON()], { type: "application/json" });
@@ -124,13 +134,23 @@ export default function TradeLog() {
 
       {notice ? <div style={styles.notice}>{notice}</div> : null}
 
+      <div style={styles.laneLabel}>SYSTEM LANE (mechanical v2.0 — followed to the dot)</div>
       <div style={styles.statsRow}>
-        <Stat label="Open" value={String(open.length)} />
-        <Stat label="Closed" value={String(stats.count)} />
-        <Stat label="Wins / Losses" value={`${stats.wins} / ${stats.losses}`} />
-        <Stat label="Win rate" value={stats.count ? `${((stats.wins / stats.count) * 100).toFixed(1)}%` : "-"} />
-        <Stat label="Realized PnL" value={`${fmt(stats.pnl, 2)} USDT`} good={stats.pnl > 0} bad={stats.pnl < 0} />
-        <Stat label="Avg R (closed)" value={fmt(stats.avgR, 2)} />
+        <Stat label="Open" value={String(open.filter((t) => laneOf(t) === "SYSTEM").length)} />
+        <Stat label="Closed" value={String(sysStats.count)} />
+        <Stat label="Wins / Losses" value={`${sysStats.wins} / ${sysStats.losses}`} />
+        <Stat label="Win rate" value={sysStats.count ? `${((sysStats.wins / sysStats.count) * 100).toFixed(1)}%` : "-"} />
+        <Stat label="Realized PnL" value={`${fmt(sysStats.pnl, 2)} USDT`} good={sysStats.pnl > 0} bad={sysStats.pnl < 0} />
+        <Stat label="Avg R" value={fmt(sysStats.avgR, 2)} />
+      </div>
+      <div style={styles.laneLabel}>DISCRETIONARY LANE (Market Cipher / your judgment)</div>
+      <div style={styles.statsRow}>
+        <Stat label="Open" value={String(open.filter((t) => laneOf(t) === "DISCRETIONARY").length)} />
+        <Stat label="Closed" value={String(discStats.count)} />
+        <Stat label="Wins / Losses" value={`${discStats.wins} / ${discStats.losses}`} />
+        <Stat label="Win rate" value={discStats.count ? `${((discStats.wins / discStats.count) * 100).toFixed(1)}%` : "-"} />
+        <Stat label="Realized PnL" value={`${fmt(discStats.pnl, 2)} USDT`} good={discStats.pnl > 0} bad={discStats.pnl < 0} />
+        <Stat label="Avg R" value={fmt(discStats.avgR, 2)} />
       </div>
 
       <Section title="OPEN POSITIONS">
@@ -215,6 +235,7 @@ function TradeTable({ trades, onClose, onEdit, onDelete, onMd, onMdFile }) {
         <thead>
           <tr>
             <th style={styles.th}>Date</th>
+            <th style={styles.th}>Lane</th>
             <th style={styles.th}>Asset</th>
             <th style={styles.th}>Dir</th>
             <th style={styles.th}>Entry</th>
@@ -234,6 +255,11 @@ function TradeTable({ trades, onClose, onEdit, onDelete, onMd, onMdFile }) {
             return (
               <tr key={t.id}>
                 <td style={styles.td}>{ymd(t.entry?.time)}</td>
+                <td style={styles.td}>
+                  <span style={{ ...styles.laneBadge, background: laneOf(t) === "SYSTEM" ? "#0d2f3a" : "#2a1a3a", color: laneOf(t) === "SYSTEM" ? "#7cd8ff" : "#c99cff" }}>
+                    {laneOf(t) === "SYSTEM" ? "SYS" : "DISC"}
+                  </span>
+                </td>
                 <td style={{ ...styles.td, fontWeight: 700 }}>{t.asset}</td>
                 <td style={{ ...styles.td, color: t.direction === "LONG" ? "#7cffb1" : "#ff7c9c", fontWeight: 700 }}>{t.direction}</td>
                 <td style={styles.td}>{fmt(t.entry?.price, 4)}</td>
@@ -264,6 +290,7 @@ function TradeTable({ trades, onClose, onEdit, onDelete, onMd, onMdFile }) {
 function NewTradeModal({ onClose, onSave }) {
   const [form, setForm] = useState({
     asset: "BTC", direction: "LONG",
+    lane: "system",
     entryDate: new Date().toISOString().slice(0, 10),
     price: "", stop: "", qty: "", riskDollar: "", leverage: "",
     regimeState: "LONG_OK", weeklySma: "", weeklyHist: "", weeklyAdx: "", weeklyRsi: "",
@@ -302,7 +329,7 @@ function NewTradeModal({ onClose, onSave }) {
         atr: num(form.dailyAtr),
       },
       notes: form.notes,
-      systemSource: "manual",
+      systemSource: form.lane,
     };
     onSave(trade);
   }
@@ -319,6 +346,12 @@ function NewTradeModal({ onClose, onSave }) {
           <select value={form.direction} onChange={(e) => update("direction", e.target.value)} style={modalStyles.input}>
             <option value="LONG">LONG</option>
             <option value="SHORT">SHORT</option>
+          </select>
+        </Field>
+        <Field label="Lane">
+          <select value={form.lane} onChange={(e) => update("lane", e.target.value)} style={modalStyles.input}>
+            <option value="system">SYSTEM (scanner signal)</option>
+            <option value="discretionary">DISCRETIONARY (Cipher / judgment)</option>
           </select>
         </Field>
         <Field label="Entry date"><input type="date" value={form.entryDate} onChange={(e) => update("entryDate", e.target.value)} style={modalStyles.input} /></Field>
@@ -449,7 +482,9 @@ const styles = {
   btn: { padding: "10px 14px", borderRadius: 14, border: "1px solid #2cff9c33", background: "linear-gradient(180deg, #0b1712, #070b09)", color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.4, fontWeight: 800, boxShadow: "0 10px 25px #00000088" },
   btnGhost: { padding: "8px 12px", borderRadius: 12, border: "1px solid #2cff9c22", background: "#06120e", color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.2, fontWeight: 700, fontSize: 11 },
   notice: { marginTop: 12, padding: 10, borderRadius: 12, border: "1px solid #2cff9c33", background: "#0d3a25", color: "#7cffb1", fontSize: 12 },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, marginTop: 14 },
+  statsRow: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, marginTop: 8 },
+  laneLabel: { marginTop: 16, fontSize: 11, letterSpacing: 1.6, opacity: 0.75, fontWeight: 800 },
+  laneBadge: { display: "inline-block", padding: "2px 7px", borderRadius: 6, fontSize: 10, fontWeight: 800, letterSpacing: 1 },
   stat: { padding: 12, borderRadius: 14, border: "1px solid #2cff9c22", background: "#06120e" },
   sectionTitle: { fontSize: 12, letterSpacing: 2, opacity: 0.85, fontWeight: 700, marginBottom: 8 },
   tableWrap: { borderRadius: 18, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e" },

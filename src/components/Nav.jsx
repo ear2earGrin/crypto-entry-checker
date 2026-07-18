@@ -5,7 +5,6 @@ const NAV_LINKS = [
   { to: '/scanner', label: 'SCANNER' },
   { to: '/backtest', label: 'BACKTEST' },
   { to: '/log', label: 'TRADE LOG' },
-  { to: '/lore', label: 'WORLD LORE' },
 ];
 
 export default function Nav() {
@@ -31,7 +30,7 @@ export default function Nav() {
         letterSpacing: '0.15em',
         color: '#2cff9c',
       }}>
-        SHELLFORGE
+        CRYPTO SYSTEM v2.0
       </span>
 
       <div style={{ display: 'flex', gap: '4px' }}>
