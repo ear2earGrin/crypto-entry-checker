@@ -34,6 +34,7 @@ import { walkForward } from "../src/backtest/walkforward.js";
 import { computeMetrics } from "../src/backtest/metrics.js";
 import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
 import { SIGNAL_PARAMS } from "../src/strategy/signal.js";
+import { REGIME_PARAMS } from "../src/strategy/regime.js";
 import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -41,11 +42,12 @@ const REPORTS_DIR = join(__dirname, "..", "reports");
 
 // ---------- args ----------
 function parseArgs(argv) {
-  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false };
+  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false, preset: null };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--selftest") a.selftest = true;
     else if (k === "--long-only") a.longOnly = true;
+    else if (k === "--preset") a.preset = String(argv[++i]);
     else if (k === "--from") a.from = Number(argv[++i]);
     else if (k === "--risk") a.risk = Number(argv[++i]);
     else if (k === "--fee") a.fee = Number(argv[++i]);
@@ -63,7 +65,26 @@ function metricsRow(asset, m) {
 // ---------- main ----------
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  const sigParams = args.longOnly ? { ...SIGNAL_PARAMS, allowShort: false } : SIGNAL_PARAMS;
+  // Presets are PREDECLARED configurations under evaluation — not the spec.
+  // v2: the configuration the 2026-07-18 ablation's convergent evidence points at:
+  //     Donchian 20/10 + 50W-SMA-only regime, long-only, trail-only exit, no vetoes.
+  let sigParams = SIGNAL_PARAMS;
+  let regParams = undefined;
+  let exitFlip = true;
+  let modeNote = "";
+  if (args.preset === "v2") {
+    sigParams = { ...SIGNAL_PARAMS, allowShort: false, useRsiVeto: false, useBbVeto: false };
+    regParams = { ...REGIME_PARAMS, use: { sma: true, macd: false, rsi: false, adx: false } };
+    exitFlip = false;
+    modeNote = " — PRESET v2 (SMA-only regime, long-only, trail-only exit, no vetoes)";
+  } else if (args.preset) {
+    console.error(`Unknown preset "${args.preset}". Known: v2`);
+    process.exit(1);
+  }
+  if (args.longOnly) {
+    sigParams = { ...sigParams, allowShort: false };
+    if (!modeNote) modeNote = " — LONG-ONLY (shorts disabled)";
+  }
   const assets = args.asset ? [args.asset] : UNIVERSE;
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
@@ -103,7 +124,7 @@ async function main() {
   const singleRows = [];
   const single = {};
   for (const asset of loaded) {
-    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams });
+    const bt = backtestOne({ asset, ...data[asset], startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip });
     const m = computeMetrics(bt);
     single[asset] = { metrics: m, trades: bt.trades };
     singleRows.push(metricsRow(asset, m));
@@ -112,7 +133,7 @@ async function main() {
   // portfolio
   const dailyByAsset = {}, weeklyByAsset = {};
   for (const asset of loaded) { dailyByAsset[asset] = data[asset].daily; weeklyByAsset[asset] = data[asset].weekly; }
-  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset, signalParams: sigParams });
+  const port = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset, signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip });
   const portMetrics = computeMetrics(port);
 
   // Funding coverage + totals, long/short split, and buy-and-hold benchmarks —
@@ -146,7 +167,7 @@ async function main() {
     { name: `expected (${args.slip}%)`, slip: args.slip },
     { name: `stressed (${(args.slip * 3).toFixed(2)}%)`, slip: args.slip * 3 },
   ].map((s) => {
-    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip, fundingByAsset, signalParams: sigParams });
+    const p = backtestPortfolio({ dailyByAsset, weeklyByAsset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: s.slip, fundingByAsset, signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip });
     const m = computeMetrics(p);
     return `| ${s.name} | ${m.numTrades} | ${f(m.expectancyR, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} |`;
   });
@@ -154,7 +175,7 @@ async function main() {
   // walk-forward per asset
   const wfRows = [];
   for (const asset of loaded) {
-    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams });
+    const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip });
     const s = wf.summary;
     wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} | ${s.degradation === null ? "-" : pct(s.degradation)} |`);
   }
@@ -167,7 +188,7 @@ async function main() {
   const md = [
     `# Backtest report — ${stamp}`,
     "",
-    `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}${args.longOnly ? " — LONG-ONLY (shorts disabled)" : ""}`,
+    `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}${modeNote}`,
     `- Universe: ${loaded.join(", ")}`,
     `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
     "",

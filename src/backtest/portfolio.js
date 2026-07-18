@@ -1,4 +1,4 @@
-import { computeRegime } from "../strategy/regime.js";
+import { computeRegime, REGIME_PARAMS } from "../strategy/regime.js";
 import { computeSignal, SIGNAL_PARAMS } from "../strategy/signal.js";
 import { donchianCloses } from "../indicators/donchian.js";
 import { sizePosition } from "../strategy/sizing.js";
@@ -46,6 +46,8 @@ export function backtestPortfolio({
   fundingByAsset = null,
   portfolioParams = PORTFOLIO_PARAMS,
   signalParams = SIGNAL_PARAMS,
+  regimeParams = REGIME_PARAMS,
+  exitOnRegimeFlip = true,
 }) {
   const assets = Object.keys(dailyByAsset);
   const fundingMaps = {};
@@ -60,7 +62,7 @@ export function backtestPortfolio({
     const weekly = weeklyByAsset[asset];
     if (!daily?.length || !weekly?.length) continue;
 
-    const regime = computeRegime(weekly);
+    const regime = computeRegime(weekly, regimeParams);
     const dailyRegime = new Array(daily.length).fill("WARMUP");
     for (let i = 0; i < daily.length; i++) {
       const wIdx = findLastClosedWeeklyIdx(weekly, daily[i].time);
@@ -157,7 +159,7 @@ export function backtestPortfolio({
         exitReason = "trailing stop hit";
         exited = true;
       }
-      if (!exited) {
+      if (!exited && exitOnRegimeFlip) {
         const flipLong = pos.direction === "LONG" && regimeState !== "LONG_OK";
         const flipShort = pos.direction === "SHORT" && regimeState !== "SHORT_OK";
         if (flipLong || flipShort) {
