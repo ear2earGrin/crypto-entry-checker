@@ -198,6 +198,7 @@ export default function Scanner() {
                 <th style={styles.th}>Close</th>
                 <th style={styles.th}>Entry trigger</th>
                 <th style={styles.th}>Stop</th>
+                <th style={styles.th}>D10 exit</th>
                 <th style={styles.th}>Stop dist</th>
                 <th style={styles.th}>Qty</th>
                 <th style={styles.th}>Notional</th>
@@ -238,7 +239,7 @@ function Row({ row, leverage, mmrPct }) {
     return (
       <tr>
         <td style={styles.td}>{row.asset}</td>
-        <td style={styles.td} colSpan={21}>
+        <td style={styles.td} colSpan={22}>
           <span style={{ color: "#ff7c9c" }}>error: {row.error}</span>
         </td>
       </tr>
@@ -276,6 +277,9 @@ function Row({ row, leverage, mmrPct }) {
          sig.action === "SHORT" ? `< ${fmt(sig.entryLower, 4)}` : "-"}
       </td>
       <td style={styles.td}>{fmt(sig.stop, 4)}</td>
+      <td style={styles.td} title="10-day trailing exit line. If you HOLD this coin: exit when the daily close is below this. Ratchet your stop up to it daily — never down.">
+        {fmt(sig.exitLower, 4)}
+      </td>
       <td style={styles.td}>{sz?.ok ? `${fmt(sz.stopDistPct, 2)}%` : "-"}</td>
       <td style={styles.td}>{sz?.ok ? fmt(sz.qty, 6) : "-"}</td>
       <td style={styles.td}>{sz?.ok ? fmt(sz.notional, 0) : "-"}</td>
