@@ -109,8 +109,9 @@ export default function Scanner() {
         <div>
           <h1 style={styles.title}>SCANNER</h1>
           <div style={styles.subtitle}>
-            Mechanical swing: weekly regime (50W SMA · MACD hist · ADX≥20 · RSI vs 50) →
-            daily Donchian-20 breakout → 1% risk per trade, Donchian-10 trailing exit.
+            Mechanical swing v2.0 (validated 2026-07-18): weekly 50W-SMA regime →
+            daily Donchian-20 breakout, LONG-ONLY → fixed-risk sizing, Donchian-10
+            trailing exit. No vetoes, no shorts — the ablation showed they subtract.
           </div>
         </div>
         <div style={{ display: "grid", gap: 8 }}>

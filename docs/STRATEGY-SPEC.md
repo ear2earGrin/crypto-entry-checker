@@ -1,5 +1,41 @@
 # Strategy Specification
 
+## ⚡ v2.0 — CURRENT PRODUCTION CONFIGURATION (validated 2026-07-18)
+
+The live system runs `PRESET_V2` (`src/strategy/presets.js`), selected by ablation
+and validated on 2020-2026 Binance history with full costs (fees, slippage,
+funding), causal next-bar fills, walk-forward, and Monte Carlo:
+
+- **Regime (weekly)**: close > 50W SMA → LONG_OK, else FLAT. Nothing else.
+  (MACD/RSI/ADX conditions removed — ablation showed each one SUBTRACTED edge.)
+- **Entry (daily)**: close breaks the prior 20-day close-high while LONG_OK.
+  LONG-ONLY (the short book lost money after funding over 6.5 years).
+  No RSI veto, no BB-extension veto (both removed — they cut winners).
+- **Exit**: Donchian-10 trailing stop only. No regime-flip exit (added nothing).
+- **Sizing**: unchanged — fixed-fractional risk, stop-derived quantity.
+- **Portfolio rules**: unchanged (§8).
+
+Validation (2026-07-18 report): 205 trades, 0.65R expectancy, PF 2.4, +233%
+(20.2% CAGR), maxDD 14.0%, permutation p=0.0015, 8/9 assets OOS-positive
+(BNB negative — on watch), cost-robust at 3x slippage, funding fully charged.
+Monte Carlo p95 DD 22.3% — slightly above the 20% circuit breaker, so live
+risk starts at 0.75% (tail DD ≈ 17%), stepping to 1% only after live months
+match the model.
+
+**Status: frozen for PAPER TRADING.** Selection-bias caveat: v2 was chosen
+after seeing ablation results on the same history (mitigated by walk-forward
+and by v2 being a simplification toward the canonical CTA trend structure,
+not an exotic mined combo). Paper trading is the true out-of-sample. NO
+further parameter tuning against this same history — the next evidence comes
+from the future.
+
+The sections below describe the v1.1 rules in detail. Where they conflict with
+the v2.0 summary above, **v2.0 wins**; v1.1 remains documented because the
+ablation harness still references its components and because the reasoning
+history matters.
+
+---
+
 This document is the single source of truth for the mechanical swing strategy. **Code must match this spec; if they conflict, the spec is right and the code has a bug.** A successor agent should read this first, then verify implementation parity.
 
 Owner intent: react, don't predict. Mechanical entry, mechanical exit. The system's job is to remove judgment from the trigger pull. Discretion is reserved for whether to follow the system at all.
@@ -291,3 +327,11 @@ If any rule in §3–§8 changes, bump the strategy version in this doc (top of 
   derivatives positioning (funding/OI). CONTEXT ONLY: displayed in Scanner and
   attached to proposed entries, but the mechanical entry/exit signal is unchanged.
   No promotion to hard gate until walk-forward validation. Core rules §3–§8 untouched.
+- `v2.0` (2026-07-18): First real-data validation cycle. v1.1 failed the
+  predeclared bars (0.24R, PF 1.42, p=0.087, MC p95 DD 26.9%). Ablation across
+  15 predeclared variants showed: SMA regime carries ALL the edge (Donchian
+  alone 0.02R; +SMA 0.51R); MACD/RSI/ADX conditions each subtract; anti-chase
+  vetoes subtract; regime-flip exit adds nothing; shorts lose after funding.
+  Production switched to PRESET_V2: 50W-SMA-only regime, long-only, trail-only
+  exit, no vetoes. Validated same day: 0.65R, PF 2.4, p=0.0015, maxDD 14%,
+  8/9 OOS-positive. Frozen for paper trading; live entry at 0.75% risk.

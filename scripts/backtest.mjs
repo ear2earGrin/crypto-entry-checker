@@ -33,8 +33,7 @@ import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { walkForward } from "../src/backtest/walkforward.js";
 import { computeMetrics } from "../src/backtest/metrics.js";
 import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
-import { SIGNAL_PARAMS } from "../src/strategy/signal.js";
-import { REGIME_PARAMS } from "../src/strategy/regime.js";
+import { PRESET_V1, PRESET_V2 } from "../src/strategy/presets.js";
 import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -42,7 +41,7 @@ const REPORTS_DIR = join(__dirname, "..", "reports");
 
 // ---------- args ----------
 function parseArgs(argv) {
-  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false, preset: null };
+  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false, preset: "v2" };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--selftest") a.selftest = true;
@@ -65,26 +64,22 @@ function metricsRow(asset, m) {
 // ---------- main ----------
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  // Presets are PREDECLARED configurations under evaluation — not the spec.
-  // v2: the configuration the 2026-07-18 ablation's convergent evidence points at:
-  //     Donchian 20/10 + 50W-SMA-only regime, long-only, trail-only exit, no vetoes.
-  let sigParams = SIGNAL_PARAMS;
-  let regParams = undefined;
-  let exitFlip = true;
-  let modeNote = "";
-  if (args.preset === "v2") {
-    sigParams = { ...SIGNAL_PARAMS, allowShort: false, useRsiVeto: false, useBbVeto: false };
-    regParams = { ...REGIME_PARAMS, use: { sma: true, macd: false, rsi: false, adx: false } };
-    exitFlip = false;
-    modeNote = " — PRESET v2 (SMA-only regime, long-only, trail-only exit, no vetoes)";
-  } else if (args.preset) {
-    console.error(`Unknown preset "${args.preset}". Known: v2`);
+  // Presets come from src/strategy/presets.js — the SAME source the Scanner
+  // uses, so what you backtest is exactly what you see live. Default is the
+  // production preset (v2, validated 2026-07-18); --preset v1 runs the legacy spec.
+  const presets = { v1: PRESET_V1, v2: PRESET_V2 };
+  const preset = presets[args.preset];
+  if (!preset) {
+    console.error(`Unknown preset "${args.preset}". Known: ${Object.keys(presets).join(", ")}`);
     process.exit(1);
   }
-  if (args.longOnly) {
-    sigParams = { ...sigParams, allowShort: false };
-    if (!modeNote) modeNote = " — LONG-ONLY (shorts disabled)";
-  }
+  let sigParams = preset.signalParams;
+  const regParams = preset.regimeParams;
+  const exitFlip = preset.exitOnRegimeFlip;
+  let modeNote = args.preset === "v2"
+    ? " — PRESET v2 PRODUCTION (SMA-only regime, long-only, trail-only exit, no vetoes)"
+    : " — PRESET v1 (legacy spec: full regime, both directions, vetoes)";
+  if (args.longOnly) sigParams = { ...sigParams, allowShort: false };
   const assets = args.asset ? [args.asset] : UNIVERSE;
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
