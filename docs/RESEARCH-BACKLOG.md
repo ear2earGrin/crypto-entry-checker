@@ -67,6 +67,23 @@ evidence-backed additions are ranked below.
   internal correlation (~one factor in stress) caps breadth at ~2-3 effective bets.
   The real breadth upgrade would be non-crypto futures — out of scope for now.
 
+## Ruled on: Market Cipher / WaveTrend (owner's paid TradingView indicator)
+
+Decision (2026-07-18, post-ablation): NOT a candidate for the mechanical system.
+Market Cipher is a closed-source bundle of public-domain oscillators (WaveTrend /
+LazyBear, RSI variants, money flow). The 15-variant ablation demonstrated on the
+owner's own data that oscillator layers on price SUBTRACT edge in this system
+(every added condition reduced expectancy). Closed-source also means it cannot be
+replicated exactly, so it cannot be honestly backtested.
+
+Sanctioned use instead: the DISCRETIONARY lane. Cipher-assisted manual trades go
+through the Checker page and are logged as discretionary, keeping a separate
+scorecard from system trades. After ~6 months the two tracks can be compared —
+measuring whether the owner's discretion beats the machine is a legitimate and
+interesting experiment. If anyone insists on testing WaveTrend mechanically, it
+must be implemented from the public LazyBear formula as a predeclared variant and
+judged on data the choice wasn't made on.
+
 ## Tier 3 — hedge-fund practices we deliberately skip
 
 - Cross-sectional momentum (long winners / short losers among coins): crypto
