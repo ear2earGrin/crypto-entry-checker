@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
+// Environment-aware Binance hosts (dev: Vite proxy; production build: direct API).
+// App.jsx predates data/binance.js and keeps its own fetch code, but the HOSTS
+// must come from the single source or static deploys (pm-brief.com/trading) 404.
+import { SPOT as BINANCE_SPOT, FUT as BINANCE_FUT } from "./data/binance.js";
 
 /**
  * Crypto Entry Checker
@@ -167,7 +171,7 @@ async function fetchJson(url) {
 }
 async function fetchBinanceSpotPrice(asset, quote) {
   const symbol = binanceSymbol(asset, quote);
-  const url = `/binance-spot/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`;
+  const url = `${BINANCE_SPOT}/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`;
   const data = await fetchJson(url);
   const p = num(data?.price);
   if (p === null) throw new Error("Binance spot returned invalid price.");
@@ -181,7 +185,7 @@ function tfToBinanceInterval(tf) {
 async function fetchKlines({ asset, quote, timeframe, limit = 300 }) {
   const symbol = binanceSymbol(asset, quote);
   const interval = tfToBinanceInterval(timeframe);
-  const url = `/binance-spot/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`;
+  const url = `${BINANCE_SPOT}/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`;
   const data = await fetchJson(url);
   if (!Array.isArray(data)) throw new Error("Klines response invalid.");
 
@@ -199,15 +203,15 @@ async function fetchKlines({ asset, quote, timeframe, limit = 300 }) {
 async function fetchBtcDerivsContext() {
   const symbol = "BTCUSDT";
 
-  const fundingArr = await fetchJson(`/binance-fut/fapi/v1/fundingRate?symbol=${symbol}&limit=1`);
+  const fundingArr = await fetchJson(`${BINANCE_FUT}/fapi/v1/fundingRate?symbol=${symbol}&limit=1`);
   const fundingRate = num(fundingArr?.[0]?.fundingRate);
 
-  const oiNowObj = await fetchJson(`/binance-fut/fapi/v1/openInterest?symbol=${symbol}`);
+  const oiNowObj = await fetchJson(`${BINANCE_FUT}/fapi/v1/openInterest?symbol=${symbol}`);
   const openInterestNow = num(oiNowObj?.openInterest);
 
   let oiChange24hPct = null;
   try {
-    const hist = await fetchJson(`/binance-fut/futures/data/openInterestHist?symbol=${symbol}&period=1d&limit=2`);
+    const hist = await fetchJson(`${BINANCE_FUT}/futures/data/openInterestHist?symbol=${symbol}&period=1d&limit=2`);
     const a = hist?.[0]?.sumOpenInterest ? num(hist[0].sumOpenInterest) : null;
     const b = hist?.[1]?.sumOpenInterest ? num(hist[1].sumOpenInterest) : null;
 
@@ -228,7 +232,7 @@ async function fetchBtcDerivsContext() {
 
   let longShortRatio = null;
   try {
-    const ls = await fetchJson(`/binance-fut/futures/data/globalLongShortAccountRatio?symbol=${symbol}&period=4h&limit=1`);
+    const ls = await fetchJson(`${BINANCE_FUT}/futures/data/globalLongShortAccountRatio?symbol=${symbol}&period=4h&limit=1`);
     longShortRatio = num(ls?.[0]?.longShortRatio);
   } catch {
     // ignore
