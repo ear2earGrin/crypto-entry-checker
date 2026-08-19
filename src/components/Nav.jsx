@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { to: '/scanner', label: 'SCANNER' },
   { to: '/backtest', label: 'BACKTEST' },
   { to: '/log', label: 'TRADE LOG' },
+  { to: '/paper', label: 'PAPER' },
 ];
 
 export default function Nav() {

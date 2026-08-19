@@ -34,3 +34,7 @@ export const PRESET_V2 = {
 };
 
 export const PRODUCTION_PRESET = PRESET_V2;
+
+// Official start of the paper-trading phase (matches the Mac mini robot's epoch).
+// The Paper tab replays the portfolio from this date; trades before it don't count.
+export const PAPER_EPOCH = "2026-07-18";
