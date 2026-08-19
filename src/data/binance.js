@@ -1,5 +1,9 @@
-const SPOT = "/binance-spot";
-const FUT = "/binance-fut";
+// Dev: Vite proxy paths (CORS-free). Production build (static hosting, e.g.
+// pm-brief.com/trading): Binance's public market-data API sends CORS headers,
+// so the browser can call it directly — no proxy or server rewrites needed.
+const PROD = typeof import.meta !== "undefined" && import.meta.env && import.meta.env.PROD;
+const SPOT = PROD ? "https://api.binance.com" : "/binance-spot";
+const FUT = PROD ? "https://fapi.binance.com" : "/binance-fut";
 
 function tfToBinanceInterval(tf) {
   const map = {

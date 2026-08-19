@@ -6,6 +6,29 @@ If you are a person: skim §1 and §2, hand the prompt at the bottom to the othe
 
 ---
 
+## 0. FAST PATH (recommended since 2026-08): drop-in prebuilt bundle
+
+Since v2.0 the app builds as a fully static, subpath-portable bundle — no source
+porting, no CORS proxy, no framework adaptation needed:
+
+1. In crypto-entry-checker (branch claude/trading-system-indicators-Lrj5i, latest):
+   `npm install && npm run build`
+2. The `dist/` folder is self-contained: relative asset paths (works under
+   /trading/ or any subpath), hash routing (#/scanner — no server rewrites), and
+   production builds call api.binance.com / fapi.binance.com DIRECTLY (Binance's
+   public market-data API sends CORS headers, so no proxy is required).
+3. Replace the contents of pm-brief's /trading/ directory with `dist/*`. Deploy.
+
+That's the whole integration. Rebuild + recopy on every update — the bundle IS
+the system, so drift between pm-brief and the validated code becomes impossible.
+The source-porting guide below (§1-§9) remains for anyone who wants a native
+integration instead, but the fast path supersedes it for normal use.
+
+CAVEAT: the Trade Log stores data in the visitor's browser (localStorage) —
+the pm-brief copy and the Mac mini copy are separate journals. And if pm-brief
+is publicly reachable, consider putting /trading behind auth: it exposes no
+secrets, but a trade journal is personal.
+
 ## 1. What you're porting
 
 The crypto-entry-checker is a mechanical swing-trading system for crypto. It already runs as a standalone Vite app at `/scanner`, `/backtest`, `/log` (plus the existing `/` checker). The owner wants the same functionality as a subpage inside pm-brief.com.

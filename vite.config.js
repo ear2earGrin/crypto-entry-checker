@@ -1,7 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // Relative base so the built bundle works under ANY subpath (e.g. pm-brief.com/trading/).
+  // Dev keeps '/' — the dev server needs an absolute base.
+  base: command === "build" ? "./" : "/",
   plugins: [react()],
   server: {
     proxy: {
@@ -30,4 +33,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
