@@ -32,6 +32,7 @@ import { dirname, join } from "node:path";
 
 import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { PRESET_V2 } from "../src/strategy/presets.js";
+import { computeRegime } from "../src/strategy/regime.js";
 import {
   UNIVERSE, fetchKlinesRange, dropUnclosed, loadFunding, synth, synthFunding, f,
 } from "./lib/data.mjs";
@@ -71,6 +72,25 @@ function notifyMac(title, body) {
     const esc = (x) => String(x).replace(/"/g, "'");
     execFile("osascript", ["-e", `display notification "${esc(body)}" with title "${esc(title)}"`], () => {});
   } catch { /* not macOS — log only */ }
+}
+
+// Phone push via ntfy.sh: if data/paper/ntfy.txt contains a topic name, every
+// event is POSTed there. Install the ntfy app on your phone and subscribe to
+// the same topic (treat the topic name as a secret — it IS the auth).
+function ntfyTopic() {
+  try { return readFileSync(join(DIR, "ntfy.txt"), "utf8").trim() || null; } catch { return null; }
+}
+async function notifyPhone(title, body) {
+  if (SELFTEST) return;
+  const topic = ntfyTopic();
+  if (!topic) return;
+  try {
+    await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+      method: "POST",
+      headers: { Title: title.replace(/[^\x20-\x7E]/g, ""), Priority: "high" },
+      body,
+    });
+  } catch { /* best-effort */ }
 }
 const ymd = (unix) => new Date(unix * 1000).toISOString().slice(0, 10);
 
@@ -137,6 +157,25 @@ async function main() {
 
   const data = SELFTEST ? loadSelftestData() : await loadData(epochMs);
 
+  // Regime-flip announcements: the flip PRECEDES the first entry, and the owner's
+  // discretionary plans are keyed to it — so it deserves its own notification.
+  if (!state.regimes) state.regimes = {};
+  const regimeEvents = [];
+  for (const asset of Object.keys(data.weeklyByAsset)) {
+    const latest = computeRegime(data.weeklyByAsset[asset], PRESET_V2.regimeParams).latest;
+    if (!latest) continue;
+    const now = latest.state;
+    const prev = state.regimes[asset];
+    if (prev && prev !== now) {
+      if (now === "LONG_OK") {
+        regimeEvents.push(`🟢 REGIME FLIP ${asset}: BULL — longs allowed (weekly close ${f(latest.close, 2)} > 50W ${f(latest.sma, 2)}). First breakout close will trigger an entry.`);
+      } else {
+        regimeEvents.push(`🔴 REGIME ${asset}: back to ${now === "SHORT_OK" ? "BEAR — stand aside" : now}.`);
+      }
+    }
+    state.regimes[asset] = now;
+  }
+
   const res = backtestPortfolio({
     ...data,
     startEquity: CFG.equity,
@@ -182,10 +221,12 @@ async function main() {
     state.stops[sk] = p.stop;
   }
 
-  // Announce.
-  for (const e of events) {
+  // Announce (regime flips first — they're the headline).
+  const allEvents = [...regimeEvents, ...events];
+  for (const e of allEvents) {
     logLine(`- ${nowIso} ${e}`);
-    notifyMac("Crypto System (paper)", e.replace(/^[^\s]+\s/, ""));
+    notifyMac("Crypto System", e.replace(/^[^\s]+\s/, ""));
+    await notifyPhone("Crypto System", e);
   }
 
   // Status snapshot (overwritten each run).
@@ -207,13 +248,13 @@ async function main() {
     openLines.length ? "|---|---|---|---|---|" : "",
     ...openLines,
     "",
-    `_${events.length ? events.length + " new event(s) this run." : "No new events this run."}_`,
+    `_${allEvents.length ? allEvents.length + " new event(s) this run." : "No new events this run."}_`,
   ].filter((l) => l !== "").join("\n") + "\n");
 
   state.lastRunAt = nowIso;
   saveState(state);
 
-  console.log(`\n[paper] run complete ${nowIso}: ${events.length} new event(s), ` +
+  console.log(`\n[paper] run complete ${nowIso}: ${allEvents.length} new event(s), ` +
     `${res.openPositions.filter((p) => p.entryTime >= epochSec).length} open, ` +
     `${paperTrades.length} closed since epoch. Status: ${STATUS_PATH}`);
 }
