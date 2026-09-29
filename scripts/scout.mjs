@@ -70,7 +70,7 @@ async function fetchJson(url, headers = {}, tries = 3) {
       const res = await fetch(url, { headers, signal: AbortSignal.timeout(20000) });
       if (res.status === 429) { await sleep(15000 * (k + 1)); last = new Error(`429 rate limited: ${url}`); continue; }
       if (res.status === 401 || res.status === 403) {
-        const hint = url.includes("coingecko") ? " — turn off VPN or add a free CoinGecko Demo key" : "";
+        const hint = !url.includes("coingecko") ? "" : res.status === 401 ? " — API key rejected, check data/scout/coingecko.txt" : " — turn off VPN or add a free CoinGecko Demo key";
         throw Object.assign(new Error(`HTTP ${res.status} for ${url.split("?")[0]}${hint}`), { fatal: true });
       }
       if (!res.ok) throw new Error(`HTTP ${res.status} for ${url.split("?")[0]}`);
@@ -289,7 +289,7 @@ async function main() {
       }
       snapshot = {
         ...(snapshot || { narratives: [], watchlist: [], rejects: [], categories: [], funnel: {}, gauge: null, btcRegime: null, picksToday: [], explainers: {} }),
-        generatedAt: snapshot?.generatedAt || now.toISOString(),
+        generatedAt: snapshot?.scanDay ? snapshot.generatedAt : now.toISOString(),
         scanDay: snapshot?.scanDay || null,
         selftest: SELFTEST,
         scanError: { at: now.toISOString(), coingecko: health.coingecko, binance: health.binance },
@@ -546,15 +546,17 @@ function statusMarkdown(s) {
     `news ${news.filter((h) => h.ok).length}/${news.length} feeds`,
     `Claude ${s.health?.claude?.ok ? "on" : "off"}`,
   ].join(" · ");
-  const lines = [`# Narrative Scout — ${s.generatedAt}`, ""];
+  const lines = [`# Narrative Scout — updated ${s.newsUpdatedAt || s.generatedAt}`, ""];
   if (s.scanError) {
     const cg = s.scanError.coingecko;
     lines.push(
       `**Market scan failed at ${s.scanError.at}.** It retries every hour.`,
       s.scanDay ? `The numbers below are from the last good scan (${s.scanDay}).` : "No scan has succeeded yet, so there are no numbers below. News still updates.",
-      cg && !cg.ok && /40[13]/.test(cg.error || "")
-        ? "CoinGecko refused the request. Turn off any VPN, or put a free CoinGecko Demo API key in data/scout/coingecko.txt."
-        : "",
+      cg && !cg.ok && /401/.test(cg.error || "")
+        ? "CoinGecko rejected the API key in data/scout/coingecko.txt. Check it's your real Demo key (starts with CG-), copied in full."
+        : cg && !cg.ok && /403/.test(cg.error || "")
+          ? "CoinGecko refused the request. Turn off any VPN, or put a free CoinGecko Demo API key in data/scout/coingecko.txt."
+          : "",
       "",
     );
   }
