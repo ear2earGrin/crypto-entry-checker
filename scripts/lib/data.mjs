@@ -2,7 +2,36 @@
 // Hits api.binance.com directly — Node has no CORS, so no proxy is needed.
 
 export const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
-const BINANCE = "https://api.binance.com";
+// api.binance.com answers HTTP 451 (or 403) to requests from locations Binance
+// restricts, e.g. US IPs and some VPN exits. data-api.binance.vision serves the
+// same public spot market data (klines, tickers, depth) and is Binance's own
+// market-data-only endpoint, so it's the fallback. Futures (fapi) has no mirror.
+export const BINANCE_HOSTS = ["https://api.binance.com", "https://data-api.binance.vision"];
+const BLOCKED_STATUS = new Set([403, 451]);
+let preferredHost = 0;
+
+export async function binanceGet(pathAndQuery, fetchImpl = fetch) {
+  let lastErr = null;
+  for (let k = 0; k < BINANCE_HOSTS.length; k++) {
+    const idx = (preferredHost + k) % BINANCE_HOSTS.length;
+    const url = `${BINANCE_HOSTS[idx]}${pathAndQuery}`;
+    let res;
+    try {
+      res = await fetchImpl(url, { signal: AbortSignal.timeout(20000) });
+    } catch (e) {
+      lastErr = e;
+      continue;
+    }
+    if (BLOCKED_STATUS.has(res.status)) {
+      lastErr = new Error(`HTTP ${res.status} for ${url}`);
+      continue;
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 120)}`);
+    preferredHost = idx;
+    return res.json();
+  }
+  throw lastErr;
+}
 const FAPI = "https://fapi.binance.com";
 
 function toCandles(raw) {
@@ -24,10 +53,7 @@ export async function fetchKlinesRange(symbol, interval, startMs, endMs = Date.n
   const all = [];
   let cursor = startMs;
   for (let guard = 0; guard < 80; guard++) {
-    const url = `${BINANCE}/api/v3/klines?symbol=${symbol}&interval=${interval}&startTime=${cursor}&limit=1000`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 120)}`);
-    const batch = toCandles(await res.json());
+    const batch = toCandles(await binanceGet(`/api/v3/klines?symbol=${symbol}&interval=${interval}&startTime=${cursor}&limit=1000`));
     if (batch.length === 0) break;
     all.push(...batch);
     const lastMs = (batch[batch.length - 1].closeTime || batch[batch.length - 1].time) * 1000;

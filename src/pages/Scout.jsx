@@ -112,7 +112,13 @@ export default function Scout() {
           SELFTEST DATA — synthetic coins and prices. Run node scripts/scout.mjs on the Mac for the real scan.
         </div>
       )}
-      {!bull && (
+      {data.scanError && (
+        <div style={{ ...styles.banner, borderColor: "#ff8f8f55", background: "#1f0c0c", color: "#ffb3b3", lineHeight: 1.5 }}>
+          Market scan failed {ago(data.scanError.at)}. CoinGecko: {data.scanError.coingecko?.ok ? "ok" : data.scanError.coingecko?.error || "not reached"} · Binance: {data.scanError.binance?.ok ? "ok" : data.scanError.binance?.error || "not reached"}.
+          {data.scanDay ? ` Showing the last good scan (${data.scanDay}).` : " No scan has succeeded yet; news still updates."} It retries every hour.
+        </div>
+      )}
+      {!bull && !data.scanError && (
         <div style={{ ...styles.banner, borderColor: "#ff8f8f55", background: "#1f0c0c", color: "#ffb3b3" }}>
           BTC regime is {btcRegime?.state ?? "unknown"} — the Scout keeps watching but opens no new test positions until BTC's weekly regime is bullish.
         </div>
@@ -214,7 +220,7 @@ export default function Scout() {
         <table style={styles.table}>
           <thead><tr>{["Narrative", "7d", "30d", "200d", "Breadth", "Heat", "Stage", "Leader (7d)", "Note"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
           <tbody>
-            {data.narratives.map((b) => (
+            {(data.narratives || []).map((b) => (
               <tr key={b.key}>
                 <td style={{ ...styles.td, fontWeight: 800 }}>{b.name}</td>
                 <td style={{ ...styles.td, color: rsColor(b.rs7) }}>{pct(b.rs7)}</td>
@@ -247,7 +253,7 @@ export default function Scout() {
         <table style={styles.table}>
           <thead><tr>{["Coin", "Narrative", "Heat", "Strength", "Quality", "Supply risk", "7d vs BTC", "30d vs BTC", "FDV/MC", "Float", "Volume", "Status"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
           <tbody>
-            {data.watchlist.map((c) => (
+            {(data.watchlist || []).map((c) => (
               <Fragment key={c.id}>
                 <tr onClick={() => setOpen(open === c.id ? null : c.id)} style={{ cursor: "pointer", background: open === c.id ? "#0b1a14" : undefined }}>
                   <td style={{ ...styles.td, fontWeight: 800 }}>
@@ -288,7 +294,7 @@ export default function Scout() {
           <table style={styles.table}>
             <thead><tr>{["Coin", "7d vs BTC", "30d vs BTC", "Why rejected"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
             <tbody>
-              {data.rejects.map((c) => (
+              {(data.rejects || []).map((c) => (
                 <tr key={c.id}>
                   <td style={{ ...styles.td, fontWeight: 800 }}>{c.symbol} <span style={{ opacity: 0.6, fontWeight: 400 }}>{c.name}</span></td>
                   <td style={{ ...styles.td, color: rsColor(c.rs7) }}>{pct(c.rs7)}</td>

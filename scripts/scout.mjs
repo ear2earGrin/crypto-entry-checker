@@ -40,7 +40,7 @@ import { parseFeed, buildMatchers, tagItem, mergeNews } from "../src/scout/news.
 import { newBook, openBlockers, openPosition, updatePosition, closePosition, bookSummary } from "../src/scout/book.js";
 import { computeRegime } from "../src/strategy/regime.js";
 import { PRESET_V2 } from "../src/strategy/presets.js";
-import { fetchKlinesRange, dropUnclosed } from "./lib/data.mjs";
+import { fetchKlinesRange, dropUnclosed, binanceGet } from "./lib/data.mjs";
 import { explainCoin } from "./lib/explainer.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -51,7 +51,6 @@ const FORCE = process.argv.includes("--force");
 const P = (name) => join(DIR, SELFTEST ? `selftest-${name}` : name);
 
 const CG = "https://api.coingecko.com/api/v3";
-const BINANCE = "https://api.binance.com";
 const DAY = 86400;
 const SHORTLIST = 40;
 const DETAIL_CALLS_PER_RUN = 6;
@@ -70,16 +69,24 @@ async function fetchJson(url, headers = {}, tries = 3) {
     try {
       const res = await fetch(url, { headers, signal: AbortSignal.timeout(20000) });
       if (res.status === 429) { await sleep(15000 * (k + 1)); last = new Error(`429 rate limited: ${url}`); continue; }
-      if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+      if (res.status === 401 || res.status === 403) throw Object.assign(new Error(`HTTP ${res.status} for ${url.split("?")[0]}`), { fatal: true });
+      if (!res.ok) throw new Error(`HTTP ${res.status} for ${url.split("?")[0]}`);
       return await res.json();
-    } catch (e) { last = e; await sleep(1500 * (k + 1)); }
+    } catch (e) { if (e.fatal) throw e; last = e; await sleep(1500 * (k + 1)); }
   }
   throw last;
 }
 
+// CoinGecko sits behind Cloudflare, which answers 403 to requests that don't
+// identify themselves. A free "Demo" key (coingecko.com/en/developers/dashboard)
+// in data/scout/coingecko.txt is the reliable fix.
 function cgHeaders() {
   const key = readText(join(DIR, "coingecko.txt"));
-  return key ? { "x-cg-demo-api-key": key } : {};
+  return {
+    Accept: "application/json",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) NarrativeScout/1.0",
+    ...(key ? { "x-cg-demo-api-key": key } : {}),
+  };
 }
 
 async function loadMarkets() {
@@ -118,7 +125,7 @@ async function loadCoinDetail(id) {
   };
 }
 async function loadBinancePrices() {
-  const rows = await fetchJson(`${BINANCE}/api/v3/ticker/price`);
+  const rows = await binanceGet("/api/v3/ticker/price");
   const map = new Map();
   for (const r of rows) if (r.symbol.endsWith("USDT")) map.set(r.symbol, Number(r.price));
   return map;
@@ -130,7 +137,7 @@ async function loadDaily(symbol, days = 120) {
   return { closed, forming };
 }
 async function loadBidDepthUsd(symbol) {
-  const j = await fetchJson(`${BINANCE}/api/v3/depth?symbol=${symbol}&limit=500`);
+  const j = await binanceGet(`/api/v3/depth?symbol=${symbol}&limit=500`);
   const bids = (j.bids || []).map(([p, q]) => [Number(p), Number(q)]);
   if (!bids.length) return 0;
   const floor = bids[0][0] * 0.98;
@@ -271,7 +278,22 @@ async function main() {
     catch (e) { health.binance = { ok: false, error: String(e.message).slice(0, 120) }; }
 
     if (!markets.length || !binance.size) {
-      log(`- ${now.toISOString()} scan skipped: market data unavailable (${JSON.stringify(health)})`);
+      log(`- ${now.toISOString()} scan skipped: market data unavailable (${JSON.stringify({ coingecko: health.coingecko, binance: health.binance })})`);
+      if (state.universe?.length) {
+        state.news = mergeNews(state.news, newsRes.items.map((it) => tagItem(it, buildMatchers(state.universe), NARRATIVES)), now.getTime());
+      } else {
+        state.news = mergeNews(state.news, newsRes.items.map((it) => tagItem(it, [], NARRATIVES)), now.getTime());
+      }
+      snapshot = {
+        ...(snapshot || { narratives: [], watchlist: [], rejects: [], categories: [], funnel: {}, gauge: null, btcRegime: null, picksToday: [], explainers: {} }),
+        generatedAt: snapshot?.generatedAt || now.toISOString(),
+        scanDay: snapshot?.scanDay || null,
+        selftest: SELFTEST,
+        scanError: { at: now.toISOString(), coingecko: health.coingecko, binance: health.binance },
+        health: { ...(snapshot?.health || {}), coingecko: health.coingecko, binance: health.binance },
+        book: bookSummary(state.book, {}, null),
+        bookConfig: BOOK,
+      };
     } else {
       let trending = [], categories = [], btcRegime = null;
       try { trending = fx ? fx.trending : await loadTrending(); } catch { /* optional */ }
