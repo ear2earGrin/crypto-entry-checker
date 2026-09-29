@@ -31,6 +31,12 @@ src/
   pages/             Scanner.jsx (live verdict), Backtest.jsx, App.jsx (old discretionary
                      CHECKER — leave it alone, it's still valuable as the discretionary
                      pre-trade gate)
+  scout/             Narrative Scout (separate from v2.0): config.js (baskets, feeds,
+                     gates, vetoes, pick rule, test book), metrics.js (scores),
+                     news.js (RSS tagging/grading), book.js (paper test book).
+                     Runner: scripts/scout.mjs (hourly via scripts/scout-install.mjs).
+                     UI: pages/Scout.jsx reads data/scout/latest.json via a Vite
+                     dev middleware. Plan + status: docs/NARRATIVE-SCOUT-PLAN.md.
 docs/
   STRATEGY-SPEC.md   The rules. Single source of truth. Code must match.
   AGENT-HANDOFF.md   This file.

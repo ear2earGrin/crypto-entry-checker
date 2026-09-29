@@ -29,3 +29,6 @@ reports/*.json
 
 # Paper-trading daemon state (local artifacts)
 data/paper/
+
+# Narrative Scout state, snapshots and API keys (local artifacts)
+data/scout/

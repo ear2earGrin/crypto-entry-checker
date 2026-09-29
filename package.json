@@ -18,10 +18,15 @@
     "paper:selftest": "node scripts/papertrade.mjs --selftest",
     "paper:install": "node scripts/paper-install.mjs",
     "paper:uninstall": "node scripts/paper-install.mjs --uninstall",
+    "scout": "node scripts/scout.mjs",
+    "scout:selftest": "node scripts/scout.mjs --selftest",
+    "scout:install": "node scripts/scout-install.mjs",
+    "scout:uninstall": "node scripts/scout-install.mjs --uninstall",
     "dashboard:install": "node scripts/dashboard-install.mjs",
     "dashboard:uninstall": "node scripts/dashboard-install.mjs --uninstall"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.129.0",
     "lightweight-charts": "^4.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

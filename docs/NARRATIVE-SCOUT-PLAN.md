@@ -1,4 +1,31 @@
-# Narrative Scout — plan (proposed 2026-09-29, not built yet)
+# Narrative Scout — plan and build status
+
+## Status (2026-09-29): layers 1-5 and 7 built, layer 6 replaced by a test book
+
+Built and unit-tested (src/scout/, scripts/scout.mjs, SCOUT tab):
+- **Radar**: 6 free RSS feeds, keyword tagging to coins/narratives, event types, grades A/B/C.
+  Hourly. No X/Twitter (paid API); CoinGecko "trending searches" stands in for retail attention.
+- **Rotation board**: 8 curated narrative baskets vs BTC (7d/30d/200d), breadth, heat, stage,
+  single-coin-move flag; CoinGecko categories 24h as the broad view; alt-season gauge.
+- **Funnel, scores, vetoes**: top 1000 by market cap → liquidity + Binance USDT gate →
+  four scores → vetoes (FDV/MC, float, turnover, EXTENDED, thin book) → watchlist.
+- **Coin card**: numbers + description; Claude explainer when an API key is present
+  (data/scout/anthropic.txt), CoinGecko description otherwise.
+- **Pick rule** (predeclared in config.js): BTC weekly regime LONG_OK, heat ≥ 50,
+  strength ≥ 60, above 50-day average, best pick score; max 1 new pick per day.
+- **Test book** (owner request): $10k paper, $1k per pick, max 5 open, stop at entry
+  (closer of 2.5×ATR / 10-day close-low), 10-day close-low trailing exit, 14-day
+  re-pick cooldown, every trade benchmarked vs BTC over the same days.
+- **Journal**: data/scout/journal.jsonl, one line per daily scan — the forward record
+  that will show whether the scores mean anything.
+
+Not built yet: token unlock schedules, holder concentration, fees/revenue
+(DefiLlama), X/Twitter, the survivorship-free alt-sleeve backtest. Until the journal
+has 3-6 months of history, treat the test book as an experiment, not evidence.
+
+---
+
+(Original plan below.)
 
 A discovery system for altcoins that sits NEXT TO the mechanical trend system,
 never inside it. Owner's thesis: alts can outperform this cycle and narratives
