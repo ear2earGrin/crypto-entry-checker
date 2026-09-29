@@ -69,7 +69,10 @@ async function fetchJson(url, headers = {}, tries = 3) {
     try {
       const res = await fetch(url, { headers, signal: AbortSignal.timeout(20000) });
       if (res.status === 429) { await sleep(15000 * (k + 1)); last = new Error(`429 rate limited: ${url}`); continue; }
-      if (res.status === 401 || res.status === 403) throw Object.assign(new Error(`HTTP ${res.status} for ${url.split("?")[0]}`), { fatal: true });
+      if (res.status === 401 || res.status === 403) {
+        const hint = url.includes("coingecko") ? " — turn off VPN or add a free CoinGecko Demo key" : "";
+        throw Object.assign(new Error(`HTTP ${res.status} for ${url.split("?")[0]}${hint}`), { fatal: true });
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status} for ${url.split("?")[0]}`);
       return await res.json();
     } catch (e) { if (e.fatal) throw e; last = e; await sleep(1500 * (k + 1)); }
@@ -536,28 +539,54 @@ async function main() {
 
 function statusMarkdown(s) {
   const pct = (x) => (x === null || x === undefined ? "?" : `${x >= 0 ? "+" : ""}${Number(x).toFixed(1)}%`);
-  const lines = [
-    `# Narrative Scout — ${s.generatedAt}`,
-    "",
-    `BTC regime: **${s.btcRegime?.state ?? "unknown"}** · Alt-season gauge: **${s.gauge?.score ?? "?"}** (${s.gauge?.label ?? "?"})`,
-    `Funnel: ${s.funnel.universe} coins → ${s.funnel.gated} liquid → ${s.funnel.watchlist} watchlist → ${s.funnel.eligible} eligible → ${s.funnel.picked} picked`,
-    "",
-    "## Narratives (vs BTC)",
-    "| Narrative | 7d | 30d | Breadth | Heat | Stage |",
-    "|---|---|---|---|---|---|",
-    ...s.narratives.map((b) => `| ${b.name} | ${pct(b.rs7)} | ${pct(b.rs30)} | ${b.breadth30?.toFixed(0) ?? "?"}% | ${b.heat ?? "?"} | ${b.stage}${b.singleCoinEvent ? " (single-coin move)" : ""} |`),
-    "",
+  const news = s.newsHealth || [];
+  const health = [
+    `CoinGecko ${s.health?.coingecko?.ok ? "ok" : `FAILED${s.health?.coingecko?.error ? ` (${s.health.coingecko.error})` : ""}`}`,
+    `Binance ${s.health?.binance?.ok ? "ok" : "FAILED"}`,
+    `news ${news.filter((h) => h.ok).length}/${news.length} feeds`,
+    `Claude ${s.health?.claude?.ok ? "on" : "off"}`,
+  ].join(" · ");
+  const lines = [`# Narrative Scout — ${s.generatedAt}`, ""];
+  if (s.scanError) {
+    const cg = s.scanError.coingecko;
+    lines.push(
+      `**Market scan failed at ${s.scanError.at}.** It retries every hour.`,
+      s.scanDay ? `The numbers below are from the last good scan (${s.scanDay}).` : "No scan has succeeded yet, so there are no numbers below. News still updates.",
+      cg && !cg.ok && /40[13]/.test(cg.error || "")
+        ? "CoinGecko refused the request. Turn off any VPN, or put a free CoinGecko Demo API key in data/scout/coingecko.txt."
+        : "",
+      "",
+    );
+  }
+  if (s.funnel?.universe !== undefined) {
+    lines.push(
+      `BTC regime: **${s.btcRegime?.state ?? "unknown"}** · Alt-season gauge: **${s.gauge?.score ?? "?"}** (${s.gauge?.label ?? "?"})`,
+      `Funnel: ${s.funnel.universe} coins → ${s.funnel.gated} liquid → ${s.funnel.watchlist} watchlist → ${s.funnel.eligible} eligible → ${s.funnel.picked} picked`,
+      "",
+      "## Narratives (vs BTC)",
+      "| Narrative | 7d | 30d | Breadth | Heat | Stage |",
+      "|---|---|---|---|---|---|",
+      ...(s.narratives || []).map((b) => `| ${b.name} | ${pct(b.rs7)} | ${pct(b.rs30)} | ${b.breadth30?.toFixed(0) ?? "?"}% | ${b.heat ?? "?"} | ${b.stage}${b.singleCoinEvent ? " (single-coin move)" : ""} |`),
+      "",
+    );
+  }
+  lines.push(
     "## Test book",
     `Equity $${s.book.equity} (${pct(s.book.returnPct)}) · cash $${s.book.cash} · closed trades ${s.book.stats.trades}, win rate ${s.book.stats.winRate ?? "–"}%, beat BTC ${s.book.stats.beatBtcRate ?? "–"}%`,
     ...s.book.open.map((p) => `- ${p.symbol}: entry ${p.entry}, stop ${p.stop}, now ${pct(p.retPct)} (BTC ${pct(p.btcRetPct)})`),
     "",
-    "## Watchlist (top 10)",
-    ...s.watchlist.slice(0, 10).map((c) => `- ${c.symbol} ${c.eligible ? "✅ eligible" : `— ${c.pickFails.join("; ")}`} · heat ${c.scores.heat} · strength ${c.scores.strength} · quality ${c.scores.quality} · supply risk ${c.scores.supplyRisk}`),
-    "",
-    "## Source health",
-    `CoinGecko ${s.health.coingecko?.ok ? "ok" : "FAILED"} · Binance ${s.health.binance?.ok ? "ok" : "FAILED"} · news ${(s.health.news || []).filter((h) => h.ok).length}/${(s.health.news || []).length} feeds · Claude ${s.health.claude?.ok ? "on" : "off"}`,
-  ];
-  return lines.join("\n") + "\n";
+  );
+  if (s.watchlist?.length) {
+    lines.push(
+      "## Watchlist (top 10)",
+      ...s.watchlist.slice(0, 10).map((c) => `- ${c.symbol} ${c.eligible ? "✅ eligible" : `— ${c.pickFails.join("; ")}`} · heat ${c.scores.heat} · strength ${c.scores.strength} · quality ${c.scores.quality} · supply risk ${c.scores.supplyRisk}`),
+      "",
+    );
+  }
+  const gradeA = (s.news || []).filter((n) => n.grade === "A").slice(0, 5);
+  if (gradeA.length) lines.push("## Latest Grade-A news", ...gradeA.map((n) => `- ${n.title} (${n.source})`), "");
+  lines.push("## Source health", health);
+  return lines.filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n") + "\n";
 }
 
 main().catch((e) => {
