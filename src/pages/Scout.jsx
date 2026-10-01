@@ -6,11 +6,14 @@ import { useEffect, useState, Fragment } from "react";
  * /scout-data/latest.json). Nothing here fetches markets itself; the job does
  * the work hourly so the page opens instantly and shows the same numbers the
  * phone alerts were based on.
+ *
+ * Visual language follows the Narrative Scout concept page: slate panels,
+ * amber accent, IBM Plex type, heatmap cells for relative strength.
  */
 
 const DATA_URL = "/scout-data/latest.json";
 
-const pct = (x, d = 1) => (x === null || x === undefined || !Number.isFinite(x) ? "–" : `${x >= 0 ? "+" : ""}${x.toFixed(d)}%`);
+const pct = (x, d = 1) => (x === null || x === undefined || !Number.isFinite(x) ? "–" : `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(d)}%`);
 const usd = (x) => {
   if (x === null || x === undefined || !Number.isFinite(x)) return "–";
   if (Math.abs(x) >= 1e9) return `$${(x / 1e9).toFixed(2)}B`;
@@ -28,32 +31,20 @@ const ago = (iso) => {
 };
 const ymd = (unix) => (unix ? new Date(unix * 1000).toISOString().slice(0, 10) : "–");
 
-const heatColor = (x) => (x === null || x === undefined ? "#6b7f76" : x >= 70 ? "#2cff9c" : x >= 50 ? "#b8f5d2" : x >= 30 ? "#c9b27a" : "#ff8f8f");
-const rsColor = (x) => (x === null || x === undefined ? "#6b7f76" : x > 5 ? "#2cff9c" : x > 0 ? "#b8f5d2" : x > -5 ? "#e6c98f" : "#ff8f8f");
-const STAGE_COLORS = {
-  ACCELERATING: ["#0d3a25", "#7cffb1"],
-  EMERGING: ["#10243a", "#8fc8ff"],
-  MAINSTREAM: ["#3a3010", "#ffd76a"],
-  EXHAUSTING: ["#3a1616", "#ff9b9b"],
-  COLD: ["#1a1f1d", "#8a9a92"],
-  UNKNOWN: ["#1a1f1d", "#8a9a92"],
-};
-const GRADE_COLORS = { A: ["#0d3a25", "#7cffb1"], B: ["#1a1f1d", "#c8d6cf"], C: ["#3a1616", "#ff9b9b"] };
+// Heatmap shade for a BTC-relative return.
+const heat = (x) => (x === null || x === undefined || !Number.isFinite(x) ? "z" : x >= 10 ? "p2" : x > 1 ? "p1" : x >= -1 ? "z" : x > -10 ? "n1" : "n2");
+const signClass = (x) => (x === null || x === undefined || !Number.isFinite(x) ? "" : x > 0 ? "up" : x < 0 ? "down" : "");
+const STAGE_CLASS = { ACCELERATING: "s-acc", EMERGING: "s-em", MAINSTREAM: "s-main", EXHAUSTING: "s-exh", COLD: "s-cold", UNKNOWN: "s-cold" };
+const STAGE_LABEL = { ACCELERATING: "Accelerating", EMERGING: "Emerging", MAINSTREAM: "Mainstream", EXHAUSTING: "Exhausting", COLD: "Cold", UNKNOWN: "Unknown" };
 
-function Chip({ text, colors }) {
-  const [bg, fg] = colors || ["#1a1f1d", "#c8d6cf"];
-  return <span style={{ alignSelf: "start", justifySelf: "start", padding: "2px 8px", borderRadius: 999, background: bg, color: fg, fontSize: 10, fontWeight: 800, letterSpacing: 1, whiteSpace: "nowrap" }}>{text}</span>;
-}
-
-function ScoreBar({ value, invert = false }) {
-  const v = value ?? 0;
-  const color = invert ? heatColor(100 - v) : heatColor(v);
+function Bar({ value, invert = false }) {
+  const v = Math.max(0, Math.min(100, value ?? 0));
+  const good = invert ? 100 - v : v;
+  const color = good >= 70 ? "var(--up)" : good >= 45 ? "var(--accent)" : "var(--down)";
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-      <span style={{ width: 46, height: 6, background: "#12201a", borderRadius: 3, overflow: "hidden", display: "inline-block" }}>
-        <span style={{ display: "block", width: `${Math.max(0, Math.min(100, v))}%`, height: "100%", background: color }} />
-      </span>
-      <span style={{ color, minWidth: 22, textAlign: "right" }}>{value ?? "–"}</span>
+    <span className="bar-wrap">
+      <span className="bar"><i style={{ width: `${v}%`, background: color }} /></span>
+      <span className="mono">{value ?? "–"}</span>
     </span>
   );
 }
@@ -83,375 +74,511 @@ export default function Scout() {
 
   if (!data) {
     return (
-      <div style={styles.page}>
-        <Header onRefresh={load} loading={loading} />
-        <div style={{ ...styles.empty, marginTop: 16, textAlign: "left", lineHeight: 1.7 }}>
-          {loading ? "Loading the latest scan…" : (
-            <>
-              <div style={{ fontWeight: 800, marginBottom: 6 }}>No Scout data yet{error && error !== "no-data" ? ` (${error})` : ""}.</div>
-              The Scout runs on the Mac mini and this page reads what it writes. In Terminal, in the project folder:
-              <pre style={styles.pre}>{`git pull\nnpm install\nnode scripts/scout.mjs        # first scan now (takes ~1–2 minutes)\nnode scripts/scout-install.mjs # then run it every hour automatically`}</pre>
-              On pm-brief.com this tab stays empty: the Scout's data lives on your Mac, not on the website. Use http://localhost:5173/#/scout.
-            </>
-          )}
+      <div className="ns">
+        <style>{CSS}</style>
+        <div className="wrap">
+          <Header onRefresh={load} loading={loading} />
+          <section className="panel">
+            {loading ? <p className="muted">Loading the latest scan…</p> : (
+              <>
+                <h3>No Scout data yet{error && error !== "no-data" ? ` (${error})` : ""}</h3>
+                <p className="muted">The Scout runs on the Mac mini and this page reads what it writes. In Terminal, in the project folder:</p>
+                <pre className="pre">{`git pull\nnpm install\nnode scripts/scout.mjs        # first scan now (takes ~1–2 minutes)\nnode scripts/scout-install.mjs # then run it every hour automatically`}</pre>
+                <p className="muted">On pm-brief.com this tab stays empty: the Scout's data lives on your Mac. Use http://localhost:5173/#/scout.</p>
+              </>
+            )}
+          </section>
         </div>
       </div>
     );
   }
 
   const { book, gauge, funnel, btcRegime } = data;
-  const news = (data.news || []).filter((n) => grades[n.grade]);
   const bull = btcRegime?.state === "LONG_OK";
+  const news = (data.news || []).filter((n) => grades[n.grade]);
+  const cfg = data.bookConfig || {};
 
   return (
-    <div style={styles.page}>
-      <Header onRefresh={load} loading={loading} data={data} />
+    <div className="ns">
+      <style>{CSS}</style>
+      <div className="wrap">
+        <Header onRefresh={load} loading={loading} data={data} />
 
-      {data.selftest && (
-        <div style={{ ...styles.banner, borderColor: "#ffd76a55", background: "#1f1a08", color: "#ffd76a" }}>
-          SELFTEST DATA — synthetic coins and prices. Run node scripts/scout.mjs on the Mac for the real scan.
-        </div>
-      )}
-      {data.scanError && (
-        <div style={{ ...styles.banner, borderColor: "#ff8f8f55", background: "#1f0c0c", color: "#ffb3b3", lineHeight: 1.5 }}>
-          Market scan failed {ago(data.scanError.at)}. CoinGecko: {data.scanError.coingecko?.ok ? "ok" : data.scanError.coingecko?.error || "not reached"} · Binance: {data.scanError.binance?.ok ? "ok" : data.scanError.binance?.error || "not reached"}.
-          {data.scanDay ? ` Showing the last good scan (${data.scanDay}).` : " No scan has succeeded yet; news still updates."} It retries every hour.
-        </div>
-      )}
-      {!bull && !data.scanError && (
-        <div style={{ ...styles.banner, borderColor: "#ff8f8f55", background: "#1f0c0c", color: "#ffb3b3" }}>
-          BTC regime is {btcRegime?.state ?? "unknown"} — the Scout keeps watching but opens no new test positions until BTC's weekly regime is bullish.
-        </div>
-      )}
+        {data.selftest && <div className="banner warn"><b>Selftest data.</b> Synthetic coins and prices. Run node scripts/scout.mjs on the Mac for the real scan.</div>}
+        {data.scanError && (
+          <div className="banner bad">
+            <b>Market scan failed {ago(data.scanError.at)}.</b> CoinGecko: {data.scanError.coingecko?.ok ? "ok" : data.scanError.coingecko?.error || "not reached"} · Binance: {data.scanError.binance?.ok ? "ok" : data.scanError.binance?.error || "not reached"}.
+            {data.scanDay ? ` Showing the last good scan (${data.scanDay}).` : " No scan has succeeded yet; news still updates."} It retries every hour.
+          </div>
+        )}
+        {!bull && !data.scanError && (
+          <div className="banner bad"><b>BTC regime is {btcRegime?.state ?? "unknown"}.</b> The Scout keeps watching but opens no new test positions until BTC's weekly regime is bullish.</div>
+        )}
 
-      <div style={styles.statsRow}>
-        <div style={styles.stat}>
-          <div style={styles.statLabel}>BTC REGIME</div>
-          <div style={{ ...styles.statValue, color: bull ? "#2cff9c" : "#ff8f8f" }}>{bull ? "BULL" : btcRegime?.state ?? "–"}</div>
-          <div style={styles.statSub}>{btcRegime?.close ? `weekly ${Math.round(btcRegime.close).toLocaleString()} vs 50W ${Math.round(btcRegime.sma).toLocaleString()}` : "master switch for new picks"}</div>
-        </div>
-        <div style={styles.stat}>
-          <div style={styles.statLabel}>ALT-SEASON GAUGE</div>
-          <div style={{ ...styles.statValue, color: heatColor(gauge?.score) }}>{gauge?.score ?? "–"}</div>
-          <div style={styles.statSub}>{gauge?.label} · {gauge?.share30?.toFixed(0) ?? "–"}% of top {gauge?.sample} beat BTC (30d), {gauge?.share200?.toFixed(0) ?? "–"}% (200d)</div>
-        </div>
-        <div style={styles.stat}>
-          <div style={styles.statLabel}>TEST BOOK</div>
-          <div style={{ ...styles.statValue, color: Math.abs(book?.returnPct ?? 0) < 0.05 ? "#d7ffe8" : book.returnPct > 0 ? "#2cff9c" : "#ff8f8f" }}>{usd(book?.equity)}</div>
-          <div style={styles.statSub}>{pct(book?.returnPct)} on {usd(data.bookConfig?.startCash)} · {usd(data.bookConfig?.testAmount)} per pick</div>
-        </div>
-        <div style={styles.stat}>
-          <div style={styles.statLabel}>SCORECARD</div>
-          <div style={styles.statValue}>{book?.stats?.trades ?? 0} closed</div>
-          <div style={styles.statSub}>win {book?.stats?.winRate ?? "–"}% · beat BTC {book?.stats?.beatBtcRate ?? "–"}% · avg {book?.stats?.avgR ?? "–"}R</div>
-        </div>
-      </div>
+        <section className="rule" aria-label="The operating rule">
+          <div><span className="eyebrow">Narrative decides</span><b>what to watch</b><span className="muted">The Scout builds the watchlist</span></div>
+          <div><span className="eyebrow">Price decides</span><b>when</b><span className="muted">The pick rule fires, or nothing happens</span></div>
+          <div><span className="eyebrow">Risk decides</span><b>how much</b><span className="muted">{usd(cfg.testAmount)} test per pick, stop set at entry</span></div>
+        </section>
 
-      <div style={styles.funnel}>
-        {[
-          [funnel?.universe, "coins scanned"],
-          [funnel?.gated, "liquid + on Binance"],
-          [funnel?.watchlist, "passed vetoes"],
-          [funnel?.eligible, "met pick rule"],
-          [funnel?.picked, "picked today"],
-        ].map(([n, label], i) => (
-          <Fragment key={label}>
-            {i > 0 && <span style={{ opacity: 0.4 }}>→</span>}
-            <span><b style={{ color: "#2cff9c" }}>{n ?? "–"}</b> <span style={{ opacity: 0.7 }}>{label}</span></span>
-          </Fragment>
-        ))}
-      </div>
+        <div className="grid2">
+          <section className="panel">
+            <div className="panel-head"><h2>Narrative rotation board</h2><span className="chip live">live</span></div>
+            <p className="muted small">Each row is an equal-weight basket. Cells show performance relative to BTC. Breadth is the share of the basket beating BTC over 30 days.</p>
+            <div className="scroll">
+              <table>
+                <thead><tr><th>Narrative</th><th>7d vs BTC</th><th>30d</th><th>200d</th><th>Breadth</th><th>Heat</th><th>Stage</th></tr></thead>
+                <tbody>
+                  {(data.narratives || []).map((b) => (
+                    <tr key={b.key}>
+                      <td>
+                        {b.name}
+                        {b.leader && <div className="tiny muted">Leader {b.leader.symbol} <span className={signClass(b.leader.rs7)}>{pct(b.leader.rs7, 0)}</span> 7d</div>}
+                        {b.singleCoinEvent && <div className="tiny warn-text">one coin carrying it</div>}
+                        {b.missing?.length > 0 && <div className="tiny muted">{b.missing.length} coin{b.missing.length > 1 ? "s" : ""} outside top 1,000</div>}
+                      </td>
+                      <td className={`heat ${heat(b.rs7)}`}>{pct(b.rs7, 0)}</td>
+                      <td className={`heat ${heat(b.rs30)}`}>{pct(b.rs30, 0)}</td>
+                      <td className={`heat ${heat(b.rs200)}`}>{pct(b.rs200, 0)}</td>
+                      <td className="mono">{b.breadth30 === null || b.breadth30 === undefined ? "–" : `${b.breadth30.toFixed(0)}%`}</td>
+                      <td><Bar value={b.heat} /></td>
+                      <td><span className={`stage ${STAGE_CLASS[b.stage] || "s-cold"}`}>{STAGE_LABEL[b.stage] || b.stage}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {data.categories?.length > 0 && (
+              <div className="cats">
+                <span className="muted">Hottest CoinGecko categories, 24h:</span>
+                {data.categories.slice(0, 8).map((c) => <span key={c.id} className="tag">{c.name} <b className={signClass(c.change24h)}>{pct(c.change24h)}</b></span>)}
+              </div>
+            )}
+          </section>
 
-      <div style={styles.sectionTitle}>TEST POSITIONS</div>
-      {book?.open?.length ? (
-        <div style={styles.tableWrap}>
-          <table style={styles.table}>
-            <thead><tr>{["Coin", "Opened", "Entry", "Stop", "Now", "Result", "BTC same days", "vs BTC", "Why picked"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
-            <tbody>
-              {book.open.map((p) => (
-                <tr key={p.id + p.entryTime}>
-                  <td style={{ ...styles.td, fontWeight: 800 }}>{p.symbol} {data.picksToday?.includes(p.id) && <span style={styles.newTag}>NEW</span>}</td>
-                  <td style={styles.td}>{p.entryDay}</td>
-                  <td style={styles.td}>{px(p.entry)}</td>
-                  <td style={styles.td}>{px(p.stop)}</td>
-                  <td style={styles.td}>{px(p.price)}</td>
-                  <td style={{ ...styles.td, color: rsColor(p.retPct) }}>{pct(p.retPct)}</td>
-                  <td style={styles.td}>{pct(p.btcRetPct)}</td>
-                  <td style={{ ...styles.td, color: rsColor(p.vsBtcPct) }}>{pct(p.vsBtcPct)}</td>
-                  <td style={{ ...styles.td, whiteSpace: "normal", minWidth: 240, opacity: 0.8 }}>{p.reason}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="stack">
+            <section className="panel">
+              <div className="panel-head"><h3>BTC regime</h3><span className={`chip ${bull ? "live" : "bad"}`}>{bull ? "bull" : (btcRegime?.state || "unknown").toLowerCase()}</span></div>
+              <p className="muted small">
+                {btcRegime?.close ? <>Weekly close <b className="ink mono">{Math.round(btcRegime.close).toLocaleString("en-US")}</b> vs 50-week average <b className="ink mono">{Math.round(btcRegime.sma).toLocaleString("en-US")}</b>. </> : null}
+                The master switch: new picks only while BTC is bullish.
+              </p>
+            </section>
+            <section className="panel">
+              <div className="panel-head"><h3>Alt-season gauge</h3><span className="chip">{gauge?.label?.toLowerCase() || "–"}</span></div>
+              <div className="gauge" role="img" aria-label={`Gauge reading ${gauge?.score ?? "unknown"} of 100`}>
+                <div className="track">{gauge?.score !== null && gauge?.score !== undefined && <span className="needle" style={{ left: `${gauge.score}%` }} />}</div>
+                <div className="ends"><span>BTC leading</span><span className="mono ink">{gauge?.score ?? "–"}</span><span>Alts leading</span></div>
+              </div>
+              <p className="muted small">
+                {gauge?.share30 !== null && gauge?.share30 !== undefined ? `${gauge.share30.toFixed(0)}% of the top ${gauge.sample} beat BTC over 30 days, ${gauge.share200?.toFixed(0)}% over 200 days. ` : ""}
+                Alt season is when 75%+ do.
+              </p>
+            </section>
+            <section className="panel">
+              <div className="panel-head"><h3>Today's funnel</h3><span className="chip">{data.scanDay || "–"}</span></div>
+              <div className="funnel">
+                {[
+                  [funnel?.universe, "Coins scanned"],
+                  [funnel?.gated, "Liquid and on Binance"],
+                  [funnel?.watchlist, "Passed all vetoes → watchlist"],
+                  [funnel?.eligible, "Met the pick rule"],
+                  [funnel?.picked, "Picked today → test buy"],
+                ].map(([n, label]) => <div key={label}><span className="n mono">{n ?? "–"}</span><span className="f">{label}</span></div>)}
+              </div>
+            </section>
+          </div>
         </div>
-      ) : (
-        <div style={styles.empty}>No open test positions. {bull ? "A pick needs a coin that clears every rule below." : "Waiting for BTC's weekly regime to turn bullish."}</div>
-      )}
 
-      {book?.closed?.length > 0 && (
-        <>
-          <div style={styles.sectionTitle}>CLOSED TEST TRADES</div>
-          <div style={styles.tableWrap}>
-            <table style={styles.table}>
-              <thead><tr>{["Coin", "Opened", "Closed", "Entry", "Exit", "Result", "R", "BTC same days", "vs BTC", "Exit reason"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
+        <section className="panel">
+          <div className="panel-head"><h2>Test book</h2><span className="chip">paper · {usd(cfg.startCash)}</span></div>
+          <div className="tiles">
+            <div className="tile"><span className="l">Equity</span><span className={`v ${Math.abs(book?.returnPct ?? 0) < 0.05 ? "" : signClass(book?.returnPct)}`}>{usd(book?.equity)}</span><span className="muted small">{pct(book?.returnPct)} since start</span></div>
+            <div className="tile"><span className="l">Cash free</span><span className="v">{usd(book?.cash)}</span><span className="muted small">{book?.open?.length ?? 0} of {cfg.maxOpen ?? 5} slots used</span></div>
+            <div className="tile"><span className="l">Closed trades</span><span className="v">{book?.stats?.trades ?? 0}</span><span className="muted small">win rate {book?.stats?.winRate ?? "–"}% · avg {book?.stats?.avgR ?? "–"}R</span></div>
+            <div className="tile"><span className="l">Beat BTC</span><span className="v">{book?.stats?.beatBtcRate ?? "–"}{book?.stats?.beatBtcRate !== null && book?.stats?.beatBtcRate !== undefined ? "%" : ""}</span><span className="muted small">of closed trades, same days</span></div>
+          </div>
+          {book?.open?.length ? (
+            <div className="scroll">
+              <table>
+                <thead><tr><th>Coin</th><th>Opened</th><th>Entry</th><th>Stop</th><th>Now</th><th>Result</th><th>BTC same days</th><th>vs BTC</th><th>Why picked</th></tr></thead>
+                <tbody>
+                  {book.open.map((p) => (
+                    <tr key={p.id + p.entryTime}>
+                      <td><b>{p.symbol}</b> {data.picksToday?.includes(p.id) && <span className="chip live">new</span>}</td>
+                      <td className="mono">{p.entryDay}</td>
+                      <td className="mono">{px(p.entry)}</td>
+                      <td className="mono">{px(p.stop)}</td>
+                      <td className="mono">{px(p.price)}</td>
+                      <td className={`mono ${signClass(p.retPct)}`}>{pct(p.retPct)}</td>
+                      <td className="mono">{pct(p.btcRetPct)}</td>
+                      <td className={`mono ${signClass(p.vsBtcPct)}`}>{pct(p.vsBtcPct)}</td>
+                      <td className="wrap-cell muted">{p.reason}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="muted">No open test positions. {bull ? "A pick needs a coin that clears every rule below." : "Waiting for BTC's weekly regime to turn bullish."}</p>
+          )}
+          {book?.closed?.length > 0 && (
+            <div className="scroll">
+              <table>
+                <thead><tr><th>Closed</th><th>Coin</th><th>Opened</th><th>Entry</th><th>Exit</th><th>Result</th><th>R</th><th>BTC same days</th><th>vs BTC</th><th>Exit reason</th></tr></thead>
+                <tbody>
+                  {[...book.closed].reverse().map((t) => (
+                    <tr key={t.id + t.entryTime}>
+                      <td className="mono">{ymd(t.exitTime)}</td>
+                      <td><b>{t.symbol}</b></td>
+                      <td className="mono">{t.entryDay}</td>
+                      <td className="mono">{px(t.entry)}</td>
+                      <td className="mono">{px(t.exit)}</td>
+                      <td className={`mono ${signClass(t.retPct)}`}>{pct(t.retPct)} ({usd(t.pnl)})</td>
+                      <td className="mono">{t.r ?? "–"}</td>
+                      <td className="mono">{pct(t.btcRetPct)}</td>
+                      <td className={`mono ${signClass(t.vsBtcPct)}`}>{pct(t.vsBtcPct)}</td>
+                      <td>{t.exitReason}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <section className="panel">
+          <div className="panel-head"><h2>Watchlist</h2><span className="muted small">Click a coin to open its card</span></div>
+          <div className="scroll">
+            <table>
+              <thead><tr><th>Coin</th><th>Narrative</th><th>Heat</th><th>Strength</th><th>Quality</th><th>Supply risk</th><th>7d vs BTC</th><th>30d vs BTC</th><th>Status</th></tr></thead>
               <tbody>
-                {[...book.closed].reverse().map((t) => (
-                  <tr key={t.id + t.entryTime}>
-                    <td style={{ ...styles.td, fontWeight: 800 }}>{t.symbol}</td>
-                    <td style={styles.td}>{t.entryDay}</td>
-                    <td style={styles.td}>{ymd(t.exitTime)}</td>
-                    <td style={styles.td}>{px(t.entry)}</td>
-                    <td style={styles.td}>{px(t.exit)}</td>
-                    <td style={{ ...styles.td, color: rsColor(t.retPct) }}>{pct(t.retPct)} ({usd(t.pnl)})</td>
-                    <td style={styles.td}>{t.r ?? "–"}</td>
-                    <td style={styles.td}>{pct(t.btcRetPct)}</td>
-                    <td style={{ ...styles.td, color: rsColor(t.vsBtcPct) }}>{pct(t.vsBtcPct)}</td>
-                    <td style={styles.td}>{t.exitReason}</td>
-                  </tr>
+                {(data.watchlist || []).map((c) => (
+                  <Fragment key={c.id}>
+                    <tr className={`clickable ${open === c.id ? "open" : ""}`} onClick={() => setOpen(open === c.id ? null : c.id)}>
+                      <td><b>{c.symbol}</b> <span className="muted">{c.name}</span> {c.trending && <span className="chip info">trending</span>}</td>
+                      <td className="muted">{c.narratives?.join(", ") || "–"}</td>
+                      <td><Bar value={c.scores.heat} /></td>
+                      <td><Bar value={c.scores.strength} /></td>
+                      <td><Bar value={c.scores.quality} /></td>
+                      <td><Bar value={c.scores.supplyRisk} invert /></td>
+                      <td className={`heat ${heat(c.rs7)}`}>{pct(c.rs7, 0)}</td>
+                      <td className={`heat ${heat(c.rs30)}`}>{pct(c.rs30, 0)}</td>
+                      <td className="status">
+                        {data.picksToday?.includes(c.id) ? <span className="tier on">Picked today</span>
+                          : c.eligible ? <span className="up">Eligible{c.bookBlockers?.length ? ` · ${c.bookBlockers.join("; ")}` : ""}</span>
+                          : <span className="muted">{c.pickFails?.join("; ")}</span>}
+                      </td>
+                    </tr>
+                    {open === c.id && (
+                      <tr className="card-row"><td colSpan={9}><CoinCard coin={c} explainer={data.explainers?.[c.id]} news={(data.news || []).filter((n) => n.coins?.includes(c.id))} picked={data.picksToday?.includes(c.id)} /></td></tr>
+                    )}
+                  </Fragment>
                 ))}
               </tbody>
             </table>
           </div>
-        </>
-      )}
+        </section>
 
-      <div style={styles.sectionTitle}>NARRATIVE ROTATION (performance vs BTC)</div>
-      <div style={styles.tableWrap}>
-        <table style={styles.table}>
-          <thead><tr>{["Narrative", "7d", "30d", "200d", "Breadth", "Heat", "Stage", "Leader (7d)", "Note"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
-          <tbody>
-            {(data.narratives || []).map((b) => (
-              <tr key={b.key}>
-                <td style={{ ...styles.td, fontWeight: 800 }}>{b.name}</td>
-                <td style={{ ...styles.td, color: rsColor(b.rs7) }}>{pct(b.rs7)}</td>
-                <td style={{ ...styles.td, color: rsColor(b.rs30) }}>{pct(b.rs30)}</td>
-                <td style={{ ...styles.td, color: rsColor(b.rs200) }}>{pct(b.rs200, 0)}</td>
-                <td style={styles.td}>{b.breadth30 === null ? "–" : `${b.breadth30.toFixed(0)}%`}</td>
-                <td style={styles.td}><ScoreBar value={b.heat} /></td>
-                <td style={styles.td}><Chip text={b.stage} colors={STAGE_COLORS[b.stage]} /></td>
-                <td style={styles.td}>{b.leader ? `${b.leader.symbol} ${pct(b.leader.rs7)}` : "–"}</td>
-                <td style={{ ...styles.td, opacity: 0.75 }}>
-                  {b.singleCoinEvent ? "one coin carrying the basket" : ""}
-                  {b.missing?.length ? ` ${b.missing.length} id(s) not found` : ""}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {data.categories?.length > 0 && (
-        <div style={{ ...styles.funnel, flexWrap: "wrap", fontSize: 11 }}>
-          <span style={{ opacity: 0.7 }}>Hottest CoinGecko categories (24h market cap):</span>
-          {data.categories.slice(0, 8).map((c) => (
-            <span key={c.id} style={{ color: rsColor(c.change24h) }}>{c.name} {pct(c.change24h)}</span>
-          ))}
-        </div>
-      )}
+        <section className="panel">
+          <div className="panel-head">
+            <h2>Rejected by vetoes</h2>
+            <button className="btn small" onClick={() => setShowRejects(!showRejects)}>{showRejects ? "Hide" : `Show ${data.rejects?.length ?? 0}`}</button>
+          </div>
+          {showRejects && (
+            <div className="scroll">
+              <table>
+                <thead><tr><th>Coin</th><th>7d vs BTC</th><th>30d vs BTC</th><th>Why rejected</th></tr></thead>
+                <tbody>
+                  {(data.rejects || []).map((c) => (
+                    <tr key={c.id}>
+                      <td><b>{c.symbol}</b> <span className="muted">{c.name}</span></td>
+                      <td className={`heat ${heat(c.rs7)}`}>{pct(c.rs7, 0)}</td>
+                      <td className={`heat ${heat(c.rs30)}`}>{pct(c.rs30, 0)}</td>
+                      <td className="wrap-cell down">{c.vetoes?.join("; ")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
 
-      <div style={styles.sectionTitle}>WATCHLIST — click a coin for its card</div>
-      <div style={styles.tableWrap}>
-        <table style={styles.table}>
-          <thead><tr>{["Coin", "Narrative", "Heat", "Strength", "Quality", "Supply risk", "7d vs BTC", "30d vs BTC", "FDV/MC", "Float", "Volume", "Status"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
-          <tbody>
-            {(data.watchlist || []).map((c) => (
-              <Fragment key={c.id}>
-                <tr onClick={() => setOpen(open === c.id ? null : c.id)} style={{ cursor: "pointer", background: open === c.id ? "#0b1a14" : undefined }}>
-                  <td style={{ ...styles.td, fontWeight: 800 }}>
-                    {c.symbol} <span style={{ opacity: 0.6, fontWeight: 400 }}>{c.name}</span>
-                    {c.trending && <span style={{ ...styles.newTag, background: "#10243a", color: "#8fc8ff" }}>TRENDING</span>}
-                  </td>
-                  <td style={{ ...styles.td, opacity: 0.8 }}>{c.narratives?.join(", ") || "–"}</td>
-                  <td style={styles.td}><ScoreBar value={c.scores.heat} /></td>
-                  <td style={styles.td}><ScoreBar value={c.scores.strength} /></td>
-                  <td style={styles.td}><ScoreBar value={c.scores.quality} /></td>
-                  <td style={styles.td}><ScoreBar value={c.scores.supplyRisk} invert /></td>
-                  <td style={{ ...styles.td, color: rsColor(c.rs7) }}>{pct(c.rs7)}</td>
-                  <td style={{ ...styles.td, color: rsColor(c.rs30) }}>{pct(c.rs30)}</td>
-                  <td style={styles.td}>{c.fdvToMcap ? `${c.fdvToMcap.toFixed(2)}×` : "–"}</td>
-                  <td style={styles.td}>{c.float !== null ? `${(c.float * 100).toFixed(0)}%` : "–"}</td>
-                  <td style={styles.td}>{usd(c.vol)}</td>
-                  <td style={{ ...styles.td, whiteSpace: "normal", minWidth: 180 }}>
-                    {data.picksToday?.includes(c.id) ? <Chip text="PICKED TODAY" colors={["#0d3a25", "#7cffb1"]} />
-                      : c.eligible ? <span style={{ color: "#2cff9c" }}>eligible{c.bookBlockers?.length ? ` · ${c.bookBlockers.join("; ")}` : ""}</span>
-                      : <span style={{ opacity: 0.7 }}>{c.pickFails?.join("; ")}</span>}
-                  </td>
-                </tr>
-                {open === c.id && (
-                  <tr><td colSpan={12} style={{ padding: 0 }}><CoinCard coin={c} explainer={data.explainers?.[c.id]} news={(data.news || []).filter((n) => n.coins?.includes(c.id))} /></td></tr>
-                )}
-              </Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div style={styles.sectionTitle}>
-        REJECTED BY VETOES ({data.rejects?.length ?? 0} of the shortlist)
-        <button style={{ ...styles.smallBtn, marginLeft: 10 }} onClick={() => setShowRejects(!showRejects)}>{showRejects ? "hide" : "show"}</button>
-      </div>
-      {showRejects && (
-        <div style={styles.tableWrap}>
-          <table style={styles.table}>
-            <thead><tr>{["Coin", "7d vs BTC", "30d vs BTC", "Why rejected"].map((h) => <th key={h} style={styles.th}>{h}</th>)}</tr></thead>
-            <tbody>
-              {(data.rejects || []).map((c) => (
-                <tr key={c.id}>
-                  <td style={{ ...styles.td, fontWeight: 800 }}>{c.symbol} <span style={{ opacity: 0.6, fontWeight: 400 }}>{c.name}</span></td>
-                  <td style={{ ...styles.td, color: rsColor(c.rs7) }}>{pct(c.rs7)}</td>
-                  <td style={{ ...styles.td, color: rsColor(c.rs30) }}>{pct(c.rs30)}</td>
-                  <td style={{ ...styles.td, whiteSpace: "normal", color: "#ffb3b3" }}>{c.vetoes?.join("; ")}</td>
-                </tr>
+        <section className="panel">
+          <div className="panel-head">
+            <h2>News radar</h2>
+            <div className="filters">
+              <span className="muted small">updated {ago(data.newsUpdatedAt)}</span>
+              {["A", "B", "C"].map((g) => (
+                <button key={g} className={`btn small ${grades[g] ? "" : "off"}`} onClick={() => setGrades({ ...grades, [g]: !grades[g] })}>{g}</button>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      <div style={styles.sectionTitle}>
-        NEWS RADAR · updated {ago(data.newsUpdatedAt)}
-        {["A", "B", "C"].map((g) => (
-          <button key={g} onClick={() => setGrades({ ...grades, [g]: !grades[g] })}
-            style={{ ...styles.smallBtn, marginLeft: 8, opacity: grades[g] ? 1 : 0.4 }}>{g}</button>
-        ))}
-      </div>
-      <div style={{ display: "grid", gap: 6 }}>
-        {news.slice(0, 40).map((n) => (
-          <div key={n.link} style={{ ...styles.event, borderColor: "#2cff9c18", display: "grid", gridTemplateColumns: "28px 1fr", gap: 10 }}>
-            <Chip text={n.grade} colors={GRADE_COLORS[n.grade]} />
-            <div>
-              <a href={n.link} target="_blank" rel="noreferrer" style={{ color: "#d7ffe8", fontWeight: 700, textDecoration: "none" }}>{n.title}</a>
-              <div style={{ opacity: 0.65, fontSize: 11, marginTop: 3 }}>
-                {n.source} · {ago(n.published || n.firstSeen)}
-                {n.coins?.length ? ` · ${n.coins.join(", ")}` : ""}
-                {n.narratives?.length ? ` · ${n.narratives.join(", ")}` : ""}
-                {n.types?.length ? ` · ${n.types.join(", ")}` : ""}
-              </div>
             </div>
           </div>
-        ))}
-        {!news.length && <div style={styles.empty}>No news items for the selected grades.</div>}
-      </div>
+          <div className="feed">
+            {news.slice(0, 40).map((n) => (
+              <div key={n.link} className="item">
+                <span className={`grade g${n.grade}`}>{n.grade}</span>
+                <div>
+                  <a href={n.link} target="_blank" rel="noreferrer" className="headline">{n.title}</a>
+                  <div className="tags">
+                    <span className="muted small">{n.source} · {ago(n.published || n.firstSeen)}</span>
+                    {(n.coins || []).map((id) => <span key={id} className="tag">{id}</span>)}
+                    {(n.narratives || []).map((k) => <span key={k} className="tag">{k}</span>)}
+                    {(n.types || []).map((t) => <span key={t} className="tag">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {!news.length && <p className="muted">No news items for the selected grades.</p>}
+          </div>
+        </section>
 
-      <div style={{ ...styles.funnel, marginTop: 18, fontSize: 11, flexWrap: "wrap" }}>
-        <span style={{ opacity: 0.7 }}>Sources:</span>
-        <Health label="CoinGecko" h={data.health?.coingecko} />
-        <Health label="Binance" h={data.health?.binance} />
-        <Health label="BTC regime" h={data.health?.btcRegime} />
-        <Health label="Candles" h={data.health?.candles} />
-        <span style={{ color: (data.newsHealth || []).some((h) => h.ok) ? "#7cffb1" : "#ff8f8f" }}>
-          News {(data.newsHealth || []).filter((h) => h.ok).length}/{(data.newsHealth || []).length} feeds
-        </span>
-        <Health label="Claude explainers" h={data.health?.claude} />
-        <span style={{ opacity: 0.55 }}>X/Twitter: not connected (paid API)</span>
+        <footer className="foot">
+          <div className="health">
+            <span className="muted">Sources</span>
+            <Health label="CoinGecko" h={data.health?.coingecko} />
+            <Health label="Binance" h={data.health?.binance} />
+            <Health label="BTC regime" h={data.health?.btcRegime} />
+            <Health label="Candles" h={data.health?.candles} />
+            <span className={(data.newsHealth || []).some((h) => h.ok) ? "up" : "down"}>News {(data.newsHealth || []).filter((h) => h.ok).length}/{(data.newsHealth || []).length} feeds</span>
+            <Health label="Claude explainers" h={data.health?.claude} />
+            <span className="muted">X/Twitter not connected</span>
+          </div>
+          <p className="muted small"><b className="ink">Base rate:</b> most altcoins underperform BTC over a full cycle and many go to zero. The Scout raises the odds and screens out known blow-up patterns. Judge it by the journal after 3–6 months, not by single picks.</p>
+        </footer>
       </div>
     </div>
   );
 }
 
 function Health({ label, h }) {
-  if (!h) return <span style={{ opacity: 0.5 }}>{label}: –</span>;
-  return <span style={{ color: h.ok ? "#7cffb1" : "#ff8f8f" }} title={h.error || h.note || ""}>{label} {h.ok ? "ok" : "off"}</span>;
+  if (!h) return <span className="muted">{label} –</span>;
+  return <span className={h.ok ? "up" : "down"} title={h.error || h.note || ""}>{label} {h.ok ? "ok" : "off"}</span>;
 }
 
 function Header({ onRefresh, loading, data }) {
   return (
-    <div style={styles.header}>
-      <div>
-        <h1 style={styles.title}>SCOUT</h1>
-        <div style={styles.subtitle}>
-          Narrative discovery with a $10k paper test book. Narrative decides what to watch, price decides when, risk decides how much.
-          The Mac mini rescans once a day after the UTC close and checks news every hour.
-          {data && <><br />Last scan {data.scanDay} ({ago(data.generatedAt)}) · news {ago(data.newsUpdatedAt)}</>}
-        </div>
+    <header className="top">
+      <div className="top-text">
+        <span className="eyebrow">Narrative discovery · companion to Crypto System v2.0</span>
+        <h1>Narrative Scout</h1>
+        <p className="muted">Finds the narratives money is rotating into, explains each coin, measures its supply and liquidity risk, and tests the best pick with paper money.</p>
+        {data && <p className="muted small">Last scan {data.scanDay ?? "–"} ({ago(data.generatedAt)}) · news {ago(data.newsUpdatedAt)} · rescans daily after the UTC close, news hourly</p>}
       </div>
-      <button style={styles.btn} onClick={onRefresh} disabled={loading}>{loading ? "LOADING…" : "RELOAD"}</button>
-    </div>
+      <button className="btn" onClick={onRefresh} disabled={loading}>{loading ? "Loading…" : "Reload"}</button>
+    </header>
   );
 }
 
-function CoinCard({ coin, explainer, news }) {
+function CoinCard({ coin, explainer, news, picked }) {
   const t = coin.tech;
+  const tier = picked ? "Picked" : coin.eligible ? "Watchlist · eligible" : coin.vetoes?.length ? "Reject" : "Watchlist";
   return (
-    <div style={{ position: "sticky", left: 0, boxSizing: "border-box", width: "min(1150px, calc(100vw - 30px))", padding: 14, background: "#07110d", borderTop: "1px solid #2cff9c22", display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
-      <div style={{ minWidth: 0 }}>
-        <div style={styles.cardTitle}>WHAT IT IS {explainer?.ai ? <Chip text="CLAUDE" colors={["#10243a", "#8fc8ff"]} /> : <Chip text="PROJECT DESCRIPTION" />}</div>
-        <div style={{ whiteSpace: "pre-wrap", lineHeight: 1.55, fontSize: 12, opacity: 0.9 }}>
-          {explainer?.text || "No description fetched yet — explainers are generated for new picks and the top five of the watchlist."}
+    <div className="card">
+      <div className="card-head">
+        <div>
+          <span className="eyebrow">Coin deep-dive card</span>
+          <div className="ticker-line"><span className="ticker">{coin.symbol}</span><span className="muted">{coin.name}{coin.narratives?.length ? ` · ${coin.narratives.join(", ")}` : ""}</span></div>
         </div>
-        <div style={{ marginTop: 8, fontSize: 11, opacity: 0.75, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          {explainer?.homepage && <a style={styles.link} href={explainer.homepage} target="_blank" rel="noreferrer">homepage</a>}
-          {explainer?.whitepaper && <a style={styles.link} href={explainer.whitepaper} target="_blank" rel="noreferrer">whitepaper</a>}
-          <a style={styles.link} href={`https://www.coingecko.com/en/coins/${coin.id}`} target="_blank" rel="noreferrer">CoinGecko</a>
-          {explainer?.categories?.length ? <span>categories: {explainer.categories.slice(0, 6).join(", ")}</span> : null}
+        <div className="tiers">
+          {["Radar", "Watchlist", "Reject"].map((x) => <span key={x} className={`tier ${tier.startsWith(x) || (x === "Watchlist" && tier === "Picked") ? "on" : ""}`}>{x === "Watchlist" ? tier.startsWith("Reject") ? "Watchlist" : tier : x}</span>)}
         </div>
-        {news.length > 0 && (
-          <>
-            <div style={{ ...styles.cardTitle, marginTop: 12 }}>RECENT NEWS</div>
-            {news.slice(0, 5).map((n) => (
-              <div key={n.link} style={{ fontSize: 12, marginBottom: 4 }}>
-                <Chip text={n.grade} colors={GRADE_COLORS[n.grade]} />{" "}
-                <a style={{ ...styles.link, color: "#d7ffe8" }} href={n.link} target="_blank" rel="noreferrer">{n.title}</a>
-              </div>
-            ))}
-          </>
-        )}
       </div>
-      <div style={{ minWidth: 0 }}>
-        <div style={styles.cardTitle}>NUMBERS</div>
-        <dl style={styles.dl}>
-          <dt style={{ opacity: 0.7 }}>Price</dt><dd style={{ margin: 0, textAlign: "right" }}>{px(coin.price)}</dd>
-          <dt style={{ opacity: 0.7 }}>Market cap / FDV</dt><dd style={{ margin: 0, textAlign: "right" }}>{usd(coin.mcap)} / {usd(coin.fdv)}</dd>
-          <dt style={{ opacity: 0.7 }}>Circulating share</dt><dd style={{ margin: 0, textAlign: "right" }}>{coin.float !== null ? `${(coin.float * 100).toFixed(0)}%` : "–"}</dd>
-          <dt style={{ opacity: 0.7 }}>24h volume (turnover)</dt><dd style={{ margin: 0, textAlign: "right" }}>{usd(coin.vol)} ({coin.turnover ? `${(coin.turnover * 100).toFixed(1)}%` : "–"})</dd>
-          <dt style={{ opacity: 0.7 }}>Bid depth within 2%</dt><dd style={{ margin: 0, textAlign: "right" }}>{usd(coin.depthUsd)}</dd>
-          <dt style={{ opacity: 0.7 }}>vs BTC 7d / 30d / 200d</dt><dd style={{ margin: 0, textAlign: "right" }}>{pct(coin.rs7)} / {pct(coin.rs30)} / {pct(coin.rs200, 0)}</dd>
-          <dt style={{ opacity: 0.7 }}>Above 50-day average</dt><dd style={{ margin: 0, textAlign: "right" }}>{t ? (t.above50 ? "yes" : "no") : "–"}</dd>
-          <dt style={{ opacity: 0.7 }}>7-day move</dt><dd style={{ margin: 0, textAlign: "right" }}>{pct(t?.ret7)}</dd>
-          <dt style={{ opacity: 0.7 }}>Stretch above 20-day avg</dt><dd style={{ margin: 0, textAlign: "right" }}>{t?.atrAboveSma20 !== null && t?.atrAboveSma20 !== undefined ? `${t.atrAboveSma20.toFixed(1)} ATR` : "–"}</dd>
-          <dt style={{ opacity: 0.7 }}>News mentions (7d)</dt><dd style={{ margin: 0, textAlign: "right" }}>{coin.newsCount ?? 0}</dd>
-        </dl>
-        <div style={{ fontSize: 11, opacity: 0.6, marginTop: 8, lineHeight: 1.5 }}>
-          Unlock schedules and holder concentration aren't connected yet. FDV/MC and circulating share stand in for supply risk.
+
+      {!coin.eligible && coin.pickFails?.length > 0 && <div className="flag"><b>NOT PICKED</b><span>{coin.pickFails.join("; ")}</span></div>}
+
+      <div className="scores">
+        <div className="score"><span className="l">Narrative heat</span><span className="v mono">{coin.scores.heat ?? "–"}</span></div>
+        <div className="score"><span className="l">Relative strength</span><span className="v mono">{coin.scores.strength ?? "–"}</span></div>
+        <div className="score"><span className="l">Quality</span><span className="v mono">{coin.scores.quality ?? "–"}</span></div>
+        <div className="score"><span className="l">Supply risk (lower is better)</span><span className="v mono">{coin.scores.supplyRisk ?? "–"}</span></div>
+      </div>
+
+      <div className="sections">
+        <div className="sec">
+          <div className="panel-head"><h3>What it is</h3><span className={`chip ${explainer?.ai ? "info" : ""}`}>{explainer?.ai ? "Claude" : "project description"}</span></div>
+          <p className="prose">{explainer?.text || "No description fetched yet. Explainers are made for new picks and the top five of the watchlist."}</p>
+          <div className="links">
+            {explainer?.homepage && <a href={explainer.homepage} target="_blank" rel="noreferrer">Homepage</a>}
+            {explainer?.whitepaper && <a href={explainer.whitepaper} target="_blank" rel="noreferrer">Whitepaper</a>}
+            <a href={`https://www.coingecko.com/en/coins/${coin.id}`} target="_blank" rel="noreferrer">CoinGecko</a>
+            {explainer?.categories?.length ? <span className="muted">Categories: {explainer.categories.slice(0, 6).join(", ")}</span> : null}
+          </div>
+        </div>
+        <div className="sec">
+          <div className="panel-head"><h3>Token economics</h3></div>
+          <dl>
+            <dt>Market cap</dt><dd>{usd(coin.mcap)}</dd>
+            <dt>Fully diluted value</dt><dd>{usd(coin.fdv)}</dd>
+            <dt>FDV ÷ market cap</dt><dd>{coin.fdvToMcap ? `${coin.fdvToMcap.toFixed(2)}×` : "–"}</dd>
+            <dt>Circulating share of supply</dt><dd>{coin.float !== null && coin.float !== undefined ? `${(coin.float * 100).toFixed(0)}%` : "–"}</dd>
+            <dt>Unlock schedule</dt><dd className="muted">not connected yet</dd>
+          </dl>
+        </div>
+        <div className="sec">
+          <div className="panel-head"><h3>Liquidity and trend</h3></div>
+          <dl>
+            <dt>Price</dt><dd>{px(coin.price)}</dd>
+            <dt>24h volume (share of market cap)</dt><dd>{usd(coin.vol)} ({coin.turnover ? `${(coin.turnover * 100).toFixed(1)}%` : "–"})</dd>
+            <dt>Bid depth within 2%</dt><dd>{usd(coin.depthUsd)}</dd>
+            <dt>Above 50-day average</dt><dd>{t ? (t.above50 ? "yes" : "no") : "–"}</dd>
+            <dt>7-day move</dt><dd>{pct(t?.ret7)}</dd>
+            <dt>Stretch above 20-day average</dt><dd>{t?.atrAboveSma20 !== null && t?.atrAboveSma20 !== undefined ? `${t.atrAboveSma20.toFixed(1)} ATR` : "–"}</dd>
+          </dl>
+        </div>
+        <div className="sec">
+          <div className="panel-head"><h3>vs BTC and news</h3></div>
+          <dl>
+            <dt>7 days</dt><dd className={signClass(coin.rs7)}>{pct(coin.rs7)}</dd>
+            <dt>30 days</dt><dd className={signClass(coin.rs30)}>{pct(coin.rs30)}</dd>
+            <dt>200 days</dt><dd className={signClass(coin.rs200)}>{pct(coin.rs200, 0)}</dd>
+            <dt>News mentions, 7 days</dt><dd>{coin.newsCount ?? 0}</dd>
+          </dl>
+          {news.slice(0, 4).map((n) => (
+            <div key={n.link} className="mini-news"><span className={`grade g${n.grade}`}>{n.grade}</span><a href={n.link} target="_blank" rel="noreferrer">{n.title}</a></div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-const styles = {
-  // Full-bleed dark ground so the page reads the same when macOS is in light mode.
-  page: { flex: 1, boxSizing: "border-box", width: "100%", background: "#040806", padding: "26px max(14px, calc((100% - 1180px) / 2)) 40px", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", color: "#d7ffe8" },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16, borderRadius: 18, boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.4, fontSize: 12, maxWidth: 820 },
-  btn: {
-    padding: "10px 14px", borderRadius: 14, border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #0b1712, #070b09)", color: "#d7ffe8",
-    cursor: "pointer", letterSpacing: 1.4, fontWeight: 800, boxShadow: "0 10px 25px #00000088",
-  },
-  smallBtn: { padding: "2px 9px", borderRadius: 8, border: "1px solid #2cff9c33", background: "#08120e", color: "#d7ffe8", cursor: "pointer", fontSize: 10, fontWeight: 800, fontFamily: "inherit" },
-  banner: { marginTop: 12, padding: 12, borderRadius: 14, border: "1px solid", fontSize: 13, fontWeight: 700 },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginTop: 14 },
-  stat: { padding: 12, borderRadius: 14, border: "1px solid #2cff9c22", background: "#06120e" },
-  statLabel: { fontSize: 10, letterSpacing: 2, opacity: 0.7, fontWeight: 700 },
-  statValue: { fontSize: 20, fontWeight: 900, marginTop: 4 },
-  statSub: { fontSize: 11, opacity: 0.7, marginTop: 4, lineHeight: 1.4 },
-  funnel: { display: "flex", gap: 10, alignItems: "center", marginTop: 12, padding: "9px 12px", borderRadius: 12, border: "1px solid #2cff9c18", background: "#050d0a", fontSize: 12, flexWrap: "wrap" },
-  sectionTitle: { marginTop: 18, marginBottom: 8, fontSize: 12, letterSpacing: 2, opacity: 0.85, fontWeight: 700, display: "flex", alignItems: "center", flexWrap: "wrap" },
-  tableWrap: { borderRadius: 14, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e" },
-  table: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
-  th: { textAlign: "left", padding: "9px 12px", borderBottom: "1px solid #2cff9c22", background: "#08120e", fontSize: 11, letterSpacing: 1, opacity: 0.9, whiteSpace: "nowrap" },
-  td: { padding: "8px 12px", borderBottom: "1px solid #2cff9c11", whiteSpace: "nowrap" },
-  event: { padding: "9px 12px", borderRadius: 10, border: "1px solid", fontSize: 12, lineHeight: 1.5 },
-  newTag: { marginLeft: 8, padding: "1px 7px", borderRadius: 999, background: "#0d3a25", color: "#7cffb1", fontSize: 9, fontWeight: 900, letterSpacing: 1 },
-  empty: { padding: 20, borderRadius: 14, border: "1px dashed #2cff9c22", textAlign: "center", opacity: 0.75, fontSize: 13 },
-  pre: { background: "#050807", border: "1px solid #2cff9c22", borderRadius: 10, padding: 12, margin: "10px 0", fontSize: 12, whiteSpace: "pre-wrap" },
-  cardTitle: { fontSize: 10, letterSpacing: 2, fontWeight: 800, opacity: 0.75, marginBottom: 6, display: "flex", gap: 8, alignItems: "center" },
-  dl: { display: "grid", gridTemplateColumns: "1fr auto", gap: "4px 12px", margin: 0, fontSize: 12 },
-  link: { color: "#7cffb1" },
-};
+const CSS = `
+.ns {
+  --bg: #0f151b; --panel: #161f28; --ink: #e3e9ee; --muted: #93a1ae; --line: #2a3643;
+  --accent: #e89a45; --accent-soft: #3a2a17;
+  --up: #6fd19c; --up-bg: #173327; --up-strong: #1f5a3e;
+  --down: #f08b80; --down-bg: #3a1d1b; --down-strong: #6b2d27;
+  --flat-bg: #1d2731; --warn: #e8c15a; --warn-bg: #3a3116; --info: #8fc8ff; --info-bg: #15283a;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  flex: 1; width: 100%; box-sizing: border-box; background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 14.5px; line-height: 1.5; color-scheme: dark;
+}
+.ns .wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 26px 56px; display: grid; gap: 18px; }
+.ns h1, .ns h2, .ns h3 { font-family: var(--display); margin: 0; letter-spacing: .01em; text-wrap: balance; color: var(--ink); }
+.ns h1 { font-size: clamp(28px, 4.5vw, 40px); font-weight: 700; line-height: 1.1; }
+.ns h2 { font-size: 21px; font-weight: 600; }
+.ns h3 { font-size: 16px; font-weight: 600; }
+.ns p { margin: 0; }
+.ns .muted { color: var(--muted); }
+.ns .ink { color: var(--ink); }
+.ns .small { font-size: 12.5px; }
+.ns .tiny { font-size: 11px; }
+.ns .mono, .ns td.heat { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.ns .up { color: var(--up); } .ns .down { color: var(--down); } .ns .warn-text { color: var(--warn); }
+.ns .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.ns a { color: var(--accent); text-decoration: none; }
+.ns a:hover { text-decoration: underline; }
+.ns a:focus-visible, .ns button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ns .top { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
+.ns .top-text { display: grid; gap: 6px; max-width: 760px; min-width: 0; }
+.ns .btn { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+.ns .btn:hover { border-color: var(--accent); }
+.ns .btn.small { padding: 3px 10px; font-size: 11px; }
+.ns .btn.off { opacity: .4; }
+.ns .btn:disabled { opacity: .6; cursor: default; }
+
+.ns .banner { border-radius: 6px; padding: 10px 14px; font-size: 13.5px; border: 1px solid; }
+.ns .banner.warn { background: var(--warn-bg); border-color: var(--warn); color: var(--ink); }
+.ns .banner.bad { background: var(--down-bg); border-color: var(--down); color: var(--ink); }
+
+.ns .rule { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.ns .rule div { background: var(--panel); padding: 14px 16px; display: grid; gap: 2px; }
+.ns .rule b { font-family: var(--display); font-size: 20px; font-weight: 600; }
+@media (max-width: 640px) { .ns .rule { grid-template-columns: 1fr; } }
+
+.ns .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.ns .panel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.ns .chip { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.ns .chip.live { border-color: var(--up); color: var(--up); }
+.ns .chip.bad { border-color: var(--down); color: var(--down); }
+.ns .chip.info { border-color: var(--info); color: var(--info); }
+
+.ns .grid2 { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 18px; }
+.ns .stack { display: grid; gap: 18px; align-content: start; min-width: 0; }
+@media (max-width: 900px) { .ns .grid2 { grid-template-columns: 1fr; } }
+
+.ns .scroll { overflow-x: auto; }
+.ns table { border-collapse: separate; border-spacing: 0 2px; width: 100%; font-size: 13.5px; }
+.ns th { font-family: var(--mono); font-weight: 500; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.ns td { padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+.ns td.heat { text-align: right; border-radius: 3px; border-bottom-color: transparent; }
+.ns td.wrap-cell { white-space: normal; min-width: 220px; }
+.ns td.status { white-space: normal; min-width: 170px; font-size: 12.5px; }
+.ns .p2 { background: var(--up-strong); } .ns .p1 { background: var(--up-bg); } .ns .z { background: var(--flat-bg); }
+.ns .n1 { background: var(--down-bg); } .ns .n2 { background: var(--down-strong); }
+.ns tr.clickable { cursor: pointer; }
+.ns tr.clickable:hover td:not(.heat), .ns tr.open td:not(.heat) { background: #1b2632; }
+.ns tr.card-row td { padding: 0; white-space: normal; border-bottom: 0; }
+
+.ns .stage { font-family: var(--mono); font-size: 11px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+.ns .s-acc { background: var(--up-bg); color: var(--up); }
+.ns .s-em { background: var(--info-bg); color: var(--info); }
+.ns .s-main { background: var(--warn-bg); color: var(--warn); }
+.ns .s-exh { background: var(--down-bg); color: var(--down); }
+.ns .s-cold { background: var(--flat-bg); color: var(--muted); }
+
+.ns .bar-wrap { display: inline-flex; align-items: center; gap: 7px; }
+.ns .bar { height: 6px; width: 56px; background: var(--flat-bg); border-radius: 3px; display: inline-block; overflow: hidden; }
+.ns .bar i { display: block; height: 100%; border-radius: 3px; }
+.ns .bar-wrap .mono { min-width: 22px; text-align: right; font-size: 12.5px; }
+
+.ns .cats { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 12.5px; }
+.ns .tag { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 6px; }
+
+.ns .gauge { display: grid; gap: 8px; }
+.ns .track { height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--down-strong), var(--flat-bg) 50%, var(--up-strong)); position: relative; }
+.ns .needle { position: absolute; top: -5px; width: 3px; height: 22px; margin-left: -1px; background: var(--ink); border-radius: 2px; }
+.ns .ends { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+.ns .funnel { display: grid; gap: 6px; }
+.ns .funnel div { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; }
+.ns .funnel .n { text-align: right; font-weight: 500; font-size: 15px; }
+.ns .funnel .f { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 5px 10px; font-size: 13px; border-radius: 0 4px 4px 0; }
+
+.ns .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .ns .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ns .tile { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: grid; gap: 2px; }
+.ns .tile .l { font-size: 12px; color: var(--muted); }
+.ns .tile .v { font-family: var(--mono); font-size: 21px; }
+
+.ns .feed { display: grid; }
+.ns .item { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.ns .item:last-child { border-bottom: 0; }
+.ns .grade { font-family: var(--mono); font-weight: 500; font-size: 12px; text-align: center; padding: 3px 0; border-radius: 4px; align-self: start; min-width: 22px; }
+.ns .gA { background: var(--up-bg); color: var(--up); } .ns .gB { background: var(--flat-bg); color: var(--ink); } .ns .gC { background: var(--down-bg); color: var(--down); }
+.ns .headline { color: var(--ink); font-weight: 600; }
+.ns .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; align-items: center; }
+.ns .filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.ns .card { background: #121a22; border-top: 2px solid var(--accent); padding: 16px; display: grid; gap: 14px; position: sticky; left: 0; box-sizing: border-box; width: min(1144px, calc(100vw - 32px)); }
+.ns .card-head { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-end; justify-content: space-between; }
+.ns .ticker-line { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.ns .ticker { font-family: var(--display); font-size: 34px; font-weight: 700; line-height: 1; }
+.ns .tiers { display: flex; flex-wrap: wrap; gap: 6px; }
+.ns .tier { font-family: var(--mono); font-size: 11.5px; padding: 3px 9px; border-radius: 4px; background: var(--flat-bg); color: var(--muted); }
+.ns .tier.on { background: var(--warn-bg); color: var(--warn); font-weight: 500; }
+.ns .flag { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 6px; background: var(--warn-bg); font-size: 13.5px; }
+.ns .flag b { color: var(--warn); font-family: var(--mono); font-size: 12px; letter-spacing: .06em; white-space: nowrap; }
+.ns .scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .ns .scores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ns .score { border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: grid; gap: 4px; }
+.ns .score .v { font-size: 22px; }
+.ns .score .l { font-size: 12.5px; color: var(--muted); }
+.ns .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.ns .sec { border-top: 2px solid var(--line); padding-top: 10px; display: grid; gap: 8px; min-width: 0; align-content: start; }
+.ns .prose { font-size: 13.5px; white-space: pre-wrap; line-height: 1.55; }
+.ns .links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; }
+.ns dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; margin: 0; font-size: 13px; }
+.ns dt { color: var(--muted); }
+.ns dd { margin: 0; font-family: var(--mono); text-align: right; }
+.ns .mini-news { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 12.5px; }
+.ns .mini-news a { color: var(--ink); }
+
+.ns .foot { display: grid; gap: 8px; font-size: 12.5px; }
+.ns .health { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.ns .pre { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px; font-family: var(--mono); font-size: 12px; white-space: pre-wrap; margin: 0; }
+`;
