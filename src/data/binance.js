@@ -5,6 +5,44 @@ const PROD = typeof import.meta !== "undefined" && import.meta.env && import.met
 export const SPOT = PROD ? "https://api.binance.com" : "/binance-spot";
 export const FUT = PROD ? "https://fapi.binance.com" : "/binance-fut";
 
+// api.binance.com answers HTTP 451 to US addresses (e.g. with a US VPN on).
+// data-api.binance.vision is Binance's own public market-data mirror for the
+// same spot endpoints (klines, ticker, depth) and is not geo-blocked, so it's
+// the fallback. Futures (fapi) has no mirror. In dev both go through the Vite
+// proxy so the Mac dashboard behaves the same way.
+export const SPOT_HOSTS = PROD
+  ? ["https://api.binance.com", "https://data-api.binance.vision"]
+  : ["/binance-spot", "/binance-data"];
+const BLOCKED_STATUS = new Set([403, 451]);
+let spotPreferred = 0;
+
+/** GET a public spot endpoint, falling back to the mirror when blocked. */
+export async function spotJson(pathAndQuery, fetchImpl = fetch) {
+  let lastErr = null;
+  for (let k = 0; k < SPOT_HOSTS.length; k++) {
+    const idx = (spotPreferred + k) % SPOT_HOSTS.length;
+    const url = `${SPOT_HOSTS[idx]}${pathAndQuery}`;
+    let res;
+    try {
+      res = await fetchImpl(url, { method: "GET" });
+    } catch (e) {
+      lastErr = e; // network or CORS failure: try the next host
+      continue;
+    }
+    if (BLOCKED_STATUS.has(res.status)) {
+      lastErr = new Error(`HTTP ${res.status} for ${url}`);
+      continue;
+    }
+    const ct = res.headers.get("content-type") || "";
+    const text = await res.text();
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}. Body: ${text.slice(0, 180).replace(/\s+/g, " ").trim()}`);
+    if (!ct.includes("application/json")) throw new Error(`Non-JSON response for ${url}. CT=${ct}`);
+    spotPreferred = idx;
+    return JSON.parse(text);
+  }
+  throw lastErr;
+}
+
 function tfToBinanceInterval(tf) {
   const map = {
     "5m": "5m", "15m": "15m",
@@ -61,8 +99,7 @@ function toCandles(raw) {
 export async function fetchKlines({ asset, quote = "USDT", timeframe, limit = 300 }) {
   const symbol = binanceSymbol(asset, quote);
   const interval = tfToBinanceInterval(timeframe);
-  const url = `${SPOT}/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`;
-  const raw = await fetchJson(url);
+  const raw = await spotJson(`/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`);
   return toCandles(raw);
 }
 
@@ -74,8 +111,7 @@ export async function fetchKlinesRange({ asset, quote = "USDT", timeframe, start
 
   // Binance caps klines at 1000 per request; page forward until endTime
   for (let guard = 0; guard < 50; guard++) {
-    const url = `${SPOT}/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&startTime=${cursor}&limit=1000`;
-    const raw = await fetchJson(url);
+    const raw = await spotJson(`/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&startTime=${cursor}&limit=1000`);
     const batch = toCandles(raw);
     if (batch.length === 0) break;
 

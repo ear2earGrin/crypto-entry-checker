@@ -38,6 +38,15 @@ export default defineConfig(({ command }) => ({
         rewrite: (path) => path.replace(/^\/binance-spot/, ""),
       },
 
+      // Binance's public market-data mirror: fallback when api.binance.com
+      // answers 451 (US addresses, e.g. a US VPN). Same spot data.
+      "/binance-data": {
+        target: "https://data-api.binance.vision",
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/binance-data/, ""),
+      },
+
       // Binance USDT-M futures
       "/binance-fut": {
         target: "https://fapi.binance.com",

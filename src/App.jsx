@@ -3,7 +3,7 @@ import { createChart } from "lightweight-charts";
 // Environment-aware Binance hosts (dev: Vite proxy; production build: direct API).
 // App.jsx predates data/binance.js and keeps its own fetch code, but the HOSTS
 // must come from the single source or static deploys (pm-brief.com/trading) 404.
-import { SPOT as BINANCE_SPOT, FUT as BINANCE_FUT } from "./data/binance.js";
+import { FUT as BINANCE_FUT, spotJson } from "./data/binance.js";
 import { T, TONE, HEX, CHART_FONT, ui } from "./ui/theme.js";
 import { Page, PageHeader } from "./ui/Page.jsx";
 
@@ -173,8 +173,7 @@ async function fetchJson(url) {
 }
 async function fetchBinanceSpotPrice(asset, quote) {
   const symbol = binanceSymbol(asset, quote);
-  const url = `${BINANCE_SPOT}/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`;
-  const data = await fetchJson(url);
+  const data = await spotJson(`/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`);
   const p = num(data?.price);
   if (p === null) throw new Error("Binance spot returned invalid price.");
   return p;
@@ -187,8 +186,7 @@ function tfToBinanceInterval(tf) {
 async function fetchKlines({ asset, quote, timeframe, limit = 300 }) {
   const symbol = binanceSymbol(asset, quote);
   const interval = tfToBinanceInterval(timeframe);
-  const url = `${BINANCE_SPOT}/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`;
-  const data = await fetchJson(url);
+  const data = await spotJson(`/api/v3/klines?symbol=${encodeURIComponent(symbol)}&interval=${encodeURIComponent(interval)}&limit=${limit}`);
   if (!Array.isArray(data)) throw new Error("Klines response invalid.");
 
   return data
