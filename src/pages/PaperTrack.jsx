@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { fetchKlinesRange, fetchFundingHistory, dropUnclosedCandle } from "../data/binance.js";
 import { backtestPortfolio } from "../backtest/portfolio.js";
 import { PRODUCTION_PRESET, PAPER_EPOCH } from "../strategy/presets.js";
+import { T, ui } from "../ui/theme.js";
+import { Page, PageHeader, Tile } from "../ui/Page.jsx";
 
 /**
  * PAPER — the browser mirror of the Mac mini's paper-trading robot.
@@ -131,30 +133,32 @@ export default function PaperTrack() {
     }
   }
 
-  const kindColor = { ENTRY: "#7cd8ff", OPEN: "#7cffb1", WIN: "#7cffb1", LOSS: "#ff7c9c" };
+  const kindColor = { ENTRY: T.info, OPEN: T.up, WIN: T.up, LOSS: T.down };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>PAPER TRACK</h1>
-          <div style={styles.subtitle}>
-            Live mirror of the paper-trading robot — same v2.0 engine, same config,
-            recomputed in your browser from public data since {PAPER_EPOCH}. Works
-            anywhere this page is hosted; flags what changed since your last visit.
-          </div>
-        </div>
-        <button style={styles.btn} onClick={check} type="button" disabled={status.state === "loading"}>
-          {status.state === "loading" ? "REPLAYING..." : "CHECK PAPER TRACK"}
-        </button>
-      </div>
+    <Page>
+      <PageHeader
+        eyebrow="Paper trading · Crypto System v2.0"
+        title="Paper track"
+        actions={
+          <button style={ui.btnPrimary} onClick={check} type="button" disabled={status.state === "loading"}>
+            {status.state === "loading" ? "Replaying…" : "Check paper track"}
+          </button>
+        }
+      >
+        <p className="muted">
+          Live mirror of the paper-trading robot — same v2.0 engine, same config,
+          recomputed in your browser from public data since {PAPER_EPOCH}. Works
+          anywhere this page is hosted; flags what changed since your last visit.
+        </p>
+      </PageHeader>
 
       {status.message ? (
-        <div style={{
-          ...styles.banner,
-          borderColor: status.state === "error" ? "#ff7c9c55" : result?.freshKeys?.size ? "#7cffb155" : "#2cff9c22",
-          color: status.state === "error" ? "#ff7c9c" : "#d7ffe8",
-        }}>
+        <div style={
+          status.state === "error" ? ui.bannerBad
+            : result?.freshKeys?.size ? ui.bannerGood
+            : { ...ui.banner, borderColor: T.line, background: T.panel }
+        }>
           {status.state === "error" ? "⚠️ " : result?.freshKeys?.size ? "🔔 " : ""}{status.message}
           {result?.failed?.length ? ` (data failed for: ${result.failed.join(", ")})` : ""}
         </div>
@@ -162,19 +166,19 @@ export default function PaperTrack() {
 
       {result ? (
         <>
-          <div style={styles.statsRow}>
-            <Stat label="Since" value={PAPER_EPOCH} />
-            <Stat label="Open positions" value={String(result.open.length)} />
-            <Stat label="Closed trades" value={`${result.realized.length} (${result.wins} wins)`} />
-            <Stat label="Realized PnL" value={`${fmt(result.pnl, 0)} USDT`} good={result.pnl > 0} bad={result.pnl < 0} />
+          <div style={ui.tiles}>
+            <Tile label="Since" value={PAPER_EPOCH} />
+            <Tile label="Open positions" value={String(result.open.length)} />
+            <Tile label="Closed trades" value={`${result.realized.length} (${result.wins} wins)`} />
+            <Tile label="Realized PnL" value={`${fmt(result.pnl, 0)} USDT`} good={result.pnl > 0} bad={result.pnl < 0} />
           </div>
 
-          <div style={styles.sectionTitle}>OPEN PAPER POSITIONS</div>
+          <h2 style={ui.h2}>Open paper positions</h2>
           {result.open.length === 0 ? (
-            <div style={styles.empty}>None — the system is in cash. In a bear regime, that IS the position.</div>
+            <div style={ui.empty}>None — the system is in cash. In a bear regime, that IS the position.</div>
           ) : (
-            <div style={styles.tableWrap}>
-              <table style={styles.table}>
+            <div style={ui.tableWrap}>
+              <table style={ui.table}>
                 <thead><tr>
                   <th style={styles.th}>Asset</th><th style={styles.th}>Since</th><th style={styles.th}>Entry</th>
                   <th style={styles.th}>Current stop</th><th style={styles.th}>Qty</th>
@@ -182,7 +186,7 @@ export default function PaperTrack() {
                 <tbody>
                   {result.open.map((p) => (
                     <tr key={p.asset + p.entryTime}>
-                      <td style={{ ...styles.td, fontWeight: 700 }}>{p.asset}</td>
+                      <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600 }}>{p.asset}</td>
                       <td style={styles.td}>{ymd(p.entryTime)}</td>
                       <td style={styles.td}>{fmt(p.entry, 4)}</td>
                       <td style={styles.td}>{fmt(p.stop, 4)}</td>
@@ -194,19 +198,22 @@ export default function PaperTrack() {
             </div>
           )}
 
-          <div style={{ ...styles.sectionTitle, marginTop: 18 }}>EVENT JOURNAL (newest first)</div>
+          <div style={styles.journalHead}>
+            <h2 style={ui.h2}>Event journal</h2>
+            <span style={ui.small}>Newest first</span>
+          </div>
           {result.events.length === 0 ? (
-            <div style={styles.empty}>No paper trades yet — the first weekly regime flip + breakout will appear here.</div>
+            <div style={ui.empty}>No paper trades yet — the first weekly regime flip + breakout will appear here.</div>
           ) : (
             <div style={{ display: "grid", gap: 6 }}>
               {result.events.map((e) => (
                 <div key={e.key + e.time} style={{
                   ...styles.event,
-                  borderColor: result.freshKeys.has(e.key) ? "#7cffb166" : "#2cff9c18",
-                  background: result.freshKeys.has(e.key) ? "#0d3a2533" : "#06120e",
+                  borderColor: result.freshKeys.has(e.key) ? T.up : T.line,
+                  background: result.freshKeys.has(e.key) ? T.upBg : T.panel,
                 }}>
-                  <span style={{ opacity: 0.6, marginRight: 10 }}>{ymd(e.time)}</span>
-                  <span style={{ color: kindColor[e.kind] || "#d7ffe8", fontWeight: 800, marginRight: 10 }}>{e.kind}</span>
+                  <span style={{ ...ui.mono, color: T.muted, marginRight: 10 }}>{ymd(e.time)}</span>
+                  <span style={{ ...ui.mono, color: kindColor[e.kind] || T.ink, fontWeight: 500, marginRight: 10 }}>{e.kind}</span>
                   {e.text}
                   {result.freshKeys.has(e.key) ? <span style={styles.newTag}>NEW</span> : null}
                 </div>
@@ -215,48 +222,19 @@ export default function PaperTrack() {
           )}
         </>
       ) : (
-        <div style={styles.empty}>
+        <div style={ui.empty}>
           Click CHECK PAPER TRACK. This replays the entire paper phase through the
           validated engine — a few seconds of fetching, then the full journal.
         </div>
       )}
-    </div>
-  );
-}
-
-function Stat({ label, value, good, bad }) {
-  return (
-    <div style={styles.stat}>
-      <div style={{ fontSize: 10, letterSpacing: 1.2, opacity: 0.6 }}>{label.toUpperCase()}</div>
-      <div style={{ fontSize: 18, fontWeight: 900, marginTop: 4, color: bad ? "#ff7c9c" : good ? "#7cffb1" : "#d7ffe8" }}>{value}</div>
-    </div>
+    </Page>
   );
 }
 
 const styles = {
-  page: { maxWidth: 1100, margin: "26px auto", padding: "0 14px", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", color: "#d7ffe8" },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16, borderRadius: 18, boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.3, fontSize: 12, maxWidth: 720 },
-  btn: {
-    padding: "10px 14px", borderRadius: 14, border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #0b1712, #070b09)", color: "#d7ffe8",
-    cursor: "pointer", letterSpacing: 1.4, fontWeight: 800, boxShadow: "0 10px 25px #00000088",
-  },
-  banner: { marginTop: 12, padding: 12, borderRadius: 14, border: "1px solid", fontSize: 13, fontWeight: 700 },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginTop: 14 },
-  stat: { padding: 12, borderRadius: 14, border: "1px solid #2cff9c22", background: "#06120e" },
-  sectionTitle: { marginTop: 16, marginBottom: 8, fontSize: 12, letterSpacing: 2, opacity: 0.85, fontWeight: 700 },
-  tableWrap: { borderRadius: 14, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e" },
-  table: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
-  th: { textAlign: "left", padding: "9px 12px", borderBottom: "1px solid #2cff9c22", background: "#08120e", fontSize: 11, letterSpacing: 1, opacity: 0.9 },
-  td: { padding: "9px 12px", borderBottom: "1px solid #2cff9c11", whiteSpace: "nowrap" },
-  event: { padding: "9px 12px", borderRadius: 10, border: "1px solid", fontSize: 12, lineHeight: 1.5 },
-  newTag: { marginLeft: 10, padding: "1px 7px", borderRadius: 999, background: "#0d3a25", color: "#7cffb1", fontSize: 10, fontWeight: 900, letterSpacing: 1 },
-  empty: { padding: 20, borderRadius: 14, border: "1px dashed #2cff9c22", textAlign: "center", opacity: 0.65, fontSize: 13 },
+  journalHead: { display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "4px 12px" },
+  th: ui.th,
+  td: ui.td,
+  event: { padding: "9px 12px", borderRadius: 6, border: "1px solid", fontSize: 13, lineHeight: 1.5 },
+  newTag: { ...ui.badge, marginLeft: 10, background: "var(--up-bg)", color: "var(--up)", border: "1px solid var(--up)" },
 };

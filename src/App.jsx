@@ -4,6 +4,8 @@ import { createChart } from "lightweight-charts";
 // App.jsx predates data/binance.js and keeps its own fetch code, but the HOSTS
 // must come from the single source or static deploys (pm-brief.com/trading) 404.
 import { SPOT as BINANCE_SPOT, FUT as BINANCE_FUT } from "./data/binance.js";
+import { T, TONE, HEX, CHART_FONT, ui } from "./ui/theme.js";
+import { Page, PageHeader } from "./ui/Page.jsx";
 
 /**
  * Crypto Entry Checker
@@ -489,23 +491,23 @@ function evaluate(f) {
 // ---------- UI components ----------
 function SelectField({ label, value, onChange, options, hint }) {
   return (
-    <div style={{ marginBottom: 10 }}>
-      <div style={{ fontSize: 12, letterSpacing: 1.2, opacity: 0.85, marginBottom: 6 }}>{label}</div>
+    <div style={styles.field}>
+      <label style={ui.label}>{label}</label>
       <select value={value} onChange={(e) => onChange(e.target.value)} style={styles.select}>
         {options.map((o) => (
           <option key={String(o)} value={String(o)}>{String(o)}</option>
         ))}
       </select>
-      {hint ? <div style={{ fontSize: 12, opacity: 0.65, marginTop: 6 }}>{hint}</div> : null}
+      {hint ? <div style={ui.hint}>{hint}</div> : null}
     </div>
   );
 }
 function InputField({ label, value, onChange, placeholder, hint }) {
   return (
-    <div style={{ marginBottom: 10 }}>
-      <div style={{ fontSize: 12, letterSpacing: 1.2, opacity: 0.85, marginBottom: 6 }}>{label}</div>
+    <div style={styles.field}>
+      <label style={ui.label}>{label}</label>
       <input value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} style={styles.input} />
-      {hint ? <div style={{ fontSize: 12, opacity: 0.65, marginTop: 6 }}>{hint}</div> : null}
+      {hint ? <div style={ui.hint}>{hint}</div> : null}
     </div>
   );
 }
@@ -515,7 +517,7 @@ function Pill({ text }) {
 function ModeSwitch({ mode, setMode }) {
   return (
     <div style={styles.modeWrap}>
-      <div style={{ fontSize: 12, letterSpacing: 1.4, opacity: 0.85, marginBottom: 10 }}>EXECUTION MODE</div>
+      <div style={{ ...ui.eyebrow, marginBottom: 10 }}>Execution mode</div>
       <div style={styles.modeRow}>
         {OPTIONS.executionMode.map((m) => {
           const active = mode === m;
@@ -526,15 +528,15 @@ function ModeSwitch({ mode, setMode }) {
               style={{ ...styles.modeBtn, ...(active ? styles.modeBtnActive : {}) }}
               type="button"
             >
-              <div style={{ fontWeight: 900, letterSpacing: 2 }}>{m}</div>
-              <div style={{ fontSize: 12, opacity: 0.75, marginTop: 6 }}>
+              <div style={{ fontFamily: T.display, fontSize: 18, fontWeight: 600, color: active ? T.accent : T.ink }}>{m}</div>
+              <div style={{ fontSize: 12.5, color: T.muted, marginTop: 4 }}>
                 {m === "MARKET" ? "Reactive • needs confirmation" : "Passive • needs edge proximity"}
               </div>
             </button>
           );
         })}
       </div>
-      <div style={{ fontSize: 12, opacity: 0.65, marginTop: 10 }}>
+      <div style={{ ...ui.hint, marginTop: 10 }}>
         Market mode rewards confirmation. Limit mode rewards level quality; if you’re not tight to the edge, score is capped/penalized.
       </div>
     </div>
@@ -542,62 +544,29 @@ function ModeSwitch({ mode, setMode }) {
 }
 
 // ---------- styles ----------
+// Shared look (src/ui/theme.js); only Checker-specific pieces are defined here.
 const styles = {
-  page: {
-    maxWidth: 1150,
-    margin: "26px auto",
-    padding: "0 14px",
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-    color: "#d7ffe8",
-  },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16,
-    borderRadius: 18,
-    boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    gap: 16,
-    alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.3, fontSize: 12 },
-  btn: {
-    padding: "10px 12px",
-    borderRadius: 14,
-    border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #0b1712, #070b09)",
-    color: "#d7ffe8",
-    cursor: "pointer",
-    letterSpacing: 1.4,
-    fontWeight: 800,
-    boxShadow: "0 10px 25px #00000088",
-  },
-  grid: { display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 14, marginTop: 14 },
-  card: {
-    border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #050807, #050b09)",
-    padding: 16,
-    borderRadius: 18,
-    boxShadow: "0 0 0 1px #0d2a1d inset, 0 20px 50px #00000088",
-  },
-  sectionTitle: { margin: "0 0 10px 0", letterSpacing: 2, fontSize: 12, opacity: 0.9 },
-  input: { width: "100%", padding: 10, borderRadius: 14, border: "1px solid #2cff9c2a", background: "#050b09", color: "#d7ffe8", outline: "none" },
-  select: { width: "100%", padding: 10, borderRadius: 14, border: "1px solid #2cff9c2a", background: "#050b09", color: "#d7ffe8", outline: "none" },
-  pill: { display: "inline-block", padding: "3px 9px", borderRadius: 999, border: "1px solid #2cff9c33", background: "#08110d", fontSize: 12, opacity: 0.95 },
-  modeWrap: { border: "1px solid #2cff9c22", padding: 14, borderRadius: 18, background: "linear-gradient(180deg, #06120e, #050807)", marginBottom: 14 },
+  btn: ui.btn,
+  btnPrimary: ui.btnPrimary,
+  card: ui.panel,
+  field: { display: "grid", gap: 6, marginBottom: 10, minWidth: 0, alignContent: "start" },
+  input: ui.input,
+  select: ui.input,
+  pill: ui.chip,
+  // Sub-section inside a panel, separated by a rule.
+  sub: { paddingTop: 14, borderTop: `1px solid ${T.line}`, display: "grid", gap: 10 },
+  subHead: { display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 8 },
+  modeWrap: { ...ui.inset, padding: 14 },
   modeRow: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 },
-  modeBtn: { borderRadius: 16, border: "1px solid #2cff9c22", background: "linear-gradient(180deg, #050b09, #050807)", padding: 14, textAlign: "left", color: "#d7ffe8", cursor: "pointer", boxShadow: "0 16px 40px #00000077" },
-  modeBtnActive: {
-    border: "1px solid #2cff9c88",
-    boxShadow: "0 0 0 1px #2cff9c22 inset, 0 20px 60px #000000aa",
-    background: "radial-gradient(800px 180px at 20% 0%, #2cff9c22, transparent), linear-gradient(180deg, #06120e, #050807)",
-  },
-  pre: { whiteSpace: "pre-wrap", background: "#06120e", color: "#d7ffe8", padding: 12, borderRadius: 16, maxHeight: 380, overflow: "auto", border: "1px solid #2cff9c22" },
-  chartWrap: { border: "1px solid #2cff9c22", borderRadius: 18, background: "linear-gradient(180deg, #06120e, #050807)", padding: 12, marginBottom: 12 },
-  chartBox: { height: 320, borderRadius: 14, overflow: "hidden", border: "1px solid #2cff9c22" },
+  modeBtn: { borderRadius: 6, border: `1px solid ${T.line}`, background: T.panel, padding: 12, textAlign: "left", color: T.ink, cursor: "pointer", fontFamily: T.body },
+  modeBtnActive: { border: `1px solid ${T.accent}`, background: T.accentSoft },
+  pre: { whiteSpace: "pre-wrap", background: T.bg, color: T.ink, padding: 12, borderRadius: 6, maxHeight: 380, overflow: "auto", border: `1px solid ${T.line}`, fontFamily: T.mono, fontSize: 12, margin: 0 },
+  chartBox: { height: 320, borderRadius: 6, overflow: "hidden", border: `1px solid ${T.line}` },
+  listHead: { ...ui.eyebrow, marginTop: 4 },
 };
+
+// Verdict colour: green to go, amber to wait, red to stay out.
+const VERDICT_TONE = { "OK TO TRADE": TONE.up, WATCHLIST: TONE.warn, "NO TRADE": TONE.down };
 
 // ---------- App ----------
 export default function App() {
@@ -665,8 +634,8 @@ export default function App() {
     const chart = createChart(el, {
       width,
       height: 320,
-      layout: { background: { color: "#050807" }, textColor: "#d7ffe8" },
-      grid: { vertLines: { visible: false }, horzLines: { visible: false } },
+      layout: { background: { color: HEX.bg }, textColor: HEX.muted, fontFamily: CHART_FONT },
+      grid: { vertLines: { visible: false }, horzLines: { color: HEX.line } },
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
       crosshair: { mode: 1 },
@@ -677,7 +646,10 @@ export default function App() {
       throw new Error("lightweight-charts v4 required. addCandlestickSeries is missing. Your install is not v4.");
     }
 
-    const series = chart.addCandlestickSeries();
+    const series = chart.addCandlestickSeries({
+      upColor: HEX.up, downColor: HEX.down, borderVisible: false,
+      wickUpColor: HEX.up, wickDownColor: HEX.down,
+    });
 
     chartApiRef.current = chart;
     candleSeriesRef.current = series;
@@ -722,7 +694,7 @@ export default function App() {
     const series = candleSeriesRef.current;
     if (!series) return;
 
-    function upsertLine(lineRef, value, title) {
+    function upsertLine(lineRef, value, title, color) {
       const v = num(value);
       if (!Number.isFinite(v)) {
         if (lineRef.current) {
@@ -740,15 +712,16 @@ export default function App() {
       lineRef.current = series.createPriceLine({
         price: v,
         title,
+        color,
         lineWidth: 2,
         lineStyle: 2,
         axisLabelVisible: true,
       });
     }
 
-    upsertLine(entryLineRef, f.price, "Entry");
-    upsertLine(stopLineRef, f.stop, "Stop");
-    upsertLine(targetLineRef, f.target, "Target");
+    upsertLine(entryLineRef, f.price, "Entry", HEX.accent);
+    upsertLine(stopLineRef, f.stop, "Stop", HEX.down);
+    upsertLine(targetLineRef, f.target, "Target", HEX.up);
   }, [f.price, f.stop, f.target]);
 
   async function loadChart() {
@@ -842,31 +815,32 @@ export default function App() {
   }
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>CRYPTO ENTRY CHECKER</h1>
-          <div style={styles.subtitle}>
-            Deterministic vetoes + macro + BTC-led derivatives stress + sizing/liquidation.
-            Blocks bad trades; does not find trades. (Now with chart for faster sim.)
-          </div>
-        </div>
+    <Page>
+      <PageHeader
+        eyebrow="Pre-trade check · Crypto System v2.0"
+        title="Entry checker"
+        actions={
+          <>
+            <button style={styles.btn} onClick={refreshContext} type="button">Refresh context</button>
+            <button style={styles.btn} onClick={fetchSpotPrice} type="button">Fetch price</button>
+            <button style={styles.btn} onClick={fetchDerivs} type="button">Fetch BTC derivs</button>
+          </>
+        }
+      >
+        <p className="muted">
+          Deterministic vetoes + macro + BTC-led derivatives stress + sizing/liquidation.
+          Blocks bad trades; does not find trades.
+        </p>
+      </PageHeader>
 
-        <div style={{ display: "grid", gap: 10 }}>
-          <button style={styles.btn} onClick={refreshContext} type="button">REFRESH CONTEXT</button>
-          <button style={styles.btn} onClick={fetchSpotPrice} type="button">FETCH PRICE</button>
-          <button style={styles.btn} onClick={fetchDerivs} type="button">FETCH BTC DERIVS</button>
-        </div>
-      </div>
-
-      <div style={styles.grid}>
+      <div className="split">
         {/* LEFT */}
-        <div style={styles.card}>
-          <div style={styles.sectionTitle}>INPUTS</div>
+        <section style={styles.card}>
+          <h2 style={ui.h2}>Inputs</h2>
 
           <ModeSwitch mode={f.executionMode} setMode={(m) => update("executionMode", m)} />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "4px 12px" }}>
             <SelectField label="Asset" value={f.asset} options={OPTIONS.asset} onChange={(v) => update("asset", v)} />
             <SelectField label="Quote" value={f.quote} options={OPTIONS.quote} onChange={(v) => update("quote", v)} />
 
@@ -880,7 +854,7 @@ export default function App() {
             <SelectField label="Mental state" value={f.mental} options={OPTIONS.mental} onChange={(v) => update("mental", v)} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, alignItems: "end", marginTop: 6 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: 10, alignItems: "end" }}>
             <InputField
               label="Current price (spot / intended entry)"
               value={f.price}
@@ -888,10 +862,10 @@ export default function App() {
               onChange={(v) => update("price", v)}
               hint={spotStatus.message ? (spotStatus.state === "error" ? `⚠️ ${spotStatus.message}` : `✅ ${spotStatus.message}`) : ""}
             />
-            <button onClick={fetchSpotPrice} style={styles.btn} type="button">FETCH</button>
+            <button onClick={fetchSpotPrice} style={{ ...styles.btn, marginBottom: 10 }} type="button">Fetch</button>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "4px 12px" }}>
             <InputField label="Support (pivot)" value={f.support} placeholder="e.g., 0.133" onChange={(v) => update("support", v)} />
             <InputField label="Resistance (pivot)" value={f.resistance} placeholder="e.g., 0.151" onChange={(v) => update("resistance", v)} />
             <InputField label="Stop (required)" value={f.stop} placeholder="Click chart or type" onChange={(v) => update("stop", v)} />
@@ -899,20 +873,20 @@ export default function App() {
           </div>
 
           {/* SIZING */}
-          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #2cff9c22" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <div style={styles.sectionTitle}>RISK + SIZING (NO KEYS)</div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div style={styles.sub}>
+            <div style={styles.subHead}>
+              <span style={ui.eyebrow}>Risk + sizing (no keys)</span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
                 <Pill text={`Qty≈${format(sizingComputed.metrics.qty, 6)} ${f.asset}`} />
                 <Pill text={`Liq≈${format(sizingComputed.metrics.liqPriceApprox, 2)}`} />
               </div>
             </div>
 
-            <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 10 }}>
+            <div style={ui.hint}>
               Liquidation is <b>approx</b>. Exchanges use tiered maintenance margin and fee rules. Use this as a safety margin check.
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "4px 12px" }}>
               <InputField label="Equity (USDT)" value={f.sizing.equityUSDT} onChange={(v) => updateSizing("equityUSDT", v)} placeholder="e.g., 10000" />
               <InputField label="Risk % per trade" value={f.sizing.riskPct} onChange={(v) => updateSizing("riskPct", v)} placeholder="e.g., 0.5" />
 
@@ -923,8 +897,8 @@ export default function App() {
               <InputField label="Min stop→liq buffer %" value={f.sizing.liqBufferPct} onChange={(v) => updateSizing("liqBufferPct", v)} placeholder="e.g., 2" hint="Default=2%. If stop is too close to liquidation, score is penalized and warnings appear." />
             </div>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 16, border: "1px solid #2cff9c22", background: "#06120e" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, fontSize: 12, opacity: 0.95 }}>
+            <div style={ui.inset}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 8, fontSize: 13, color: T.muted }}>
                 <div>Risk (USDT): <b>{format(sizingComputed.metrics.riskUSDT, 2)}</b></div>
                 <div>Notional (USDT): <b>{format(sizingComputed.metrics.notional, 2)}</b></div>
                 <div>Init margin (USDT): <b>{format(sizingComputed.metrics.initialMargin, 2)}</b></div>
@@ -934,7 +908,7 @@ export default function App() {
               </div>
 
               {sizingComputed.warnings?.length ? (
-                <div style={{ marginTop: 10, fontSize: 12, opacity: 0.9 }}>
+                <div style={{ marginTop: 10, fontSize: 13, color: T.warn }}>
                   {sizingComputed.warnings.map((w, i) => (<div key={i}>⚠️ {w}</div>))}
                 </div>
               ) : null}
@@ -942,25 +916,25 @@ export default function App() {
           </div>
 
           {/* Macro */}
-          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #2cff9c22" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <div style={styles.sectionTitle}>MACRO CATALYSTS (MANUAL)</div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div style={styles.sub}>
+            <div style={styles.subHead}>
+              <span style={ui.eyebrow}>Macro catalysts (manual)</span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
                 <Pill text={`Macro: ${macroComputed.level}`} />
                 <Pill text={`Score≈${format(macroComputed.score, 2)}`} />
               </div>
             </div>
 
-            <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+            <div style={{ display: "grid", gap: 6 }}>
               {MACRO_EVENTS.map((e) => (
-                <div key={e.key} style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 10, alignItems: "center", padding: "8px 10px", border: "1px solid #2cff9c22", borderRadius: 16, background: "#06120e" }}>
+                <div key={e.key} style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr) auto", gap: 10, alignItems: "center", padding: "6px 10px", border: `1px solid ${T.line}`, borderRadius: 6, background: T.bg }}>
                   <input type="checkbox" checked={!!f.macro[e.key]?.enabled} onChange={(ev) => updateMacro(e.key, { enabled: ev.target.checked })} />
-                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    <span style={{ opacity: 0.95 }}>{e.label}</span>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 8px", alignItems: "center", fontSize: 13.5 }}>
+                    <span>{e.label}</span>
                     <Pill text={`Tier ${e.tier}`} />
                     <Pill text={`w=${e.base}`} />
                   </div>
-                  <select value={f.macro[e.key]?.time || "3–7d"} onChange={(ev) => updateMacro(e.key, { time: ev.target.value })} style={styles.select} disabled={!f.macro[e.key]?.enabled}>
+                  <select value={f.macro[e.key]?.time || "3–7d"} onChange={(ev) => updateMacro(e.key, { time: ev.target.value })} style={{ ...styles.select, width: "auto", padding: "4px 8px", fontSize: 13 }} disabled={!f.macro[e.key]?.enabled}>
                     {OPTIONS.timeToEvent.map((t) => (<option key={t} value={t}>{t}</option>))}
                   </select>
                 </div>
@@ -969,22 +943,22 @@ export default function App() {
           </div>
 
           {/* Derivs */}
-          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid #2cff9c22" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <div style={styles.sectionTitle}>BTC-LED DERIVATIVES CONTEXT (BINANCE)</div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div style={styles.sub}>
+            <div style={styles.subHead}>
+              <span style={ui.eyebrow}>BTC-led derivatives context (Binance)</span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
                 <Pill text={`Derivs: ${derivsComputed.level}`} />
                 <Pill text={`riskPts=${derivsComputed.riskPoints}`} />
               </div>
             </div>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 16, border: "1px solid #2cff9c22", background: "#06120e" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, opacity: 0.9 }}>
+            <div style={ui.inset}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", justifyContent: "space-between", fontSize: 12.5, color: T.muted }}>
                 <div>Status: {f.derivs.status}{f.derivs.error ? ` — ⚠️ ${f.derivs.error}` : ""}</div>
-                <div style={{ opacity: 0.7 }}>Updated: {f.derivs.updatedAt ? new Date(f.derivs.updatedAt).toLocaleString() : "-"}</div>
+                <div>Updated: {f.derivs.updatedAt ? new Date(f.derivs.updatedAt).toLocaleString() : "-"}</div>
               </div>
 
-              <ul style={{ marginTop: 10, marginBottom: 0, fontSize: 12, opacity: 0.95 }}>
+              <ul style={{ marginTop: 8, fontSize: 13, ...ui.mono }}>
                 <li>Funding: {f.derivs.fundingRate !== null ? `${format(f.derivs.fundingRate * 100, 4)}%` : "-"}</li>
                 <li>Open interest: {f.derivs.openInterest !== null ? format(f.derivs.openInterest, 0) : "-"}</li>
                 <li>OI 24h Δ: {f.derivs.oiChange24hPct !== null ? `${format(f.derivs.oiChange24hPct, 2)}%` : "-"}</li>
@@ -993,87 +967,89 @@ export default function App() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-            <button style={styles.btn} onClick={run} type="button">RUN CHECK</button>
-            <button style={styles.btn} onClick={reset} type="button">RESET</button>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
+            <button style={styles.btnPrimary} onClick={run} type="button">Run check</button>
+            <button style={styles.btn} onClick={reset} type="button">Reset</button>
           </div>
-        </div>
+        </section>
 
         {/* RIGHT */}
-        <div style={styles.card}>
-          <div style={styles.chartWrap}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <div style={styles.sectionTitle}>CHART</div>
-              <div style={{ fontSize: 12, opacity: 0.75 }}>
+        <div style={{ display: "grid", gap: 18, minWidth: 0 }}>
+          <section style={styles.card}>
+            <div className="panel-head">
+              <h2 style={ui.h2}>Chart</h2>
+              <span style={{ fontSize: 12.5, color: chartStatus.state === "error" ? T.down : T.muted }}>
                 {chartStatus.state === "error" ? `⚠️ ${chartStatus.message}` : chartStatus.message || ""}
-              </div>
+              </span>
             </div>
 
-            <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
-              <button style={styles.btn} onClick={loadChart} type="button">LOAD CHART</button>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+              <button style={styles.btn} onClick={loadChart} type="button">Load chart</button>
 
-              <select value={clickMode} onChange={(e) => setClickMode(e.target.value)} style={{ ...styles.select, width: 220 }}>
+              <select value={clickMode} onChange={(e) => setClickMode(e.target.value)} style={{ ...styles.select, width: 190 }}>
                 <option value="NONE">Click mode: off</option>
                 <option value="ENTRY">Click sets: Entry</option>
                 <option value="STOP">Click sets: Stop</option>
                 <option value="TARGET">Click sets: Target</option>
               </select>
 
-              <div style={{ fontSize: 12, opacity: 0.7 }}>Set mode → click chart → it fills field + draws line.</div>
+              <span style={ui.hint}>Set mode → click chart → it fills field + draws line.</span>
             </div>
 
             <div style={styles.chartBox} ref={chartDivRef} />
-          </div>
+          </section>
 
-          <div style={styles.sectionTitle}>RESULT</div>
+          <section style={styles.card}>
+            <h2 style={ui.h2}>Result</h2>
 
-          {!res ? (
-            <div style={{ opacity: 0.85, lineHeight: 1.4 }}>
-              No result yet. Fill inputs, pick execution mode, fetch context if needed, then <b>Run check</b>.
-            </div>
-          ) : (
-            <>
-              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-                <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: 2 }}>{res.verdict}</div>
-                <div style={{ opacity: 0.9 }}>Score: <b>{res.score}/10</b></div>
-              </div>
+            {!res ? (
+              <p className="muted">
+                No result yet. Fill inputs, pick execution mode, fetch context if needed, then <b className="ink">Run check</b>.
+              </p>
+            ) : (
+              <>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "baseline", justifyContent: "space-between" }}>
+                  <div style={{ fontFamily: T.display, fontSize: 30, fontWeight: 700, lineHeight: 1.1, color: (VERDICT_TONE[res.verdict] || TONE.flat).fg }}>{res.verdict}</div>
+                  <div style={{ color: T.muted }}>Score <b style={{ ...ui.mono, fontSize: 18, color: T.ink }}>{res.score}/10</b></div>
+                </div>
 
-              <div style={{ marginTop: 10, opacity: 0.85, fontSize: 12, lineHeight: 1.4 }}>
-                TF policy: <b>{res.metrics?.tfp?.bucket}</b> — {res.metrics?.tfp?.description} (min R:R ≈ {res.metrics?.tfp?.minRR})
-              </div>
+                <div style={{ fontSize: 13, color: T.muted, lineHeight: 1.5 }}>
+                  TF policy: <b>{res.metrics?.tfp?.bucket}</b> — {res.metrics?.tfp?.description} (min R:R ≈ {res.metrics?.tfp?.minRR})
+                </div>
 
-              {res.blockedBy?.length ? (
-                <>
-                  <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>BLOCKED BY</div>
-                  <ul style={{ marginTop: 8 }}>{res.blockedBy.map((b, i) => <li key={i}>{b}</li>)}</ul>
-                </>
-              ) : null}
+                {res.blockedBy?.length ? (
+                  <>
+                    <div style={{ ...styles.listHead, color: T.down }}>Blocked by</div>
+                    <ul style={{ marginTop: 0, fontSize: 13.5 }}>{res.blockedBy.map((b, i) => <li key={i}>{b}</li>)}</ul>
+                  </>
+                ) : null}
 
-              {res.warnings?.length ? (
-                <>
-                  <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>WARNINGS</div>
-                  <ul style={{ marginTop: 8 }}>{res.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>
-                </>
-              ) : null}
+                {res.warnings?.length ? (
+                  <>
+                    <div style={{ ...styles.listHead, color: T.warn }}>Warnings</div>
+                    <ul style={{ marginTop: 0, fontSize: 13.5 }}>{res.warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>
+                  </>
+                ) : null}
 
-              <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>CHECKS</div>
-              <ul style={{ marginTop: 8 }}>{res.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul>
+                <div style={styles.listHead}>Checks</div>
+                <ul style={{ marginTop: 0, fontSize: 13.5 }}>{res.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul>
 
-              <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 12 }}>
-                <button style={styles.btn} onClick={copyJournal} type="button">COPY JOURNAL NOTE</button>
-                <div style={{ opacity: 0.7, fontSize: 12 }}>(includes macro + derivs + sizing)</div>
-              </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+                  <button style={styles.btn} onClick={copyJournal} type="button">Copy journal note</button>
+                  <span style={ui.hint}>(includes macro + derivs + sizing)</span>
+                </div>
 
-              <div style={{ marginTop: 12, fontWeight: 900, letterSpacing: 1.4 }}>JOURNAL PREVIEW</div>
-              <pre style={styles.pre}>{journal}</pre>
-            </>
-          )}
+                <div style={styles.listHead}>Journal preview</div>
+                <pre style={styles.pre}>{journal}</pre>
+              </>
+            )}
+          </section>
         </div>
       </div>
 
-      <div style={{ marginTop: 12, opacity: 0.65, fontSize: 12, lineHeight: 1.35 }}>
+      <p style={ui.foot}>
         Notes: Liquidation is an approximation; treat it as a safety margin check. Macro + derivs mostly add friction to prevent “good R:R” trades in unstable conditions.
-      </div>
-    </div>
+      </p>
+    </Page>
   );
 }

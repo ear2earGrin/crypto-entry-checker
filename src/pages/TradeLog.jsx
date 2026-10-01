@@ -4,6 +4,8 @@ import {
   exportTradesJSON, importTrades,
   tradeToObsidianMarkdown, obsidianFilename,
 } from "../data/tradeLog.js";
+import { T, TONE, ui } from "../ui/theme.js";
+import { Page, PageHeader, Tile } from "../ui/Page.jsx";
 
 const ASSETS = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 
@@ -111,49 +113,61 @@ export default function TradeLog() {
   }
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>TRADE LOG</h1>
-          <div style={styles.subtitle}>
-            Persisted in this browser. Every trade exports as Obsidian-flavored Markdown
-            with YAML frontmatter — drop the file into your vault and your Memory Wiki
-            indexes it.
-          </div>
+    <Page>
+      <PageHeader
+        eyebrow="Journal · Crypto System v2.0"
+        title="Trade log"
+        actions={
+          <>
+            <button style={ui.btn} onClick={downloadJSON} type="button">Export JSON</button>
+            <label role="button" style={ui.btn}>
+              Import JSON
+              <input type="file" accept="application/json" onChange={handleImport} style={{ display: "none" }} />
+            </label>
+            <button style={ui.btn} onClick={downloadAllObsidianMd} type="button">Export all to MD</button>
+            <button style={ui.btnPrimary} onClick={() => setShowNew(true)} type="button">New trade</button>
+          </>
+        }
+      >
+        <p className="muted">
+          Persisted in this browser. Every trade exports as Obsidian-flavored Markdown
+          with YAML frontmatter — drop the file into your vault and your Memory Wiki
+          indexes it.
+        </p>
+      </PageHeader>
+
+      {notice ? <div style={ui.bannerGood}>{notice}</div> : null}
+
+      <section style={ui.panel}>
+        <div style={styles.laneHead}>
+          <h2 style={ui.h2}>System lane</h2>
+          <span style={ui.small}>Mechanical v2.0 — followed to the dot</span>
         </div>
-        <div style={{ display: "grid", gap: 8 }}>
-          <button style={styles.btn} onClick={() => setShowNew(true)} type="button">NEW TRADE</button>
-          <button style={styles.btnGhost} onClick={downloadJSON} type="button">EXPORT JSON</button>
-          <label style={{ ...styles.btnGhost, cursor: "pointer", display: "inline-block", textAlign: "center" }}>
-            IMPORT JSON
-            <input type="file" accept="application/json" onChange={handleImport} style={{ display: "none" }} />
-          </label>
-          <button style={styles.btnGhost} onClick={downloadAllObsidianMd} type="button">EXPORT ALL TO MD</button>
+        <div style={ui.tiles}>
+          <Tile label="Open" value={String(open.filter((t) => laneOf(t) === "SYSTEM").length)} />
+          <Tile label="Closed" value={String(sysStats.count)} />
+          <Tile label="Wins / Losses" value={`${sysStats.wins} / ${sysStats.losses}`} />
+          <Tile label="Win rate" value={sysStats.count ? `${((sysStats.wins / sysStats.count) * 100).toFixed(1)}%` : "-"} />
+          <Tile label="Realized PnL" value={`${fmt(sysStats.pnl, 2)} USDT`} good={sysStats.pnl > 0} bad={sysStats.pnl < 0} />
+          <Tile label="Avg R" value={fmt(sysStats.avgR, 2)} />
         </div>
-      </div>
+      </section>
+      <section style={ui.panel}>
+        <div style={styles.laneHead}>
+          <h2 style={ui.h2}>Discretionary lane</h2>
+          <span style={ui.small}>Market Cipher / your judgment</span>
+        </div>
+        <div style={ui.tiles}>
+          <Tile label="Open" value={String(open.filter((t) => laneOf(t) === "DISCRETIONARY").length)} />
+          <Tile label="Closed" value={String(discStats.count)} />
+          <Tile label="Wins / Losses" value={`${discStats.wins} / ${discStats.losses}`} />
+          <Tile label="Win rate" value={discStats.count ? `${((discStats.wins / discStats.count) * 100).toFixed(1)}%` : "-"} />
+          <Tile label="Realized PnL" value={`${fmt(discStats.pnl, 2)} USDT`} good={discStats.pnl > 0} bad={discStats.pnl < 0} />
+          <Tile label="Avg R" value={fmt(discStats.avgR, 2)} />
+        </div>
+      </section>
 
-      {notice ? <div style={styles.notice}>{notice}</div> : null}
-
-      <div style={styles.laneLabel}>SYSTEM LANE (mechanical v2.0 — followed to the dot)</div>
-      <div style={styles.statsRow}>
-        <Stat label="Open" value={String(open.filter((t) => laneOf(t) === "SYSTEM").length)} />
-        <Stat label="Closed" value={String(sysStats.count)} />
-        <Stat label="Wins / Losses" value={`${sysStats.wins} / ${sysStats.losses}`} />
-        <Stat label="Win rate" value={sysStats.count ? `${((sysStats.wins / sysStats.count) * 100).toFixed(1)}%` : "-"} />
-        <Stat label="Realized PnL" value={`${fmt(sysStats.pnl, 2)} USDT`} good={sysStats.pnl > 0} bad={sysStats.pnl < 0} />
-        <Stat label="Avg R" value={fmt(sysStats.avgR, 2)} />
-      </div>
-      <div style={styles.laneLabel}>DISCRETIONARY LANE (Market Cipher / your judgment)</div>
-      <div style={styles.statsRow}>
-        <Stat label="Open" value={String(open.filter((t) => laneOf(t) === "DISCRETIONARY").length)} />
-        <Stat label="Closed" value={String(discStats.count)} />
-        <Stat label="Wins / Losses" value={`${discStats.wins} / ${discStats.losses}`} />
-        <Stat label="Win rate" value={discStats.count ? `${((discStats.wins / discStats.count) * 100).toFixed(1)}%` : "-"} />
-        <Stat label="Realized PnL" value={`${fmt(discStats.pnl, 2)} USDT`} good={discStats.pnl > 0} bad={discStats.pnl < 0} />
-        <Stat label="Avg R" value={fmt(discStats.avgR, 2)} />
-      </div>
-
-      <Section title="OPEN POSITIONS">
+      <Section title="Open positions">
         {open.length === 0 ? <Empty text="No open positions." /> : (
           <TradeTable
             trades={open}
@@ -166,7 +180,7 @@ export default function TradeLog() {
         )}
       </Section>
 
-      <Section title="CLOSED">
+      <Section title="Closed">
         {closed.length === 0 ? <Empty text="No closed trades yet." /> : (
           <TradeTable
             trades={closed.slice().reverse()}
@@ -202,36 +216,27 @@ export default function TradeLog() {
           }}
         />
       ) : null}
-    </div>
+    </Page>
   );
 }
 
 function Section({ title, children }) {
   return (
-    <div style={{ marginTop: 18 }}>
-      <div style={styles.sectionTitle}>{title}</div>
+    <section style={{ display: "grid", gap: 10, minWidth: 0 }}>
+      <h2 style={ui.h2}>{title}</h2>
       {children}
-    </div>
+    </section>
   );
 }
 
 function Empty({ text }) {
-  return <div style={styles.empty}>{text}</div>;
-}
-
-function Stat({ label, value, good, bad }) {
-  return (
-    <div style={styles.stat}>
-      <div style={{ fontSize: 10, letterSpacing: 1.2, opacity: 0.6 }}>{label.toUpperCase()}</div>
-      <div style={{ fontSize: 18, fontWeight: 900, marginTop: 4, color: bad ? "#ff7c9c" : good ? "#7cffb1" : "#d7ffe8" }}>{value}</div>
-    </div>
-  );
+  return <div style={ui.empty}>{text}</div>;
 }
 
 function TradeTable({ trades, onClose, onEdit, onDelete, onMd, onMdFile }) {
   return (
-    <div style={styles.tableWrap}>
-      <table style={styles.table}>
+    <div style={ui.tableWrap}>
+      <table style={ui.table}>
         <thead>
           <tr>
             <th style={styles.th}>Date</th>
@@ -256,26 +261,26 @@ function TradeTable({ trades, onClose, onEdit, onDelete, onMd, onMdFile }) {
               <tr key={t.id}>
                 <td style={styles.td}>{ymd(t.entry?.time)}</td>
                 <td style={styles.td}>
-                  <span style={{ ...styles.laneBadge, background: laneOf(t) === "SYSTEM" ? "#0d2f3a" : "#2a1a3a", color: laneOf(t) === "SYSTEM" ? "#7cd8ff" : "#c99cff" }}>
+                  <span style={{ ...ui.badge, background: laneOf(t) === "SYSTEM" ? TONE.info.bg : TONE.accent.bg, color: laneOf(t) === "SYSTEM" ? TONE.info.fg : TONE.accent.fg }}>
                     {laneOf(t) === "SYSTEM" ? "SYS" : "DISC"}
                   </span>
                 </td>
-                <td style={{ ...styles.td, fontWeight: 700 }}>{t.asset}</td>
-                <td style={{ ...styles.td, color: t.direction === "LONG" ? "#7cffb1" : "#ff7c9c", fontWeight: 700 }}>{t.direction}</td>
+                <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600 }}>{t.asset}</td>
+                <td style={{ ...styles.td, color: t.direction === "LONG" ? T.up : T.down }}>{t.direction}</td>
                 <td style={styles.td}>{fmt(t.entry?.price, 4)}</td>
                 <td style={styles.td}>{fmt(t.entry?.stop, 4)}</td>
                 <td style={styles.td}>{fmt(t.entry?.qty, 6)}</td>
                 <td style={styles.td}>{fmt(t.entry?.riskDollar, 2)}</td>
                 <td style={styles.td}>{t.exit ? `${ymd(t.exit.time)} @ ${fmt(t.exit.price, 4)}` : "-"}</td>
-                <td style={{ ...styles.td, color: pnl > 0 ? "#7cffb1" : pnl < 0 ? "#ff7c9c" : "#888" }}>{fmt(pnl, 2)}</td>
+                <td style={{ ...styles.td, color: pnl > 0 ? T.up : pnl < 0 ? T.down : T.muted }}>{fmt(pnl, 2)}</td>
                 <td style={styles.td}>{fmt(r, 2)}</td>
                 <td style={styles.td}>
                   <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                    {onClose ? <button style={styles.actBtn} onClick={() => onClose(t)} type="button">close</button> : null}
-                    <button style={styles.actBtn} onClick={() => onEdit(t)} type="button">edit</button>
-                    <button style={styles.actBtn} onClick={() => onMd(t)} type="button" title="Copy Markdown">md</button>
-                    <button style={styles.actBtn} onClick={() => onMdFile(t)} type="button" title="Download .md">↓</button>
-                    <button style={styles.actBtnDanger} onClick={() => onDelete(t)} type="button">×</button>
+                    {onClose ? <button style={ui.btnSmall} onClick={() => onClose(t)} type="button">close</button> : null}
+                    <button style={ui.btnSmall} onClick={() => onEdit(t)} type="button">edit</button>
+                    <button style={ui.btnSmall} onClick={() => onMd(t)} type="button" title="Copy Markdown">md</button>
+                    <button style={ui.btnSmall} onClick={() => onMdFile(t)} type="button" title="Download .md">↓</button>
+                    <button style={ui.btnSmallDanger} onClick={() => onDelete(t)} type="button">×</button>
                   </div>
                 </td>
               </tr>
@@ -335,7 +340,7 @@ function NewTradeModal({ onClose, onSave }) {
   }
 
   return (
-    <Modal title="NEW TRADE" onClose={onClose} onSave={save}>
+    <Modal title="New trade" onClose={onClose} onSave={save}>
       <div style={modalStyles.grid2}>
         <Field label="Asset">
           <select value={form.asset} onChange={(e) => update("asset", e.target.value)} style={modalStyles.input}>
@@ -362,7 +367,7 @@ function NewTradeModal({ onClose, onSave }) {
         <Field label="Leverage"><input value={form.leverage} onChange={(e) => update("leverage", e.target.value)} style={modalStyles.input} /></Field>
       </div>
 
-      <div style={{ ...modalStyles.sectionTitle, marginTop: 14 }}>WEEKLY REGIME (at entry)</div>
+      <div style={{ ...ui.eyebrow, marginTop: 18, marginBottom: 8 }}>Weekly regime (at entry)</div>
       <div style={modalStyles.grid4}>
         <Field label="State">
           <select value={form.regimeState} onChange={(e) => update("regimeState", e.target.value)} style={modalStyles.input}>
@@ -375,7 +380,7 @@ function NewTradeModal({ onClose, onSave }) {
         <Field label="RSI"><input value={form.weeklyRsi} onChange={(e) => update("weeklyRsi", e.target.value)} style={modalStyles.input} /></Field>
       </div>
 
-      <div style={{ ...modalStyles.sectionTitle, marginTop: 14 }}>DAILY SIGNAL (at entry)</div>
+      <div style={{ ...ui.eyebrow, marginTop: 18, marginBottom: 8 }}>Daily signal (at entry)</div>
       <div style={modalStyles.grid4}>
         <Field label="Close"><input value={form.dailyClose} onChange={(e) => update("dailyClose", e.target.value)} style={modalStyles.input} /></Field>
         <Field label="RSI(14)"><input value={form.dailyRsi} onChange={(e) => update("dailyRsi", e.target.value)} style={modalStyles.input} /></Field>
@@ -416,7 +421,7 @@ function EditModal({ trade, mode, onClose, onSave }) {
   }
 
   return (
-    <Modal title={isClose ? "CLOSE TRADE" : "EDIT TRADE"} onClose={onClose} onSave={save}>
+    <Modal title={isClose ? "Close trade" : "Edit trade"} onClose={onClose} onSave={save}>
       {isClose ? (
         <>
           <div style={modalStyles.grid2}>
@@ -446,13 +451,13 @@ function Modal({ title, children, onClose, onSave }) {
     <div style={modalStyles.overlay} onClick={onClose}>
       <div style={modalStyles.modal} onClick={(e) => e.stopPropagation()}>
         <div style={modalStyles.modalHead}>
-          <div style={{ fontWeight: 900, letterSpacing: 2, fontSize: 14 }}>{title}</div>
+          <h2 style={ui.h2}>{title}</h2>
           <button style={modalStyles.closeX} onClick={onClose} type="button">×</button>
         </div>
-        <div style={{ padding: 16 }}>{children}</div>
+        <div style={{ padding: 18, display: "grid", gap: 12 }}>{children}</div>
         <div style={modalStyles.modalFoot}>
-          <button style={styles.btnGhost} onClick={onClose} type="button">CANCEL</button>
-          <button style={styles.btn} onClick={onSave} type="button">SAVE</button>
+          <button style={ui.btn} onClick={onClose} type="button">Cancel</button>
+          <button style={ui.btnPrimary} onClick={onSave} type="button">Save</button>
         </div>
       </div>
     </div>
@@ -461,49 +466,28 @@ function Modal({ title, children, onClose, onSave }) {
 
 function Field({ label, children }) {
   return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <label style={{ fontSize: 11, letterSpacing: 1.2, opacity: 0.7 }}>{label}</label>
+    <div style={ui.fieldWrap}>
+      <label style={ui.label}>{label}</label>
       {children}
     </div>
   );
 }
 
 const styles = {
-  page: { maxWidth: 1400, margin: "26px auto", padding: "0 14px", fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace", color: "#d7ffe8" },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16, borderRadius: 18,
-    boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.3, fontSize: 12, maxWidth: 760 },
-  btn: { padding: "10px 14px", borderRadius: 14, border: "1px solid #2cff9c33", background: "linear-gradient(180deg, #0b1712, #070b09)", color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.4, fontWeight: 800, boxShadow: "0 10px 25px #00000088" },
-  btnGhost: { padding: "8px 12px", borderRadius: 12, border: "1px solid #2cff9c22", background: "#06120e", color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.2, fontWeight: 700, fontSize: 11 },
-  notice: { marginTop: 12, padding: 10, borderRadius: 12, border: "1px solid #2cff9c33", background: "#0d3a25", color: "#7cffb1", fontSize: 12 },
-  statsRow: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, marginTop: 8 },
-  laneLabel: { marginTop: 16, fontSize: 11, letterSpacing: 1.6, opacity: 0.75, fontWeight: 800 },
-  laneBadge: { display: "inline-block", padding: "2px 7px", borderRadius: 6, fontSize: 10, fontWeight: 800, letterSpacing: 1 },
-  stat: { padding: 12, borderRadius: 14, border: "1px solid #2cff9c22", background: "#06120e" },
-  sectionTitle: { fontSize: 12, letterSpacing: 2, opacity: 0.85, fontWeight: 700, marginBottom: 8 },
-  tableWrap: { borderRadius: 18, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e" },
-  table: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
-  th: { textAlign: "left", padding: "10px 12px", borderBottom: "1px solid #2cff9c22", background: "#08120e", position: "sticky", top: 0, fontSize: 11, letterSpacing: 1, opacity: 0.9 },
-  td: { padding: "10px 12px", borderBottom: "1px solid #2cff9c11", whiteSpace: "nowrap" },
-  actBtn: { padding: "4px 8px", borderRadius: 6, border: "1px solid #2cff9c22", background: "#08120e", color: "#d7ffe8", cursor: "pointer", fontSize: 11 },
-  actBtnDanger: { padding: "4px 8px", borderRadius: 6, border: "1px solid #ff7c9c33", background: "#1f0d12", color: "#ff7c9c", cursor: "pointer", fontSize: 11 },
-  empty: { padding: 24, borderRadius: 18, border: "1px dashed #2cff9c22", textAlign: "center", opacity: 0.6, fontSize: 13 },
+  laneHead: { display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "4px 12px" },
+  th: ui.th,
+  td: ui.td,
 };
 
 const modalStyles = {
-  overlay: { position: "fixed", inset: 0, background: "#000c", display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: 60, zIndex: 200 },
-  modal: { width: 720, maxWidth: "94vw", maxHeight: "84vh", overflow: "auto", borderRadius: 18, border: "1px solid #2cff9c33", background: "#050807", boxShadow: "0 30px 80px #000c" },
-  modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 16px", borderBottom: "1px solid #2cff9c22" },
-  modalFoot: { display: "flex", justifyContent: "flex-end", gap: 10, padding: "12px 16px", borderTop: "1px solid #2cff9c22" },
-  closeX: { background: "transparent", border: "none", color: "#d7ffe8", fontSize: 22, cursor: "pointer", opacity: 0.7 },
-  input: { padding: 10, borderRadius: 12, border: "1px solid #2cff9c2a", background: "#050b09", color: "#d7ffe8", outline: "none", width: "100%", fontFamily: "inherit", fontSize: 13 },
-  grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  grid4: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 },
-  sectionTitle: { fontSize: 11, letterSpacing: 1.8, opacity: 0.75, fontWeight: 700 },
+  // The modal sits outside <Page>'s content column but inside .ns, so the
+  // theme variables still resolve.
+  overlay: { position: "fixed", inset: 0, background: "#000b", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "60px 12px 12px", zIndex: 200 },
+  modal: { width: 720, maxWidth: "100%", maxHeight: "84vh", overflow: "auto", borderRadius: 8, border: `1px solid ${T.line}`, background: T.panel, boxShadow: "0 30px 80px #0009" },
+  modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", borderBottom: `1px solid ${T.line}` },
+  modalFoot: { display: "flex", justifyContent: "flex-end", gap: 10, padding: "12px 18px", borderTop: `1px solid ${T.line}` },
+  closeX: { background: "transparent", border: "none", color: T.muted, fontSize: 22, cursor: "pointer", lineHeight: 1, padding: "0 4px" },
+  input: ui.input,
+  grid2: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 },
+  grid4: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 },
 };

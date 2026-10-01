@@ -3,6 +3,8 @@ import { createChart } from "lightweight-charts";
 import { fetchKlinesRange, dropUnclosedCandle, binanceSymbol } from "../data/binance.js";
 import { backtestOne } from "../backtest/engine.js";
 import { computeMetrics } from "../backtest/metrics.js";
+import { T, HEX, CHART_FONT, ui } from "../ui/theme.js";
+import { Page, PageHeader, Field, Tile } from "../ui/Page.jsx";
 
 const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 const START_YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
@@ -50,15 +52,15 @@ export default function Backtest() {
     const chart = createChart(el, {
       width: el.clientWidth || 800,
       height: 300,
-      layout: { background: { color: "#050807" }, textColor: "#d7ffe8" },
-      grid: { vertLines: { visible: false }, horzLines: { visible: false } },
+      layout: { background: { color: HEX.panel }, textColor: HEX.muted, fontFamily: CHART_FONT },
+      grid: { vertLines: { visible: false }, horzLines: { color: HEX.line } },
       rightPriceScale: { borderVisible: false },
       timeScale: { borderVisible: false },
     });
     const series = chart.addAreaSeries({
-      lineColor: "#2cff9c",
-      topColor: "#2cff9c33",
-      bottomColor: "#2cff9c05",
+      lineColor: HEX.accent,
+      topColor: `${HEX.accent}40`,
+      bottomColor: `${HEX.accent}05`,
       lineWidth: 2,
     });
     chartRef.current = chart;
@@ -118,81 +120,84 @@ export default function Backtest() {
   const m = result?.metrics;
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>BACKTEST</h1>
-          <div style={styles.subtitle}>
-            Same rules the Scanner runs live: weekly regime → daily Donchian-20 breakout →
-            fixed-fractional risk → Donchian-10 trail. If you wouldn't have followed this
-            equity curve through its worst stretch, don't trade it live.
-          </div>
+    <Page>
+      <PageHeader
+        eyebrow="Historical replay · Crypto System v2.0"
+        title="Backtest"
+        actions={
+          <button style={ui.btnPrimary} onClick={run} type="button" disabled={status.state === "loading"}>
+            {status.state === "loading" ? "Running…" : "Run backtest"}
+          </button>
+        }
+      >
+        <p className="muted">
+          Same rules the Scanner runs live: weekly regime → daily Donchian-20 breakout →
+          fixed-fractional risk → Donchian-10 trail. If you wouldn't have followed this
+          equity curve through its worst stretch, don't trade it live.
+        </p>
+      </PageHeader>
+
+      <section style={ui.panel} aria-label="Backtest settings">
+        <div style={ui.controls}>
+          <Field label="Asset">
+            <select value={cfg.asset} onChange={(e) => setCfg({ ...cfg, asset: e.target.value })} style={ui.input}>
+              {UNIVERSE.map((a) => <option key={a} value={a}>{binanceSymbol(a)}</option>)}
+            </select>
+          </Field>
+          <Field label="From year">
+            <select value={cfg.startYear} onChange={(e) => setCfg({ ...cfg, startYear: e.target.value })} style={ui.input}>
+              {START_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </Field>
+          <Field label="Start equity">
+            <input value={cfg.equity} onChange={(e) => setCfg({ ...cfg, equity: e.target.value })} style={ui.input} />
+          </Field>
+          <Field label="Risk %">
+            <input value={cfg.riskPct} onChange={(e) => setCfg({ ...cfg, riskPct: e.target.value })} style={ui.input} />
+          </Field>
+          <Field label="Fee % (round-trip)">
+            <input value={cfg.feePct} onChange={(e) => setCfg({ ...cfg, feePct: e.target.value })} style={ui.input} />
+          </Field>
         </div>
-        <button style={styles.btn} onClick={run} type="button" disabled={status.state === "loading"}>
-          {status.state === "loading" ? "RUNNING..." : "RUN BACKTEST"}
-        </button>
-      </div>
+        {status.message ? (
+          <p style={{ fontSize: 13, color: status.state === "error" ? T.down : T.muted }}>
+            {status.state === "error" ? "⚠️ " : ""}{status.message}
+          </p>
+        ) : null}
+      </section>
 
-      <div style={styles.controls}>
-        <Field label="ASSET">
-          <select value={cfg.asset} onChange={(e) => setCfg({ ...cfg, asset: e.target.value })} style={styles.input}>
-            {UNIVERSE.map((a) => <option key={a} value={a}>{binanceSymbol(a)}</option>)}
-          </select>
-        </Field>
-        <Field label="FROM YEAR">
-          <select value={cfg.startYear} onChange={(e) => setCfg({ ...cfg, startYear: e.target.value })} style={styles.input}>
-            {START_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </Field>
-        <Field label="START EQUITY">
-          <input value={cfg.equity} onChange={(e) => setCfg({ ...cfg, equity: e.target.value })} style={styles.input} />
-        </Field>
-        <Field label="RISK %">
-          <input value={cfg.riskPct} onChange={(e) => setCfg({ ...cfg, riskPct: e.target.value })} style={styles.input} />
-        </Field>
-        <Field label="FEE % (ROUND-TRIP)">
-          <input value={cfg.feePct} onChange={(e) => setCfg({ ...cfg, feePct: e.target.value })} style={styles.input} />
-        </Field>
-      </div>
-
-      {status.message ? (
-        <div style={{ marginTop: 10, fontSize: 12, color: status.state === "error" ? "#ff7c9c" : "#d7ffe8", opacity: 0.85 }}>
-          {status.state === "error" ? "⚠️ " : ""}{status.message}
-        </div>
-      ) : null}
-
-      <div style={styles.chartCard}>
-        <div style={styles.sectionTitle}>EQUITY CURVE</div>
-        <div ref={chartDivRef} style={{ borderRadius: 14, overflow: "hidden" }} />
-      </div>
+      <section style={ui.panel}>
+        <h2 style={ui.h2}>Equity curve</h2>
+        <div ref={chartDivRef} style={{ borderRadius: 6, overflow: "hidden" }} />
+      </section>
 
       {m ? (
         <>
-          <div style={styles.metricsGrid}>
-            <Metric label="Trades" value={String(m.numTrades)} />
-            <Metric label="Win rate" value={`${fmt(m.winRate * 100, 1)}%`} />
-            <Metric label="Expectancy" value={`${fmt(m.expectancyR, 2)}R`} sub={`${fmt(m.expectancy, 0)} USDT`} />
-            <Metric label="Profit factor" value={m.profitFactor === Infinity ? "∞" : fmt(m.profitFactor, 2)} />
-            <Metric label="Total return" value={`${fmt(m.totalReturnPct, 1)}%`} sub={`${fmt(m.totalReturn, 0)} USDT`} good={m.totalReturn > 0} bad={m.totalReturn < 0} />
-            <Metric label="CAGR" value={`${fmt(m.cagr, 1)}%`} />
-            <Metric label="Max drawdown" value={`${fmt(m.maxDDPct, 1)}%`} sub={`${fmt(m.maxDD, 0)} USDT / ${fmt(m.maxDDDays, 0)}d`} bad={m.maxDDPct > 20} />
-            <Metric label="Avg hold" value={`${fmt(m.avgBarsHeld, 0)} days`} />
-            <Metric label="Avg win" value={fmt(m.avgWin, 0)} />
-            <Metric label="Avg loss" value={fmt(m.avgLoss, 0)} />
-            <Metric label="Best trade" value={fmt(m.bestTrade?.pnl, 0)} />
-            <Metric label="Worst trade" value={fmt(m.worstTrade?.pnl, 0)} />
+          <div style={ui.tiles}>
+            <Tile label="Trades" value={String(m.numTrades)} />
+            <Tile label="Win rate" value={`${fmt(m.winRate * 100, 1)}%`} />
+            <Tile label="Expectancy" value={`${fmt(m.expectancyR, 2)}R`} sub={`${fmt(m.expectancy, 0)} USDT`} />
+            <Tile label="Profit factor" value={m.profitFactor === Infinity ? "∞" : fmt(m.profitFactor, 2)} />
+            <Tile label="Total return" value={`${fmt(m.totalReturnPct, 1)}%`} sub={`${fmt(m.totalReturn, 0)} USDT`} good={m.totalReturn > 0} bad={m.totalReturn < 0} />
+            <Tile label="CAGR" value={`${fmt(m.cagr, 1)}%`} />
+            <Tile label="Max drawdown" value={`${fmt(m.maxDDPct, 1)}%`} sub={`${fmt(m.maxDD, 0)} USDT / ${fmt(m.maxDDDays, 0)}d`} bad={m.maxDDPct > 20} />
+            <Tile label="Avg hold" value={`${fmt(m.avgBarsHeld, 0)} days`} />
+            <Tile label="Avg win" value={fmt(m.avgWin, 0)} />
+            <Tile label="Avg loss" value={fmt(m.avgLoss, 0)} />
+            <Tile label="Best trade" value={fmt(m.bestTrade?.pnl, 0)} />
+            <Tile label="Worst trade" value={fmt(m.worstTrade?.pnl, 0)} />
           </div>
 
           {m.maxDDPct > 20 ? (
-            <div style={styles.warnBanner}>
+            <div style={ui.bannerWarn}>
               ⚠️ Max drawdown {fmt(m.maxDDPct, 1)}% exceeds your 20% circuit-breaker threshold.
               Either reduce risk % or accept that you WILL see this drawdown live and plan for it.
             </div>
           ) : null}
 
-          <div style={styles.tableWrap}>
-            <div style={{ ...styles.sectionTitle, padding: "12px 12px 0" }}>TRADES ({result.trades.length})</div>
-            <table style={styles.table}>
+          <div style={{ ...ui.tableWrap, maxHeight: 480 }}>
+            <h2 style={{ ...ui.h2, padding: "14px 12px 6px" }}>Trades ({result.trades.length})</h2>
+            <table style={ui.table}>
               <thead>
                 <tr>
                   <th style={styles.th}>#</th>
@@ -211,15 +216,15 @@ export default function Backtest() {
                 {result.trades.map((t, i) => (
                   <tr key={i}>
                     <td style={styles.td}>{i + 1}</td>
-                    <td style={{ ...styles.td, color: t.direction === "LONG" ? "#7cffb1" : "#ff7c9c", fontWeight: 700 }}>{t.direction}</td>
+                    <td style={{ ...styles.td, color: t.direction === "LONG" ? T.up : T.down }}>{t.direction}</td>
                     <td style={styles.td}>{fmtDate(t.entryTime)}</td>
                     <td style={styles.td}>{fmt(t.entry, 4)}</td>
                     <td style={styles.td}>{fmtDate(t.exitTime)}</td>
                     <td style={styles.td}>{fmt(t.exit, 4)}</td>
                     <td style={styles.td}>{t.barsHeld}</td>
-                    <td style={{ ...styles.td, color: t.pnl >= 0 ? "#7cffb1" : "#ff7c9c" }}>{fmt(t.pnl, 0)}</td>
-                    <td style={{ ...styles.td, color: t.rMultiple >= 0 ? "#7cffb1" : "#ff7c9c" }}>{fmt(t.rMultiple, 2)}</td>
-                    <td style={{ ...styles.td, opacity: 0.7 }}>{t.exitReason}</td>
+                    <td style={{ ...styles.td, color: t.pnl >= 0 ? T.up : T.down }}>{fmt(t.pnl, 0)}</td>
+                    <td style={{ ...styles.td, color: t.rMultiple >= 0 ? T.up : T.down }}>{fmt(t.rMultiple, 2)}</td>
+                    <td style={{ ...styles.td, fontFamily: T.body, color: T.muted }}>{t.exitReason}</td>
                   </tr>
                 ))}
               </tbody>
@@ -227,88 +232,16 @@ export default function Backtest() {
           </div>
         </>
       ) : (
-        <div style={styles.empty}>
+        <div style={ui.empty}>
           Pick asset + start year, click RUN BACKTEST. Single asset for now — portfolio-level
           replay (correlation caps, 1-entry-per-day across assets) comes later.
         </div>
       )}
-    </div>
-  );
-}
-
-function Field({ label, children }) {
-  return (
-    <div style={{ display: "grid", gap: 6 }}>
-      <label style={styles.label}>{label}</label>
-      {children}
-    </div>
-  );
-}
-
-function Metric({ label, value, sub, good, bad }) {
-  return (
-    <div style={styles.metric}>
-      <div style={{ fontSize: 10, letterSpacing: 1.2, opacity: 0.6 }}>{label.toUpperCase()}</div>
-      <div style={{ fontSize: 20, fontWeight: 900, marginTop: 4, color: bad ? "#ff7c9c" : good ? "#7cffb1" : "#d7ffe8" }}>
-        {value}
-      </div>
-      {sub ? <div style={{ fontSize: 10, opacity: 0.55, marginTop: 2 }}>{sub}</div> : null}
-    </div>
+    </Page>
   );
 }
 
 const styles = {
-  page: {
-    maxWidth: 1400, margin: "26px auto", padding: "0 14px",
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    color: "#d7ffe8",
-  },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16, borderRadius: 18,
-    boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.3, fontSize: 12, maxWidth: 760 },
-  btn: {
-    padding: "10px 14px", borderRadius: 14, border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #0b1712, #070b09)",
-    color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.4, fontWeight: 800,
-    boxShadow: "0 10px 25px #00000088",
-  },
-  controls: {
-    display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginTop: 14,
-    padding: 14, borderRadius: 18, border: "1px solid #2cff9c22", background: "#06120e",
-  },
-  label: { fontSize: 11, letterSpacing: 1.2, opacity: 0.7 },
-  input: {
-    padding: 10, borderRadius: 12, border: "1px solid #2cff9c2a",
-    background: "#050b09", color: "#d7ffe8", outline: "none", width: "100%",
-  },
-  sectionTitle: { margin: 0, letterSpacing: 2, fontSize: 12, opacity: 0.9, fontWeight: 700 },
-  chartCard: {
-    marginTop: 14, padding: 14, borderRadius: 18,
-    border: "1px solid #2cff9c22", background: "linear-gradient(180deg, #06120e, #050807)",
-    display: "grid", gap: 10,
-  },
-  metricsGrid: {
-    display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, marginTop: 14,
-  },
-  metric: {
-    padding: 12, borderRadius: 14, border: "1px solid #2cff9c22", background: "#06120e",
-  },
-  warnBanner: {
-    marginTop: 12, padding: 12, borderRadius: 14,
-    border: "1px solid #ffd17c44", background: "#1a1408", color: "#ffd17c", fontSize: 12, lineHeight: 1.4,
-  },
-  tableWrap: { marginTop: 14, borderRadius: 18, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e", maxHeight: 480 },
-  table: { width: "100%", borderCollapse: "collapse", fontSize: 12, marginTop: 8 },
-  th: {
-    textAlign: "left", padding: "8px 12px", borderBottom: "1px solid #2cff9c22",
-    background: "#08120e", position: "sticky", top: 0, fontSize: 11, letterSpacing: 1, opacity: 0.9,
-  },
-  td: { padding: "8px 12px", borderBottom: "1px solid #2cff9c11", whiteSpace: "nowrap" },
-  empty: { marginTop: 24, padding: 24, borderRadius: 18, border: "1px dashed #2cff9c22", textAlign: "center", opacity: 0.7, fontSize: 13 },
+  th: ui.th,
+  td: ui.td,
 };

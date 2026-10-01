@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchKlines, dropUnclosedCandle, binanceSymbol, fetchDerivsContext } from "../data/binance.js";
 import { runOne } from "../strategy/runOne.js";
 import { estimateLiquidation, stopToLiqBufferPct, maxSafeLeverage } from "../strategy/liquidation.js";
+import { T, TONE, ui, signColor } from "../ui/theme.js";
+import { Page, PageHeader, Field } from "../ui/Page.jsx";
 
 const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 const QUOTE = "USDT";
@@ -12,10 +14,10 @@ const LS_KEY = "scanner.config.v1";
 const DEFAULT_CFG = { equity: 100000, riskPct: 1, fetchDerivs: false, leverage: 5, mmrPct: 0.5 };
 
 const GRADE_COLORS = {
-  CONFIRMED: { bg: "#0d3a25", fg: "#7cffb1" },
-  NEUTRAL: { bg: "#1a1a1a", fg: "#999" },
-  CAUTION: { bg: "#3a2a0d", fg: "#ffd17c" },
-  CROWDED: { bg: "#3a0d1f", fg: "#ff7c9c" },
+  CONFIRMED: TONE.up,
+  NEUTRAL: TONE.flat,
+  CAUTION: TONE.warn,
+  CROWDED: TONE.down,
 };
 
 function loadCfg() {
@@ -38,18 +40,18 @@ function fmt(n, d = 2) {
 }
 
 const STATE_COLORS = {
-  LONG_OK: { bg: "#0d3a25", fg: "#7cffb1" },
-  SHORT_OK: { bg: "#3a0d1f", fg: "#ff7c9c" },
-  FLAT: { bg: "#1a1a1a", fg: "#888" },
-  WARMUP: { bg: "#1a1a1a", fg: "#666" },
+  LONG_OK: TONE.up,
+  SHORT_OK: TONE.down,
+  FLAT: TONE.flat,
+  WARMUP: TONE.flat,
 };
 
 const ACTION_COLORS = {
-  LONG: { bg: "#0d3a25", fg: "#7cffb1" },
-  SHORT: { bg: "#3a0d1f", fg: "#ff7c9c" },
-  VETO: { bg: "#3a2a0d", fg: "#ffd17c" },
-  NONE: { bg: "#1a1a1a", fg: "#888" },
-  WAIT: { bg: "#1a1a1a", fg: "#666" },
+  LONG: TONE.up,
+  SHORT: TONE.down,
+  VETO: TONE.warn,
+  NONE: TONE.flat,
+  WAIT: TONE.flat,
 };
 
 async function scanAsset(asset, equity, riskPct, fetchDerivs) {
@@ -104,92 +106,87 @@ export default function Scanner() {
   }, [rows]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h1 style={styles.title}>SCANNER</h1>
-          <div style={styles.subtitle}>
-            Mechanical swing v2.0 (validated 2026-07-18): weekly 50W-SMA regime →
-            daily Donchian-20 breakout, LONG-ONLY → fixed-risk sizing, Donchian-10
-            trailing exit. No vetoes, no shorts — the ablation showed they subtract.
-          </div>
-        </div>
-        <div style={{ display: "grid", gap: 8 }}>
-          <button style={styles.btn} onClick={runScan} type="button" disabled={status.state === "loading"}>
-            {status.state === "loading" ? "SCANNING..." : "RUN SCAN"}
-          </button>
-          {lastScan ? (
-            <div style={{ fontSize: 11, opacity: 0.65, textAlign: "right" }}>
-              Last: {lastScan.toLocaleTimeString()}
-            </div>
-          ) : null}
-        </div>
-      </div>
+    <Page>
+      <PageHeader
+        eyebrow="Daily signals · Crypto System v2.0"
+        title="Scanner"
+        actions={
+          <>
+            {lastScan ? <span style={ui.small}>Last scan {lastScan.toLocaleTimeString()}</span> : null}
+            <button style={ui.btnPrimary} onClick={runScan} type="button" disabled={status.state === "loading"}>
+              {status.state === "loading" ? "Scanning…" : "Run scan"}
+            </button>
+          </>
+        }
+      >
+        <p className="muted">
+          Mechanical swing v2.0 (validated 2026-07-18): weekly 50W-SMA regime →
+          daily Donchian-20 breakout, LONG-ONLY → fixed-risk sizing, Donchian-10
+          trailing exit. No vetoes, no shorts — the ablation showed they subtract.
+        </p>
+      </PageHeader>
 
-      <div style={styles.controls}>
-        <div style={styles.controlField}>
-          <label style={styles.label}>EQUITY (USDT)</label>
-          <input
-            value={cfg.equity}
-            onChange={(e) => setCfg({ ...cfg, equity: e.target.value })}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.controlField}>
-          <label style={styles.label}>RISK % PER TRADE</label>
-          <input
-            value={cfg.riskPct}
-            onChange={(e) => setCfg({ ...cfg, riskPct: e.target.value })}
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.controlField}>
-          <label style={styles.label}>RISK $ (LOSS @ STOP)</label>
-          <div style={styles.readonly}>
-            {fmt((Number(cfg.equity) || 0) * (Number(cfg.riskPct) || 0) / 100, 2)} USDT
-          </div>
-        </div>
-        <div style={styles.controlField}>
-          <label style={styles.label}>LEVERAGE (ISOLATED)</label>
-          <select
-            value={String(cfg.leverage)}
-            onChange={(e) => setCfg({ ...cfg, leverage: Number(e.target.value) })}
-            style={styles.input}
-          >
-            {[1, 2, 3, 5, 8, 10, 15, 20, 25].map((l) => <option key={l} value={l}>{l}x</option>)}
-          </select>
-        </div>
-        <div style={styles.controlField}>
-          <label style={styles.label}>DERIVATIVES (FUNDING / OI)</label>
-          <label style={{ ...styles.readonly, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+      <section style={ui.panel} aria-label="Scan settings">
+        <div style={ui.controls}>
+          <Field label="Equity (USDT)">
             <input
-              type="checkbox"
-              checked={!!cfg.fetchDerivs}
-              onChange={(e) => setCfg({ ...cfg, fetchDerivs: e.target.checked })}
+              value={cfg.equity}
+              onChange={(e) => setCfg({ ...cfg, equity: e.target.value })}
+              style={ui.input}
             />
-            <span style={{ fontSize: 12, opacity: 0.85 }}>
-              {cfg.fetchDerivs ? "On — fetches positioning per asset (slower)" : "Off — price/flow only"}
-            </span>
-          </label>
+          </Field>
+          <Field label="Risk % per trade">
+            <input
+              value={cfg.riskPct}
+              onChange={(e) => setCfg({ ...cfg, riskPct: e.target.value })}
+              style={ui.input}
+            />
+          </Field>
+          <Field label="Risk $ (loss @ stop)">
+            <div style={ui.readonly}>
+              {fmt((Number(cfg.equity) || 0) * (Number(cfg.riskPct) || 0) / 100, 2)} USDT
+            </div>
+          </Field>
+          <Field label="Leverage (isolated)">
+            <select
+              value={String(cfg.leverage)}
+              onChange={(e) => setCfg({ ...cfg, leverage: Number(e.target.value) })}
+              style={ui.input}
+            >
+              {[1, 2, 3, 5, 8, 10, 15, 20, 25].map((l) => <option key={l} value={l}>{l}x</option>)}
+            </select>
+          </Field>
+          <Field label="Derivatives (funding / OI)">
+            <label style={{ ...ui.input, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={!!cfg.fetchDerivs}
+                onChange={(e) => setCfg({ ...cfg, fetchDerivs: e.target.checked })}
+              />
+              <span style={{ fontSize: 12.5, color: T.muted }}>
+                {cfg.fetchDerivs ? "On — fetches positioning per asset (slower)" : "Off — price/flow only"}
+              </span>
+            </label>
+          </Field>
         </div>
-      </div>
+      </section>
 
       <div style={styles.summary}>
-        <Pill color="#0d3a25" text={`BULL (longs allowed): ${summary.longOk}`} />
-        <Pill color="#3a0d1f" text={`BEAR (stand aside): ${summary.shortOk}`} />
-        <Pill color="#1a1a1a" text={`FLAT: ${summary.flat}`} />
-        <Pill color="#0d2f3a" text={`SIGNALS: ${summary.entries}`} />
-        <Pill color="#3a2a0d" text={`VETOES: ${summary.vetoes}`} />
+        <Pill tone={TONE.up} text={`Bull (longs allowed): ${summary.longOk}`} />
+        <Pill tone={TONE.down} text={`Bear (stand aside): ${summary.shortOk}`} />
+        <Pill tone={TONE.flat} text={`Flat: ${summary.flat}`} />
+        <Pill tone={TONE.info} text={`Signals: ${summary.entries}`} />
+        <Pill tone={TONE.warn} text={`Vetoes: ${summary.vetoes}`} />
         {status.message ? (
-          <span style={{ marginLeft: 12, fontSize: 12, opacity: 0.75 }}>{status.message}</span>
+          <span style={{ ...ui.small, marginLeft: 6 }}>{status.message}</span>
         ) : null}
       </div>
 
       {rows.length === 0 ? (
-        <div style={styles.empty}>Click RUN SCAN. Manual refresh only — this is a once-a-day system.</div>
+        <div style={ui.empty}>Click RUN SCAN. Manual refresh only — this is a once-a-day system.</div>
       ) : (
-        <div style={styles.tableWrap}>
-          <table style={styles.table}>
+        <div style={ui.tableWrap}>
+          <table style={ui.table}>
             <thead>
               <tr>
                 <th style={styles.th}>Asset</th>
@@ -226,11 +223,11 @@ export default function Scanner() {
         </div>
       )}
 
-      <div style={styles.foot}>
+      <p style={ui.foot}>
         Source: Binance spot {QUOTE} klines (1W, 1D), live unclosed candle excluded.
-        Universe: {UNIVERSE.join(" · ")}. Backtest tab coming next.
-      </div>
-    </div>
+        Universe: {UNIVERSE.join(" · ")}.
+      </p>
+    </Page>
   );
 }
 
@@ -240,7 +237,7 @@ function Row({ row, leverage, mmrPct }) {
       <tr>
         <td style={styles.td}>{row.asset}</td>
         <td style={styles.td} colSpan={22}>
-          <span style={{ color: "#ff7c9c" }}>error: {row.error}</span>
+          <span style={{ color: T.down }}>error: {row.error}</span>
         </td>
       </tr>
     );
@@ -268,7 +265,7 @@ function Row({ row, leverage, mmrPct }) {
 
   return (
     <tr>
-      <td style={{ ...styles.td, fontWeight: 700 }}>{binanceSymbol(row.asset)}</td>
+      <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600, color: T.ink }}>{binanceSymbol(row.asset)}</td>
       <td style={styles.td}><StateBadge state={row.regimeState} /></td>
       <td style={styles.td}><ActionBadge action={sig.action || "WAIT"} reason={sig.reason} /></td>
       <td style={styles.td}>{fmt(sig.close, 4)}</td>
@@ -285,7 +282,7 @@ function Row({ row, leverage, mmrPct }) {
       <td style={styles.td}>{sz?.ok ? fmt(sz.notional, 0) : "-"}</td>
       <td style={styles.td}>{margin !== null ? fmt(margin, 0) : "-"}</td>
       <td style={styles.td}>{liq !== null ? fmt(liq, 4) : "-"}</td>
-      <td style={{ ...styles.td, color: liqDanger ? "#ff7c9c" : liqBuf !== null ? "#7cffb1" : "#888", fontWeight: liqDanger ? 800 : 400 }}
+      <td style={{ ...styles.td, color: liqDanger ? T.down : liqBuf !== null ? T.up : T.muted, fontWeight: liqDanger ? 600 : 400 }}
         title="Distance from stop to estimated liquidation. Below 2% = a wick can liquidate you before your stop fires — lower the leverage.">
         {liqBuf !== null ? `${fmt(liqBuf, 1)}%${liqDanger ? " ⚠" : ""}` : "-"}
       </td>
@@ -293,19 +290,19 @@ function Row({ row, leverage, mmrPct }) {
         {safeLev !== null ? `${safeLev}x` : hasSignal ? "none" : "-"}
       </td>
       <td style={styles.td}>{fmt(rl.sma, 2)}</td>
-      <td style={{ ...styles.td, color: rl.hist > 0 ? "#7cffb1" : rl.hist < 0 ? "#ff7c9c" : "#888" }}>
+      <td style={{ ...styles.td, color: signColor(rl.hist) }}>
         {fmt(rl.hist, 3)}
       </td>
       <td style={styles.td}>{fmt(rl.adx, 1)}</td>
       <td style={styles.td}>{fmt(rl.rsi, 1)}</td>
       <td style={styles.td}>{fmt(sig.rsi, 1)}</td>
-      <td style={{ ...styles.td, color: flow > 0 ? "#7cffb1" : flow < 0 ? "#ff7c9c" : "#888" }} title="CVD slope over last 10 days (aggressor flow)">
+      <td style={{ ...styles.td, color: signColor(flow) }} title="CVD slope over last 10 days (aggressor flow)">
         {flow === null || flow === undefined ? "-" : `${flow > 0 ? "▲" : "▼"} ${fmt(Math.abs(flow) * 100, 1)}`}
       </td>
-      <td style={{ ...styles.td, color: d.fundingRate > 0 ? "#ff7c9c" : d.fundingRate < 0 ? "#7cffb1" : "#888" }}>
+      <td style={{ ...styles.td, color: signColor(-d.fundingRate) }}>
         {Number.isFinite(d.fundingRate) ? `${fmt(d.fundingRate * 100, 4)}%` : "-"}
       </td>
-      <td style={{ ...styles.td, color: d.oiChange24hPct > 0 ? "#7cffb1" : d.oiChange24hPct < 0 ? "#ff7c9c" : "#888" }}>
+      <td style={{ ...styles.td, color: signColor(d.oiChange24hPct) }}>
         {Number.isFinite(d.oiChange24hPct) ? `${fmt(d.oiChange24hPct, 1)}%` : "-"}
       </td>
       <td style={styles.td}>{da ? <GradeBadge grade={da.grade} reasons={da.reasons} /> : "-"}</td>
@@ -332,60 +329,13 @@ function ActionBadge({ action, reason }) {
   const c = ACTION_COLORS[action] || ACTION_COLORS.NONE;
   return <span title={reason || ""} style={{ ...styles.badge, background: c.bg, color: c.fg }}>{action}</span>;
 }
-function Pill({ color, text }) {
-  return <span style={{ ...styles.pill, background: color }}>{text}</span>;
+function Pill({ tone, text }) {
+  return <span style={{ ...ui.chip, borderColor: tone.fg, color: tone.fg }}>{text}</span>;
 }
 
 const styles = {
-  page: {
-    maxWidth: 1400, margin: "26px auto", padding: "0 14px",
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    color: "#d7ffe8",
-  },
-  header: {
-    border: "1px solid #2cff9c33",
-    background: "radial-gradient(1200px 280px at 10% 0%, #1cff8a22, transparent), linear-gradient(180deg, #07110e, #050807)",
-    padding: 16, borderRadius: 18,
-    boxShadow: "0 0 0 1px #0d2a1d inset, 0 30px 80px #00000088",
-    display: "grid", gridTemplateColumns: "1fr auto", gap: 16, alignItems: "center",
-  },
-  title: { margin: 0, letterSpacing: 3, fontWeight: 900, fontSize: 22 },
-  subtitle: { marginTop: 6, opacity: 0.78, lineHeight: 1.3, fontSize: 12, maxWidth: 720 },
-  btn: {
-    padding: "10px 14px", borderRadius: 14,
-    border: "1px solid #2cff9c33",
-    background: "linear-gradient(180deg, #0b1712, #070b09)",
-    color: "#d7ffe8", cursor: "pointer", letterSpacing: 1.4, fontWeight: 800,
-    boxShadow: "0 10px 25px #00000088",
-  },
-  controls: {
-    display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginTop: 14,
-    padding: 14, borderRadius: 18, border: "1px solid #2cff9c22", background: "#06120e",
-  },
-  controlField: { display: "grid", gap: 6 },
-  label: { fontSize: 11, letterSpacing: 1.2, opacity: 0.7 },
-  input: {
-    padding: 10, borderRadius: 12, border: "1px solid #2cff9c2a",
-    background: "#050b09", color: "#d7ffe8", outline: "none",
-  },
-  readonly: { padding: 10, borderRadius: 12, border: "1px solid #2cff9c14", background: "#040806", color: "#d7ffe8", opacity: 0.85 },
-  summary: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginTop: 14 },
-  pill: {
-    display: "inline-block", padding: "5px 10px", borderRadius: 999,
-    border: "1px solid #2cff9c22", fontSize: 12,
-  },
-  badge: {
-    display: "inline-block", padding: "3px 8px", borderRadius: 6,
-    fontSize: 11, fontWeight: 800, letterSpacing: 1.2,
-  },
-  empty: { marginTop: 24, padding: 24, borderRadius: 18, border: "1px dashed #2cff9c22", textAlign: "center", opacity: 0.7, fontSize: 13 },
-  tableWrap: { marginTop: 14, borderRadius: 18, border: "1px solid #2cff9c22", overflow: "auto", background: "#06120e" },
-  table: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
-  th: {
-    textAlign: "left", padding: "10px 12px", borderBottom: "1px solid #2cff9c22",
-    background: "#08120e", position: "sticky", top: 0,
-    fontSize: 11, letterSpacing: 1, opacity: 0.9, fontWeight: 700,
-  },
-  td: { padding: "10px 12px", borderBottom: "1px solid #2cff9c11", whiteSpace: "nowrap" },
-  foot: { marginTop: 12, opacity: 0.55, fontSize: 11, lineHeight: 1.4 },
+  summary: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" },
+  badge: ui.badge,
+  th: ui.th,
+  td: ui.td,
 };
