@@ -11,7 +11,11 @@ import { useEffect, useState, Fragment } from "react";
  * amber accent, IBM Plex type, heatmap cells for relative strength.
  */
 
-const DATA_URL = "/scout-data/latest.json";
+// On the Mac's dashboard the dev server serves the local snapshot. The static
+// build (pm-brief.com) reads the copy the Mac publishes to the public
+// scout-data branch (see scripts/lib/publish.mjs).
+const PUBLIC_SNAPSHOT_URL = "https://raw.githubusercontent.com/ear2earGrin/crypto-entry-checker/scout-data/latest.json";
+const DATA_URL = import.meta.env.PROD ? PUBLIC_SNAPSHOT_URL : "/scout-data/latest.json";
 
 const pct = (x, d = 1) => (x === null || x === undefined || !Number.isFinite(x) ? "–" : `${x >= 0 ? "+" : "−"}${Math.abs(x).toFixed(d)}%`);
 const usd = (x) => {
@@ -60,7 +64,7 @@ export default function Scout() {
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetch(import.meta.env.PROD ? DATA_URL : `${DATA_URL}?t=${Date.now()}`, { cache: "no-store" });
       if (!res.ok) throw new Error(res.status === 404 ? "no-data" : `HTTP ${res.status}`);
       setData(await res.json());
       setError(null);
@@ -82,9 +86,14 @@ export default function Scout() {
             {loading ? <p className="muted">Loading the latest scan…</p> : (
               <>
                 <h3>No Scout data yet{error && error !== "no-data" ? ` (${error})` : ""}</h3>
-                <p className="muted">The Scout runs on the Mac mini and this page reads what it writes. In Terminal, in the project folder:</p>
-                <pre className="pre">{`git pull\nnpm install\nnode scripts/scout.mjs        # first scan now (takes ~1–2 minutes)\nnode scripts/scout-install.mjs # then run it every hour automatically`}</pre>
-                <p className="muted">On pm-brief.com this tab stays empty: the Scout's data lives on your Mac. Use http://localhost:5173/#/scout.</p>
+                {import.meta.env.PROD ? (
+                  <p className="muted">This page shows the snapshot the Mac mini publishes every hour. Nothing has been published yet. On the Mac, in the project folder: <span className="mono ink">echo on &gt; data/scout/publish.txt &amp;&amp; node scripts/scout.mjs --publish-now</span></p>
+                ) : (
+                  <>
+                    <p className="muted">The Scout runs on the Mac mini and this page reads what it writes. In Terminal, in the project folder:</p>
+                    <pre className="pre">{`git pull\nnpm install\nnode scripts/scout.mjs        # first scan now (takes ~1–2 minutes)\nnode scripts/scout-install.mjs # then run it every hour automatically`}</pre>
+                  </>
+                )}
               </>
             )}
           </section>

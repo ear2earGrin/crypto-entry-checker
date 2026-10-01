@@ -27,7 +27,7 @@
  *   node scripts/scout.mjs --selftest   # synthetic data, no network
  */
 
-import { readFileSync, writeFileSync, mkdirSync, appendFileSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, appendFileSync, existsSync } from "node:fs";
 import { execFile } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -42,12 +42,14 @@ import { computeRegime } from "../src/strategy/regime.js";
 import { PRESET_V2 } from "../src/strategy/presets.js";
 import { fetchKlinesRange, dropUnclosed, binanceGet } from "./lib/data.mjs";
 import { explainCoin } from "./lib/explainer.mjs";
+import { publishSnapshot, PUBLIC_SNAPSHOT_URL } from "./lib/publish.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DIR = join(ROOT, "data", "scout");
 const SELFTEST = process.argv.includes("--selftest");
 const FORCE = process.argv.includes("--force");
+const PUBLISH_NOW = process.argv.includes("--publish-now");
 const P = (name) => join(DIR, SELFTEST ? `selftest-${name}` : name);
 
 const CG = "https://api.coingecko.com/api/v3";
@@ -244,7 +246,34 @@ function selftestSources() {
 }
 
 // ---------- main ----------
+// pm-brief.com publishing is opt-in: it starts once data/scout/publish.txt exists.
+function publishingEnabled() {
+  return existsSync(join(DIR, "publish.txt"));
+}
+function runPublish(now) {
+  try {
+    publishSnapshot({ root: ROOT, file: P("latest.json"), workDir: join(DIR, "publish-repo") });
+    return { ok: true, at: now.toISOString() };
+  } catch (e) {
+    const msg = String(e.stderr || e.message || e).trim().split("\n").slice(-2).join(" ").slice(0, 200);
+    log(`- ${now.toISOString()} publish to pm-brief failed: ${msg}`);
+    return { ok: false, at: now.toISOString(), error: msg };
+  }
+}
+
 async function main() {
+  if (PUBLISH_NOW) {
+    if (!existsSync(P("latest.json"))) { console.log("No snapshot yet — run node scripts/scout.mjs first."); return; }
+    const r = runPublish(new Date());
+    const state = readJson(P("state.json"));
+    if (state) { state.publish = r; writeJson(P("state.json"), state); }
+    console.log(r.ok
+      ? `Published. pm-brief.com reads it from:\n  ${PUBLIC_SNAPSHOT_URL}\n(GitHub may take up to 5 minutes to show the new version.)`
+      : `Publish FAILED: ${r.error}`);
+    if (r.ok && !publishingEnabled()) console.log("Note: hourly publishing is off. Turn it on with: echo on > data/scout/publish.txt");
+    return;
+  }
+
   const now = new Date();
   const nowSec = Math.floor(now.getTime() / 1000);
   const day = todayKey(now);
@@ -521,8 +550,10 @@ async function main() {
     snapshot.newsUpdatedAt = now.toISOString();
     snapshot.newsHealth = health.news;
     snapshot.news = state.news.slice(0, 80);
+    snapshot.publish = state.publish || null;
     writeJson(P("latest.json"), snapshot);
     writeFileSync(P("status.md"), statusMarkdown(snapshot));
+    if (!SELFTEST && publishingEnabled()) state.publish = runPublish(now);
   }
 
   for (const a of alerts) {

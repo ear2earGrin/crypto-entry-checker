@@ -19,6 +19,13 @@ porting, no CORS proxy, no framework adaptation needed:
    public market-data API sends CORS headers, so no proxy is required).
 3. Replace the contents of pm-brief's /trading/ directory with `dist/*`. Deploy.
 
+SCOUT tab (since 2026-10): the built bundle reads the Narrative Scout snapshot
+from https://raw.githubusercontent.com/ear2earGrin/crypto-entry-checker/scout-data/latest.json,
+which the owner's Mac mini force-pushes every hour (scripts/lib/publish.mjs).
+Nothing to configure on the pm-brief side: if pm-brief sends a
+Content-Security-Policy header, allow `connect-src https://raw.githubusercontent.com`
+(and fonts.googleapis.com / fonts.gstatic.com for the SCOUT tab's fonts).
+
 That's the whole integration. Rebuild + recopy on every update — the bundle IS
 the system, so drift between pm-brief and the validated code becomes impossible.
 The source-porting guide below (§1-§9) remains for anyone who wants a native
