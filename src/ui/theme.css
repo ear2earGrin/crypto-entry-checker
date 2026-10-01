@@ -35,6 +35,7 @@
 .ns a:focus-visible, .ns button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .ns .top { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
+.ns .reload { display: grid; gap: 6px; justify-items: end; max-width: 340px; text-align: right; }
 .ns .top-text { display: grid; gap: 6px; max-width: 760px; min-width: 0; }
 .ns .top-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ns .btn { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 8px 14px; cursor: pointer; }

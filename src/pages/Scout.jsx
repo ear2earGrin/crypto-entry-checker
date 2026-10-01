@@ -60,28 +60,35 @@ export default function Scout() {
   const [open, setOpen] = useState(null);
   const [grades, setGrades] = useState({ A: true, B: true, C: false });
   const [showRejects, setShowRejects] = useState(false);
+  const [check, setCheck] = useState(null);
 
-  async function load() {
+  // manual = the Reload button: report whether a newer snapshot arrived, since
+  // the page otherwise looks identical between the Mac's hourly publishes.
+  async function load(manual = false) {
     setLoading(true);
     try {
-      const res = await fetch(import.meta.env.PROD ? DATA_URL : `${DATA_URL}?t=${Date.now()}`, { cache: "no-store" });
+      const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: "no-store" });
       if (!res.ok) throw new Error(res.status === 404 ? "no-data" : `HTTP ${res.status}`);
-      setData(await res.json());
+      const next = await res.json();
+      const stamp = (d) => `${d?.generatedAt}|${d?.newsUpdatedAt}`;
+      if (manual) setCheck({ at: Date.now(), changed: stamp(next) !== stamp(data), newsUpdatedAt: next.newsUpdatedAt });
+      setData(next);
       setError(null);
     } catch (e) {
       setError(String(e.message || e));
+      if (manual) setCheck({ at: Date.now(), error: String(e.message || e) });
     } finally {
       setLoading(false);
     }
   }
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!data) {
     return (
       <div className="ns">
         <style>{CSS}</style>
         <div className="wrap">
-          <Header onRefresh={load} loading={loading} />
+          <Header onRefresh={() => load(true)} loading={loading} check={check} />
           <section className="panel">
             {loading ? <p className="muted">Loading the latest scan…</p> : (
               <>
@@ -111,7 +118,7 @@ export default function Scout() {
     <div className="ns">
       <style>{CSS}</style>
       <div className="wrap">
-        <Header onRefresh={load} loading={loading} data={data} />
+        <Header onRefresh={() => load(true)} loading={loading} data={data} check={check} />
 
         {data.selftest && <div className="banner warn"><b>Selftest data.</b> Synthetic coins and prices. Run node scripts/scout.mjs on the Mac for the real scan.</div>}
         {data.scanError && (
@@ -365,7 +372,18 @@ function Health({ label, h }) {
   return <span className={h.ok ? "up" : "down"} title={h.error || h.note || ""}>{label} {h.ok ? "ok" : "off"}</span>;
 }
 
-function Header({ onRefresh, loading, data }) {
+const hhmm = (ms) => new Date(ms).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+function checkNote(check) {
+  if (!check) return null;
+  if (check.error) return `Checked ${hhmm(check.at)} — couldn't load (${check.error}).`;
+  if (check.changed) return `Updated ${hhmm(check.at)} — new data loaded.`;
+  const due = check.newsUpdatedAt ? Date.parse(check.newsUpdatedAt) + 65 * 60000 : null;
+  const when = due && due > Date.now() ? `next update around ${hhmm(due)}` : "the Mac's next hourly run is due now";
+  return `Checked ${hhmm(check.at)} — no new data yet; ${when}.`;
+}
+
+function Header({ onRefresh, loading, data, check }) {
   return (
     <header className="top">
       <div className="top-text">
@@ -374,7 +392,10 @@ function Header({ onRefresh, loading, data }) {
         <p className="muted">Finds the narratives money is rotating into, explains each coin, measures its supply and liquidity risk, and tests the best pick with paper money.</p>
         {data && <p className="muted small">Last scan {data.scanDay ?? "–"} ({ago(data.generatedAt)}) · news {ago(data.newsUpdatedAt)} · rescans daily after the UTC close, news hourly</p>}
       </div>
-      <button className="btn" onClick={onRefresh} disabled={loading}>{loading ? "Loading…" : "Reload"}</button>
+      <div className="reload">
+        <button className="btn" onClick={onRefresh} disabled={loading}>{loading ? "Checking…" : "Reload"}</button>
+        {check && <span className="muted small" role="status">{checkNote(check)}</span>}
+      </div>
     </header>
   );
 }
