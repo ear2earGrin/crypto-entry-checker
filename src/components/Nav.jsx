@@ -25,8 +25,10 @@ export default function Nav() {
       padding: '8px 16px',
       minHeight: '52px',
       boxSizing: 'border-box',
-      background: '#111',
-      borderBottom: '1px solid #2a2a2a',
+      // Dark navy so the bar sits between pm-brief's header (#05080F) and the
+      // slate pages (src/ui/theme.css) instead of reading as a grey stripe.
+      background: '#0A0E1A',
+      borderBottom: '1px solid #1d2731',
     }}>
       <span style={{
         fontFamily: 'monospace',
