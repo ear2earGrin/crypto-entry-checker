@@ -20,8 +20,11 @@ export default function Nav() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '0 24px',
-      height: '52px',
+      flexWrap: 'wrap',
+      gap: '6px 12px',
+      padding: '8px 16px',
+      minHeight: '52px',
+      boxSizing: 'border-box',
       background: '#111',
       borderBottom: '1px solid #2a2a2a',
     }}>
@@ -35,7 +38,7 @@ export default function Nav() {
         CRYPTO SYSTEM v2.0
       </span>
 
-      <div style={{ display: 'flex', gap: '4px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
         {NAV_LINKS.map(({ to, label }) => {
           const active = to === '/' ? pathname === '/' : pathname.startsWith(to);
           return (
