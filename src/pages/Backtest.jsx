@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
-import { fetchKlinesRange, dropUnclosedCandle, binanceSymbol } from "../data/binance.js";
+import { fetchKlinesRange, fetchFundingHistory, dropUnclosedCandle, binanceSymbol } from "../data/binance.js";
+import { productionEngineOptions } from "../strategy/presets.js";
 import { backtestOne } from "../backtest/engine.js";
 import { computeMetrics } from "../backtest/metrics.js";
 import { T, HEX, CHART_FONT, ui } from "../ui/theme.js";
@@ -99,6 +100,11 @@ export default function Backtest() {
 
       if (daily.length < 60) throw new Error(`Only ${daily.length} daily candles — not enough history for ${cfg.asset} from ${cfg.startYear}.`);
 
+      // Funding is best-effort: the validation charged it, but a failed fetch
+      // must not block the replay (the status line says so).
+      let funding = null;
+      try { funding = await fetchFundingHistory({ asset: cfg.asset, startTime }); } catch { funding = null; }
+
       setStatus({ state: "loading", message: `Replaying ${daily.length} days...` });
 
       const bt = backtestOne({
@@ -107,11 +113,13 @@ export default function Backtest() {
         daily,
         startEquity: Number(cfg.equity) || 100000,
         riskPct: Number(cfg.riskPct) || 1,
+        ...productionEngineOptions(),
         feePct: Number(cfg.feePct) || 0,
+        funding,
       });
       const metrics = computeMetrics(bt);
       setResult({ ...bt, metrics, candles: daily.length });
-      setStatus({ state: "ok", message: `Done: ${daily.length} days, ${bt.trades.length} trades.` });
+      setStatus({ state: "ok", message: `Done: ${daily.length} days, ${bt.trades.length} trades.${funding?.length ? "" : " Funding history unavailable, so funding was not charged."}` });
     } catch (e) {
       setStatus({ state: "error", message: e?.message || "Backtest failed." });
     }
@@ -131,7 +139,9 @@ export default function Backtest() {
         }
       >
         <p className="muted">
-          Same rules the Scanner runs live: weekly regime → daily Donchian-20 breakout →
+          The production v2 rules on ONE coin, with fees, slippage and funding, but without the
+          portfolio rules (max positions, one entry a day), so trades can differ from the Paper tab.
+          Weekly regime → daily Donchian-20 breakout →
           fixed-fractional risk → Donchian-10 trail. If you wouldn't have followed this
           equity curve through its worst stretch, don't trade it live.
         </p>
@@ -155,7 +165,7 @@ export default function Backtest() {
           <Field label="Risk %">
             <input value={cfg.riskPct} onChange={(e) => setCfg({ ...cfg, riskPct: e.target.value })} style={ui.input} />
           </Field>
-          <Field label="Fee % (round-trip)">
+          <Field label="Fee % (per side)">
             <input value={cfg.feePct} onChange={(e) => setCfg({ ...cfg, feePct: e.target.value })} style={ui.input} />
           </Field>
         </div>

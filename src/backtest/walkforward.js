@@ -42,15 +42,14 @@ function objective(metrics, kind = "expectancyR") {
 /**
  * Walk-forward backtest.
  *
- * The single most important methodological tool in this codebase. The trap with any
- * backtest is that you tune parameters on the same data you evaluate on, and the
- * resulting "edge" is just memorization of past noise. Walk-forward sidesteps that
- * by repeatedly: (1) tuning on an in-sample window, (2) freezing those parameters,
- * (3) measuring on a forward out-of-sample window the optimizer never saw.
+ * With a `paramGrid`, each fold (1) picks the best parameters on an in-sample
+ * window, (2) freezes them, (3) runs them on the following window.
  *
- * The OUT-OF-SAMPLE concatenated equity curve is what you should look at. If the
- * in-sample curve is great and the out-of-sample curve is flat, the system is
- * curve-fit, full stop.
+ * WITHOUT a paramGrid (how scripts/backtest.mjs calls it) nothing is fitted:
+ * every fold just runs the frozen configuration on consecutive periods. That
+ * is SUB-PERIOD STABILITY, not out-of-sample evidence — the production rules
+ * were selected on this same history. The "oos*" fields then simply mean
+ * "the later window of each fold".
  *
  * Defaults are conservative: 2-year in-sample, 6-month out-of-sample, step forward
  * 6 months. This matches academic walk-forward conventions and gives crypto data
@@ -60,7 +59,7 @@ function objective(metrics, kind = "expectancyR") {
  * @param {Array} opts.weekly                    Weekly candles (entire history).
  * @param {Array} opts.daily                     Daily candles (entire history).
  * @param {object} [opts.paramGrid]              { donchianEntry: [15, 20, 25], donchianExit: [7, 10, 14] } etc.
- *                                               Omit to skip optimization (single-fold OOS evaluation).
+ *                                               Omit to skip optimization (frozen params → sub-period stability only).
  * @param {string} [opts.objective="expectancyR"]
  * @param {number} [opts.inSampleDays=730]       2 years
  * @param {number} [opts.outSampleDays=183]      ~6 months
@@ -158,8 +157,9 @@ export function walkForward({
 
   const oosMetrics = computeMetrics({ trades: oosTrades, equityCurve: oosCurve, startEquity });
 
-  // Degradation: how much worse OOS is than IS, averaged across folds.
-  // A healthy system shows degradation < 30%. > 60% means heavy overfit.
+  // Degradation: relative drop from in-sample to "oos" objective, averaged across
+  // folds. Only meaningful when a paramGrid was fitted; with frozen params it is
+  // just the difference between two sub-periods and carries no overfit verdict.
   const validFolds = folds.filter((f) => f.isMetrics && f.oosMetrics && f.isMetrics.numTrades > 0);
   let degradation = null;
   if (validFolds.length) {

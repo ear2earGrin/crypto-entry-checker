@@ -9,15 +9,22 @@
  * Runs, across the whole universe, in one command:
  *   - single-asset backtest + metrics per asset
  *   - multi-asset portfolio backtest (respects all portfolio rules)
- *   - walk-forward on each asset (in-sample/out-of-sample, degradation)
- *   - Monte Carlo on the portfolio trade list (outcome distribution + edge p-value)
+ *   - sub-period stability per asset (consecutive 6-month windows; NOT out-of-sample)
+ *   - benchmarks scored identically (Sharpe, maxDD): BTC / equal-weight buy-and-hold
+ *     and "regime-hold" (the 50W-SMA filter without the Donchian timing)
+ *   - drawdown planning: stationary block bootstrap of daily mark-to-market returns
+ *   - timing-skill test: drift-preserving joint bar permutation (plus the weaker
+ *     sign-flip test, labelled for what it is)
  * and writes a timestamped Markdown + JSON report into reports/.
  *
  * Usage:
  *   node scripts/backtest.mjs                         # full run, universe, from 2020
  *   node scripts/backtest.mjs --from 2021 --asset BTC # single asset
  *   node scripts/backtest.mjs --risk 0.5 --fee 0.1
+ *   node scripts/backtest.mjs --to 2026-07-18         # exclusive end date (reproducible)
+ *   node scripts/backtest.mjs --perm-runs 999         # bar-permutation runs (default 199)
  *   node scripts/backtest.mjs --selftest             # synthetic data, no network
+ *                                                     # (bar permutation skipped unless --perm-runs)
  *
  * Network note: this hits api.binance.com directly (Node has no CORS, so no proxy
  * needed). If you are behind a restricted network it will fail with a clear message;
@@ -31,23 +38,30 @@ import { dirname, join } from "node:path";
 import { backtestOne } from "../src/backtest/engine.js";
 import { backtestPortfolio } from "../src/backtest/portfolio.js";
 import { walkForward } from "../src/backtest/walkforward.js";
-import { computeMetrics } from "../src/backtest/metrics.js";
-import { bootstrapTradeSequence, permutationEdgeTest } from "../src/backtest/montecarlo.js";
+import { computeMetrics, dailyReturns, equityCurveStats } from "../src/backtest/metrics.js";
+import {
+  bootstrapTradeSequence, permutationEdgeTest, barPermutationTest,
+  blockBootstrapMaxDrawdown, probMaxDDAtLeast,
+} from "../src/backtest/montecarlo.js";
+import { buyAndHold, regimeHold } from "../src/backtest/benchmarks.js";
 import { PRESET_V1, PRESET_V2 } from "../src/strategy/presets.js";
-import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, f, pct } from "./lib/data.mjs";
+import { UNIVERSE, loadAsset, loadFunding, synth, synthFunding, beforeEnd, hashData, f, pct } from "./lib/data.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPORTS_DIR = join(__dirname, "..", "reports");
 
 // ---------- args ----------
 function parseArgs(argv) {
-  const a = { from: 2020, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false, preset: "v2" };
+  const a = { from: 2020, to: null, risk: 1, fee: 0.08, slip: 0.05, equity: 100000, asset: null, selftest: false, longOnly: false, preset: "v2", permRuns: null, permBlock: 1 };
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--selftest") a.selftest = true;
     else if (k === "--long-only") a.longOnly = true;
     else if (k === "--preset") a.preset = String(argv[++i]);
     else if (k === "--from") a.from = Number(argv[++i]);
+    else if (k === "--to") a.to = String(argv[++i]);
+    else if (k === "--perm-runs") a.permRuns = Number(argv[++i]);
+    else if (k === "--perm-block") a.permBlock = Number(argv[++i]);
     else if (k === "--risk") a.risk = Number(argv[++i]);
     else if (k === "--fee") a.fee = Number(argv[++i]);
     else if (k === "--slip") a.slip = Number(argv[++i]);
@@ -55,6 +69,17 @@ function parseArgs(argv) {
     else if (k === "--asset") a.asset = String(argv[++i]).toUpperCase();
   }
   return a;
+}
+
+// Closed-trade mean R — the bar-permutation statistic. Forced end-of-data
+// closes are excluded (they are marks, not completed trades); no trades = 0.
+function closedMeanR(trades) {
+  const closed = trades.filter((t) => t.exitReason !== "end of data");
+  return closed.length ? closed.reduce((s, t) => s + (t.rMultiple || 0), 0) / closed.length : 0;
+}
+
+function statsRow(name, s) {
+  return `| ${name} | ${pct(s.totalReturnPct)} | ${pct(s.cagr)} | ${pct(s.maxDDPct)} | ${s.annVolPct === null ? "-" : pct(s.annVolPct)} | ${s.sharpe === null ? "-" : f(s.sharpe, 2)} |`;
 }
 
 function metricsRow(asset, m) {
@@ -86,15 +111,30 @@ async function main() {
   const assets = args.asset ? args.asset.split(",").map((x) => x.trim().toUpperCase()).filter(Boolean) : UNIVERSE;
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
+  // --to YYYY-MM-DD: exclusive end date. Everything that is not complete before
+  // 00:00 UTC that day is dropped, so the same --from/--to always sees the same
+  // bars (the data sha256 in the report proves it).
+  let toSec = null;
+  if (args.to) {
+    toSec = Date.parse(`${args.to}T00:00:00Z`) / 1000;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(args.to) || !Number.isFinite(toSec)) {
+      console.error(`Bad --to "${args.to}" (expected YYYY-MM-DD)`);
+      process.exit(1);
+    }
+  }
+  const startSec = Date.UTC(args.from, 0, 1) / 1000;
+
   console.log(`\nBacktest harness — ${args.selftest ? "SELF-TEST (synthetic)" : "Binance data"}`);
-  console.log(`Universe: ${assets.join(", ")} | from ${args.from} | risk ${args.risk}% | fee ${args.fee}% | slip ${args.slip}%\n`);
+  console.log(`Universe: ${assets.join(", ")} | from ${args.from} | to ${args.to ?? "latest"} (exclusive) | risk ${args.risk}% | fee ${args.fee}%/side | slip ${args.slip}%\n`);
 
   const data = {};
   const fundingByAsset = {};
   for (let i = 0; i < assets.length; i++) {
     const asset = assets[i];
     try {
-      data[asset] = args.selftest ? synth(asset, i * 1.7) : await loadAsset(asset, args.from);
+      const raw = args.selftest ? synth(asset, i * 1.7) : await loadAsset(asset, args.from, toSec ? toSec * 1000 : Date.now());
+      data[asset] = { daily: beforeEnd(raw.daily, toSec), weekly: beforeEnd(raw.weekly, toSec) };
+      if (!data[asset].daily.length) throw new Error("no daily bars before --to");
       console.log(`  loaded ${asset}: ${data[asset].daily.length} daily, ${data[asset].weekly.length} weekly`);
     } catch (e) {
       console.error(`  FAILED ${asset}: ${e.message}`);
@@ -104,7 +144,7 @@ async function main() {
     // endpoint may fail — either way the price backtest still runs, with funding
     // coverage disclosed in the report.
     try {
-      fundingByAsset[asset] = args.selftest ? synthFunding() : await loadFunding(asset, args.from);
+      fundingByAsset[asset] = beforeEnd(args.selftest ? synthFunding() : await loadFunding(asset, args.from, toSec ? toSec * 1000 : Date.now()), toSec);
       console.log(`    funding ${asset}: ${fundingByAsset[asset].length} settlements`);
     } catch (e) {
       fundingByAsset[asset] = null;
@@ -117,6 +157,10 @@ async function main() {
     console.error("\nNo data loaded. If not on --selftest, check network access to api.binance.com.\n");
     process.exit(1);
   }
+  const dataSha = hashData(Object.fromEntries(loaded.map((a) => [a, data[a]])), fundingByAsset);
+  const lastBar = Math.max(...loaded.map((a) => data[a].daily[data[a].daily.length - 1].time));
+  const lastBarDate = new Date(lastBar * 1000).toISOString().slice(0, 10);
+  console.log(`\n  data sha256 ${dataSha} (last daily bar ${lastBarDate})`);
 
   // single-asset
   const singleRows = [];
@@ -144,13 +188,16 @@ async function main() {
   const longM = computeMetrics({ trades: longTrades, equityCurve: port.equityCurve, startEquity: args.equity });
   const shortM = computeMetrics({ trades: shortTrades, equityCurve: port.equityCurve, startEquity: args.equity });
 
-  const benchRows = loaded.map((a) => {
-    const d = data[a].daily;
-    const ret = d.length > 1 ? ((d[d.length - 1].close / d[0].close) - 1) * 100 : 0;
-    return { a, ret };
-  });
-  const eqWeightRet = benchRows.reduce((s, b) => s + b.ret, 0) / (benchRows.length || 1);
-  const btcRet = benchRows.find((b) => b.a === "BTC")?.ret ?? null;
+  // Benchmarks, scored with the same equityCurveStats as the system (daily MTM
+  // curve → Sharpe, vol, maxDD). Same costs: fee per side + slippage on notional.
+  const benchCost = { startEquity: args.equity, feePct: args.fee, slippagePct: args.slip };
+  const systemStats = equityCurveStats(port.equityCurve, args.equity);
+  const benchmarks = [];
+  if (loaded.includes("BTC")) {
+    benchmarks.push({ name: "BTC buy-and-hold", stats: equityCurveStats(buyAndHold({ dailyByAsset, assets: ["BTC"], ...benchCost }), args.equity) });
+  }
+  benchmarks.push({ name: "Equal-weight buy-and-hold (universe)", stats: equityCurveStats(buyAndHold({ dailyByAsset, assets: loaded, ...benchCost }), args.equity) });
+  benchmarks.push({ name: "Regime-hold (weekly close > 50W SMA, EW, weekly rebal.)", stats: equityCurveStats(regimeHold({ dailyByAsset, weeklyByAsset, assets: loaded, ...benchCost, smaPeriod: regParams.smaPeriod }), args.equity) });
 
   // Realized (closed) vs forced END_OF_DATA: report them separately so an open
   // winner isn't dressed up as a completed trade.
@@ -170,17 +217,44 @@ async function main() {
     return `| ${s.name} | ${m.numTrades} | ${f(m.expectancyR, 2)} | ${pct(m.totalReturnPct)} | ${pct(m.maxDDPct)} |`;
   });
 
-  // walk-forward per asset
+  // Sub-period stability per asset. walkForward is called WITHOUT a param grid,
+  // so nothing is fitted: each fold's later 6-month window just runs the frozen
+  // preset. These are consecutive sub-periods of the history the preset was
+  // selected on — a stability check, not out-of-sample evidence.
   const wfRows = [];
   for (const asset of loaded) {
     const wf = walkForward({ ...data[asset], asset, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, funding: fundingByAsset[asset], signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip });
     const s = wf.summary;
-    wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} | ${s.degradation === null ? "-" : pct(s.degradation)} |`);
+    const traded = wf.folds.filter((fo) => fo.oosMetrics.numTrades > 0);
+    const positive = traded.filter((fo) => fo.oosMetrics.expectancyR > 0).length;
+    wfRows.push(`| ${asset} | ${s.numFolds ?? 0} | ${traded.length ? `${positive}/${traded.length}` : "-"} | ${f(s.oosExpectancyR, 2)} | ${pct(s.oosMaxDDPct)} |`);
   }
 
-  // monte carlo on portfolio trades
+  // Drawdown planning: stationary block bootstrap of the portfolio's DAILY
+  // mark-to-market returns (keeps open-trade swings and volatility clustering).
+  const portRets = dailyReturns(port.equityCurve);
+  const bbFull = blockBootstrapMaxDrawdown(portRets, { runs: 5000, meanBlock: 30, seed: 1 });
+  const bbHalf = blockBootstrapMaxDrawdown(portRets, { runs: 5000, meanBlock: 30, seed: 1, meanScale: 0.5 });
+  const ddRow = (label, bb) => `| ${label} | ${pct(bb.maxDDPct.p50)} | ${pct(bb.maxDDPct.p90)} | ${pct(bb.maxDDPct.p95)} | ${pct(bb.maxDDPct.p99)} | ${pct(probMaxDDAtLeast(bb, 20) * 100, 0)} | ${pct(probMaxDDAtLeast(bb, 30) * 100, 0)} |`;
+  // Old iid trade resample, kept only to show how much it understates tails.
   const boot = bootstrapTradeSequence(port.trades, { startEquity: args.equity, runs: 2000, seed: 1 });
+
+  // Sign-flip test: only "mean trade P&L > 0" — drift alone passes it.
   const perm = permutationEdgeTest(port.trades, { runs: 2000, seed: 1 });
+
+  // Timing-skill test: drift-preserving joint bar permutation. Statistic =
+  // closed-trade mean R of backtestPortfolio with the SAME config as above.
+  const permRuns = args.permRuns ?? (args.selftest ? 0 : 199);
+  let barPerm = null;
+  if (permRuns > 0) {
+    console.log(`\n  bar permutation: ${permRuns} runs (block ${args.permBlock}d)...`);
+    const t0 = Date.now();
+    barPerm = barPermutationTest({
+      dailyByAsset, weeklyByAsset, runs: permRuns, seed: 1, block: args.permBlock, startTime: startSec,
+      runStat: (d) => closedMeanR(backtestPortfolio({ ...d, startEquity: args.equity, riskPct: args.risk, feePct: args.fee, slippagePct: args.slip, fundingByAsset, signalParams: sigParams, regimeParams: regParams, exitOnRegimeFlip: exitFlip }).trades),
+    });
+    console.log(`  done in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+  }
 
   // assemble report
   const md = [
@@ -188,7 +262,9 @@ async function main() {
     "",
     `- Mode: ${args.selftest ? "SELF-TEST (synthetic data — numbers are meaningless, this only proves the pipeline runs)" : "Binance live history"}${modeNote}`,
     `- Universe: ${loaded.join(", ")}`,
-    `- From: ${args.from} | Risk: ${args.risk}% | Fee: ${args.fee}% round-trip | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
+    `- From: ${args.from} | To: ${args.to ? `${args.to} (exclusive)` : `latest available (last bar ${lastBarDate}) — pass --to to make this run reproducible`}`,
+    `- Risk: ${args.risk}% | Fee: ${args.fee}% per side | Slippage: ${args.slip}% per fill | Start equity: ${f(args.equity, 0)}`,
+    `- Data sha256: \`${dataSha}\` (daily + weekly + funding as loaded; same hash = same inputs)`,
     "",
     "## Execution assumptions (read before trusting any number)",
     "",
@@ -199,7 +275,7 @@ async function main() {
     "Signal evaluation: at daily close",
     "Entry fill:        NEXT bar's open + adverse slippage (never the signal close)",
     "Exit fill:         next executable price, gap-aware (worse of stop vs open) + slippage",
-    `Fees:              ${args.fee}% round-trip`,
+    `Fees:              ${args.fee}% per side (charged on entry AND exit notional)`,
     `Slippage:          ${args.slip}% per fill (see cost-sensitivity table)`,
     "Same-bar order:    stop checked BEFORE regime-flip (pessimistic, deterministic)",
     "Funding:           Binance USDT-M perp funding history, summed per UTC day and",
@@ -243,14 +319,19 @@ async function main() {
     "A valid outcome is one side working and the other not. Do not keep the losing",
     "side for symmetry's sake.",
     "",
-    "## Benchmarks (same period, buy-and-hold)",
+    "## Benchmarks (same timeline, same costs, scored identically)",
     "",
-    `- BTC buy-and-hold: ${btcRet === null ? "n/a" : pct(btcRet)}`,
-    `- Equal-weight universe buy-and-hold: ${pct(eqWeightRet)}`,
-    `- This system (portfolio, all costs): ${pct(portMetrics.totalReturnPct)} with ${pct(portMetrics.maxDDPct)} max DD`,
+    `Daily mark-to-market curves; Sharpe = mean/sd of daily returns × √365 (rf = 0). Costs on traded notional: ${args.fee}%/side + ${args.slip}% slippage. Buy-and-hold sleeves sit in cash until their coin's first bar.`,
     "",
-    "The system must beat these on a RISK-ADJUSTED basis (return vs drawdown), not",
-    "necessarily on raw return — otherwise just hold and skip the work.",
+    "| Strategy | Return% | CAGR | MaxDD% | Vol% (ann.) | Sharpe |",
+    "|---|---|---|---|---|---|",
+    statsRow("**This system (portfolio, all costs)**", systemStats),
+    ...benchmarks.map((b) => statsRow(b.name, b.stats)),
+    "",
+    "The system must beat these on a RISK-ADJUSTED basis (Sharpe, drawdown), not",
+    "necessarily on raw return. Regime-hold is the key control: it is the same",
+    "weekly 50W-SMA filter with NO Donchian timing. If the system does not beat it,",
+    "the entry/exit timing adds nothing over simply holding what is above its SMA.",
     "",
     "## Cost sensitivity (portfolio)",
     "",
@@ -260,36 +341,75 @@ async function main() {
     "|---|---|---|---|---|",
     ...scenarios,
     "",
-    "## Walk-forward (per asset, 2y in-sample / 6mo out-of-sample)",
+    "## Sub-period stability (NOT out-of-sample: the rules were selected on this same history)",
     "",
-    "Degradation = average drop from in-sample to out-of-sample expectancy. < 30% healthy, > 60% overfit.",
+    "Single-asset, frozen preset, consecutive 6-month windows (after a 2-year lead-in).",
+    "Nothing is fitted per window, so this only shows whether the result is spread",
+    "across time or concentrated in one stretch. It is not evidence against overfitting —",
+    "paper trading is the only true out-of-sample.",
     "",
-    "| Asset | Folds | OOS Exp(R) | OOS MaxDD% | Degradation |",
+    "| Asset | 6-mo periods | Periods with Exp(R) > 0 (of those with trades) | Exp(R) over periods | MaxDD% over periods |",
     "|---|---|---|---|---|",
     ...wfRows,
     "",
-    "## Monte Carlo (portfolio trades, 2000 runs)",
+    "## Drawdown planning (stationary block bootstrap of daily MTM returns)",
     "",
-    "Bootstrap resampling of the trade sequence — the realistic range of outcomes, not just the one curve you got.",
+    `Portfolio daily mark-to-market returns at ${args.risk}% risk per trade, resampled in blocks (mean 30 days, Politis-Romano), 5000 paths of ${bbFull.horizon} days. "Half drift" removes half the historical mean daily return.`,
     "",
-    `- Return p05 / p50 / p95: ${pct(boot.returnsPct.p05)} / ${pct(boot.returnsPct.median)} / ${pct(boot.returnsPct.p95)}`,
-    `- Max drawdown p50 / p95: ${pct(boot.maxDDPct.median)} / ${pct(boot.maxDDPct.p95)}`,
-    `- Permutation edge test p-value: ${f(perm.p, 4)} (real expectancy ${f(perm.realExpectancy, 2)} vs permuted mean ${f(perm.permutedMean, 2)})`,
-    `  - p < 0.05 = statistical evidence of edge; higher = could be luck`,
+    "| Assumption | MaxDD p50 | p90 | p95 | p99 | P(DD ≥ 20%) | P(DD ≥ 30%) |",
+    "|---|---|---|---|---|---|---|",
+    ddRow("History as-is", bbFull),
+    ddRow("Half drift", bbHalf),
+    "",
+    `For reference only: the iid closed-trade dollar resample gives p95 maxDD ${pct(boot.maxDDPct.p95)}. It ignores open-trade swings and serial dependence and on real data has understated tail drawdown — do not plan with it.`,
+    "",
+    "## Statistical tests",
+    "",
+    "### Bar permutation (timing skill)",
+    "",
+    barPerm
+      ? [
+        `Same rules and costs re-run on ${barPerm.runs} drift-preserving joint permutations of daily bars from ${args.from}-01-01 (block ${barPerm.block}d): each coin keeps its total return and each day keeps its cross-asset move; only the ORDER is shuffled. Statistic = closed-trade mean R.`,
+        "",
+        `- Observed: ${f(barPerm.observed, 3)} R | null median: ${f(barPerm.nullMedian, 3)} R | null p95: ${f(barPerm.nullP95, 3)} R`,
+        `- Timing component (observed − null median): ${f(barPerm.timing, 3)} R`,
+        `- p = ${f(barPerm.p, 4)} (= (1 + #null ≥ observed) / (1 + ${barPerm.runs - barPerm.invalid}))${barPerm.invalid ? `; ${barPerm.invalid} invalid runs dropped` : ""}`,
+        "",
+        "p < 0.05 with a positive timing component = the rules' timing beats the same days in random order. The null median is what drift alone earns.",
+      ].join("\n")
+      : "Skipped (self-test default). Pass `--perm-runs N` to run it.",
+    "",
+    "### Sign-flip test (mean trade P&L > 0 only)",
+    "",
+    `- p = ${f(perm.p, 4)} (real mean trade ${f(perm.realExpectancy, 2)} vs sign-flipped mean ${f(perm.permutedMean, 2)})`,
+    "- Tests only that the average trade made money. It does NOT separate timing skill from",
+    "  drift: a long-only system with no timing skill passes whenever the market rose.",
     "",
     "## How to read this",
     "",
-    "1. Expectancy(R) positive across most assets = the rule has edge in this period.",
-    "2. Walk-forward degradation low = the edge is not just curve-fitting.",
-    "3. Monte Carlo p95 max drawdown = the worst you should mentally prepare to sit through.",
-    "4. Permutation p < 0.05 = the result is unlikely to be random luck.",
+    "1. Expectancy(R) positive across most assets = the rules made money in this period.",
+    "2. Sub-period stability mostly positive = the result is not one lucky stretch. It is NOT out-of-sample.",
+    "3. Block-bootstrap p95 max drawdown (and the half-drift row) = what to be ready to sit through.",
+    "4. Bar-permutation p < 0.05 with a positive timing component = the timing is doing work beyond drift.",
+    "5. Beating regime-hold on Sharpe and drawdown = the Donchian layer earns its complexity.",
     "",
-    "If all four hold, the system is worth paper-trading. If walk-forward degrades badly",
-    "or the permutation p-value is high, do NOT trade it — the backtest is fooling you.",
+    "If the bar-permutation p is high or the system loses to regime-hold, the backtest",
+    "is mostly measuring the market's drift — not an edge in the rules.",
     "",
   ].join("\n");
 
-  const json = { stamp, args, single, portfolio: { metrics: portMetrics, trades: port.trades }, montecarlo: { boot, perm } };
+  const strip = ({ samples: _s, ...rest }) => rest;
+  const json = {
+    stamp, args, dataSha256: dataSha, lastBarDate, single,
+    portfolio: { metrics: portMetrics, stats: systemStats, trades: port.trades },
+    benchmarks,
+    montecarlo: {
+      blockBootstrap: { full: strip(bbFull), halfDrift: strip(bbHalf) },
+      tradeBootstrap: { returnsPct: boot.returnsPct, maxDDPct: boot.maxDDPct },
+      signFlip: perm,
+      barPermutation: barPerm,
+    },
+  };
 
   const mdPath = join(REPORTS_DIR, `backtest-${stamp}.md`);
   const jsonPath = join(REPORTS_DIR, `backtest-${stamp}.json`);

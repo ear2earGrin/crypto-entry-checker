@@ -2,13 +2,13 @@ import { slip } from "./portfolio.js";
 
 /**
  * What an open position would net if it were closed at `price` right now:
- * exit slippage, round-trip fees and the funding it has accrued, exactly as
+ * exit slippage, fees on both sides and the funding it has accrued, exactly as
  * backtestPortfolio settles a position (including its "end of data" close).
  *
  * @param {object} p
  * @param {object} p.pos      An entry of backtestPortfolio().openPositions
  * @param {number} p.price    Mark price (e.g. the latest traded price)
- * @param {number} [p.feePct=0.08]      Round-trip fee %, as passed to the engine
+ * @param {number} [p.feePct=0.08]      Fee % per side (charged on entry and exit notional), as passed to the engine
  * @param {number} [p.slippagePct=0]    Slippage %, as passed to the engine
  * @returns {null | { price, exit, net, fees, funding, movePct, r }}
  *   net    — unrealized PnL after costs (USDT)

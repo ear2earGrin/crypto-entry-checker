@@ -112,7 +112,7 @@ The owner has a working Obsidian vault and a Memory Wiki tool that indexes it. E
 
 ## 7. Open questions / decisions deferred
 
-- **Live exchange**: backtest uses Binance spot data. Owner trades futures, possibly Binance/Bybit/Hyperliquid. Funding rate realism for futures backtest is not modeled. Ask before adding.
+- **Live exchange**: backtest uses Binance spot data and charges real USDT-M funding (`src/backtest/funding.js`). The 2026-10 audit recommends executing on **spot** (funding cost ≈0.1R/trade); see the operating addendum in `STRATEGY-SPEC.md` and `ROUTINE.md`.
 - **Universe expansion**: 9 hardcoded. Worth growing? Possibly. Walk-forward over a larger universe should be done before going to 20+.
 - **Multi-timeframe entry refinement**: could a 4H trigger inside a 1D Donchian breakout improve fills? Untested. Don't add without an experiment plan and walk-forward.
 - **Stablecoin/cash equity tracking** during long FLAT periods. Currently equity sits idle. Worth modeling money-market yield? Probably noise.

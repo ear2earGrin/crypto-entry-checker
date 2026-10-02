@@ -88,3 +88,49 @@ export function computeMetrics({ trades, equityCurve, startEquity }) {
     worstTrade,
   };
 }
+
+/**
+ * Simple daily returns from a mark-to-market equity curve [{ time, equity }]
+ * (one point per day, as backtestPortfolio produces).
+ */
+export function dailyReturns(equityCurve) {
+  const out = [];
+  for (let i = 1; i < (equityCurve?.length || 0); i++) {
+    const prev = equityCurve[i - 1].equity;
+    if (prev > 0) out.push(equityCurve[i].equity / prev - 1);
+  }
+  return out;
+}
+
+/**
+ * Risk-adjusted stats from a daily mark-to-market equity curve [{ time, equity }]:
+ * annualised Sharpe (mean / sample sd of daily returns × √365, zero risk-free
+ * rate — crypto trades every day) and annualised volatility, plus total return,
+ * CAGR and max drawdown, so systems and benchmarks are scored identically.
+ *
+ * @returns {{ days, totalReturnPct, cagr, maxDDPct, annVolPct, sharpe }}
+ *   sharpe / annVolPct are null with fewer than 2 returns or zero variance.
+ */
+export function equityCurveStats(equityCurve, startEquity = equityCurve?.[0]?.equity) {
+  const curve = equityCurve || [];
+  const rets = dailyReturns(curve);
+  const n = rets.length;
+  const mean = n ? rets.reduce((s, x) => s + x, 0) / n : 0;
+  const sd = n > 1 ? Math.sqrt(rets.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1)) : 0;
+
+  const finalEq = curve.length ? curve[curve.length - 1].equity : startEquity;
+  const years = curve.length >= 2 ? (curve[curve.length - 1].time - curve[0].time) / (365.25 * 86400) : 0;
+  let peak = startEquity, maxDDPct = 0;
+  for (const pt of curve) {
+    if (pt.equity > peak) peak = pt.equity;
+    if (peak > 0) maxDDPct = Math.max(maxDDPct, ((peak - pt.equity) / peak) * 100);
+  }
+  return {
+    days: curve.length,
+    totalReturnPct: startEquity > 0 ? (finalEq / startEquity - 1) * 100 : 0,
+    cagr: years > 0 && finalEq > 0 && startEquity > 0 ? (Math.pow(finalEq / startEquity, 1 / years) - 1) * 100 : 0,
+    maxDDPct,
+    annVolPct: sd > 0 ? sd * Math.sqrt(365) * 100 : null,
+    sharpe: sd > 0 ? (mean / sd) * Math.sqrt(365) : null,
+  };
+}

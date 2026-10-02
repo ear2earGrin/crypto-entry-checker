@@ -22,10 +22,35 @@ Monte Carlo p95 DD 22.3% — slightly above the 20% circuit breaker, so live
 risk starts at 0.75% (tail DD ≈ 17%), stepping to 1% only after live months
 match the model.
 
+### Operating addendum — 2026-10 audit (no rule change)
+
+A pre-registered audit (2026-10-02) re-tested v2 on clean Binance data (incl.
+delisted coins) and on unseen Bitfinex 2014-2019 history. **Rules unchanged.** What
+it established, and what now governs live operation:
+
+- **Edge:** timing skill beyond drift is real (drift-preserving bar permutation
+  p=0.002; holds 2022-26 and on 2014-19 Bitfinex data) but smaller than the
+  headline: 0.30R on a point-in-time top-10 universe; cautious planning figure
+  ~0.16R/trade (plausible 0.15-0.45R). The p=0.0015 below is a sign-flip test of
+  "mean trade P&L > 0" and does not separate skill from drift; the walk-forward
+  fits nothing, so it is sub-period stability, not out-of-sample.
+- **Live risk: 0.35%** per trade (0.5% at most) — the trade-bootstrap MC below
+  understates the tail; a block bootstrap with crash-day stop fills gives p95
+  drawdown ≈23% at 0.35% and ≈43% at 0.75% over 6.5 years at a realistic edge.
+- **Drawdown rules** (live account, from its peak): −15% → halve risk (restore above
+  −7.5%); −20% → no new entries, stops run, review. Step up only after 100+ closed
+  trades with clean execution parity; never on recent P&L.
+- **Venue: spot** (perp funding ≈0.1R/trade). On perps: isolated, 1x, reduce-only
+  stop-market, Mark-price trigger.
+- **Instruction source:** the portfolio engine's state (PAPER tab "Today's orders",
+  robot pushes), not raw Scanner signals. Daily routine: `docs/ROUTINE.md`.
+- **Effective book:** at most 4 positions — ≤1 of BTC/ETH (group rule) + ≤3 alts
+  (alt cap). `maxConcurrent = 5` can never bind.
+
 **Status: frozen for PAPER TRADING.** Selection-bias caveat: v2 was chosen
-after seeing ablation results on the same history (mitigated by walk-forward
-and by v2 being a simplification toward the canonical CTA trend structure,
-not an exotic mined combo). Paper trading is the true out-of-sample. NO
+after seeing ablation results on the same history (partly mitigated by v2
+being a simplification toward the canonical CTA trend structure, not an exotic
+mined combo; the walk-forward does NOT mitigate it — see the addendum above). Paper trading is the true out-of-sample. NO
 further parameter tuning against this same history — the next evidence comes
 from the future.
 
@@ -162,7 +187,7 @@ Implementation: `src/strategy/exit.js`, plus the engine loop in `src/backtest/en
 
 For each daily bar at time `t`, the regime state used is the one from the **most recent weekly bar whose `closeTime <= t`**. Implemented via binary search in `backtest/engine.js::findLastClosedWeeklyIdx`.
 
-This guarantees no lookahead: a Monday's daily signal uses Friday's weekly close, never the still-forming current week.
+This guarantees no lookahead: a daily bar only sees weeks that closed (Sunday 23:59:59 UTC) at or before its open, never the still-forming current week. (Sunday's daily bar therefore still uses the previous week's regime; the new week applies from Monday's bar.)
 
 ## 7. Position sizing
 
@@ -187,8 +212,8 @@ Implementation: `src/strategy/sizing.js`.
 
 Implementation: `src/strategy/portfolio.js`.
 
-- **Max 5 concurrent positions.**
-- **Max 1 new entry per day** across the whole portfolio. If multiple signals fire, the rule of thumb is "strongest weekly ADX," but the current `checkPortfolioAllows` just gates on count.
+- **Max 5 concurrent positions** (in practice at most 4: the BTC/ETH group rule and the 3-alt cap bind first).
+- **Max 1 new entry per day** across the whole portfolio. If multiple signals fire, the engine takes the **widest initial stop as % of price** first (`src/backtest/portfolio.js`). (An earlier draft said "strongest weekly ADX"; the code has always used stop width.)
 - **Total open risk ≤ 4%.** If new entry would push total open risk above this, skip.
 - **Correlation cap**: BTC and ETH in the same direction count as one position. Three or more alt positions in the same direction count as one (informationally) and block further same-direction alt entries.
 - **Re-entry cooldown**: 3 days after a stop-out on the same asset.
@@ -235,7 +260,7 @@ Anything magic in the code that a successor model might want to "clean up" — d
 | `bbExtensionSigmas = 0.5` | signal | "More than half a sigma outside the upper band" = parabolic extension. Empirical. |
 | `donchianEntry = 20` / `donchianExit = 10` | signal | Classic Turtle parameters. Do not "optimize" without walk-forward validation. |
 | `atrStopMult = 2.5` | signal | Wide enough to survive normal noise on a daily; tight enough to keep risk meaningful. |
-| `maxConcurrent = 5` | portfolio | Empirical sweet spot — more than 5 and you can't manage attention. |
+| `maxConcurrent = 5` | portfolio | Upper bound; never binds in v2 because the BTC/ETH group and 3-alt caps limit the book to 4. |
 | `maxOpenRiskPct = 4` | portfolio | Total open risk cap. Implies max 5 trades * ~0.8% avg risk. |
 | `reentryCooldownDays = 3` | portfolio | Long enough that revenge fades, short enough you don't miss a real re-entry. |
 | `riskPct = 1` | live default | 10-loss streak ≈ 10% DD. Acceptable, not aggressive. |
@@ -335,3 +360,8 @@ If any rule in §3–§8 changes, bump the strategy version in this doc (top of 
   Production switched to PRESET_V2: 50W-SMA-only regime, long-only, trail-only
   exit, no vetoes. Validated same day: 0.65R, PF 2.4, p=0.0015, maxDD 14%,
   8/9 OOS-positive. Frozen for paper trading; live entry at 0.75% risk.
+- `v2.0` docs (2026-10-02): **no rule change.** Pre-registered audit added the
+  operating addendum (live risk 0.35%, drawdown rules, spot venue, engine state as
+  the instruction source), corrected the alignment, tie-break and max-positions
+  descriptions, and relabelled the permutation/walk-forward/MC evidence.
+

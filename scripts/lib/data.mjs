@@ -1,6 +1,8 @@
 // Shared data loader for the Node harnesses (backtest.mjs, ablation.mjs).
 // Hits api.binance.com directly — Node has no CORS, so no proxy is needed.
 
+import { createHash } from "node:crypto";
+
 export const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
 // api.binance.com answers HTTP 451 (or 403) to requests from locations Binance
 // restricts, e.g. US IPs and some VPN exits. data-api.binance.vision serves the
@@ -71,13 +73,13 @@ export function dropUnclosed(candles) {
   return last.closeTime && last.closeTime > now ? candles.slice(0, -1) : candles;
 }
 
-export async function loadAsset(asset, fromYear) {
+export async function loadAsset(asset, fromYear, toMs = Date.now()) {
   const symbol = `${asset}USDT`;
   const start = Date.UTC(fromYear, 0, 1);
   const weeklyStart = start - 55 * 7 * 86400 * 1000; // warm the 50W SMA
   const [weekly, daily] = await Promise.all([
-    fetchKlinesRange(symbol, "1w", weeklyStart),
-    fetchKlinesRange(symbol, "1d", start),
+    fetchKlinesRange(symbol, "1w", weeklyStart, toMs),
+    fetchKlinesRange(symbol, "1d", start, toMs),
   ]);
   return { weekly: dropUnclosed(weekly), daily: dropUnclosed(daily) };
 }
@@ -88,7 +90,7 @@ export async function loadAsset(asset, fromYear) {
  * records simply start when the perp existed; earlier holds accrue zero funding,
  * which is correct (there was no perp to pay funding on).
  */
-export async function loadFunding(asset, fromYear) {
+export async function loadFunding(asset, fromYear, toMs = Date.now()) {
   const symbol = `${asset}USDT`;
   const all = [];
   let cursor = Date.UTC(fromYear, 0, 1);
@@ -104,10 +106,29 @@ export async function loadFunding(asset, fromYear) {
       if (Number.isFinite(t) && Number.isFinite(fr)) all.push({ time: t, fundingRate: fr });
     }
     const lastMs = Number(raw[raw.length - 1].fundingTime);
-    if (raw.length < 1000 || lastMs >= Date.now()) break;
+    if (raw.length < 1000 || lastMs >= toMs) break;
     cursor = lastMs + 1;
   }
   return all;
+}
+
+/**
+ * Keep only rows that are fully complete before `toSec` (exclusive end, unix
+ * seconds): candles by closeTime, funding records by time. A weekly bar that
+ * straddles the end date is dropped — it would contain data from after it.
+ */
+export function beforeEnd(rows, toSec) {
+  if (!rows || !Number.isFinite(toSec)) return rows;
+  return rows.filter((r) => (r.closeTime ?? r.time) < toSec);
+}
+
+/** sha256 (hex) of the loaded inputs, asset order-independent — cite it to reproduce a run. */
+export function hashData(data, fundingByAsset = {}) {
+  const h = createHash("sha256");
+  for (const asset of Object.keys(data).sort()) {
+    h.update(JSON.stringify({ asset, daily: data[asset].daily, weekly: data[asset].weekly, funding: fundingByAsset[asset] ?? null }));
+  }
+  return h.digest("hex");
 }
 
 // Synthetic funding matching the synth() daily timeline: mildly positive on

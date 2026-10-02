@@ -1,58 +1,100 @@
-# Daily and weekly routine
+# Daily and weekly routine (v2.0)
 
-A mechanical system only works if you mechanically run it. This is your checklist.
+A mechanical system only works if you run it mechanically. This is the checklist.
+It describes **v2.0**: long only, one entry a day, exits only by the trailing stop.
+Rewritten 2026-10-02 after the audit found the old routine still described v1.1.
 
-## Sunday (or Monday before market open) — the weekly review
+## Where your instructions come from
 
-Time: 15 minutes.
+**The PAPER tab's "Today's orders" box (or the robot's phone push) is the instruction
+set.** It is the validated portfolio engine itself, with every rule applied. Do not
+trade from the Scanner's raw LONG badges: most of them are coins already held or
+entries a portfolio rule blocks. The Scanner's **System** column shows what the
+engine actually does for each coin.
 
-1. **Open `/scanner`** in the app. Click **RUN SCAN**.
-2. **Read the regime column for every asset.** Note which assets are `LONG_OK`, `SHORT_OK`, `FLAT`. That's your *entire* tradeable universe for the next 5 days.
-3. **For any open positions you hold**: confirm regime hasn't flipped. If it has, the position should already be flagged for exit on the next daily close.
-4. **Note major macro events** for the week — FOMC, CPI, NFP — in the discretionary CHECKER. These don't change the mechanical system's signals but help you mentally prepare.
-5. **Write one sentence in your trade journal**: "Week of YYYY-MM-DD: regime is [BULL/BEAR/MIXED] across the universe." This is a calibration habit, not analysis.
+## Every day, after the daily close (00:00 UTC), 7 days a week
 
-## Every weekday — the daily check (5 minutes, after the daily close)
+00:00 UTC = 02:00 CEST, 03:00 EEST, 20:00 EDT. Crypto doesn't close on weekends and
+neither does the system. If you can't check, the robot's push tells you when
+something needs doing.
 
-1. **`/scanner`** → **RUN SCAN**.
-2. **For each open position**, recompute trailing stop from the row in the table. Update your exchange's stop order if it moved.
-3. **For any new signal** (action = LONG or SHORT):
-   - Verify portfolio rules: under 5 concurrent? Total open risk < 4%? No correlated position already open? Re-entry cooldown over?
-   - If all yes: **take the trade exactly as the scanner specifies**. Entry market or limit at the close, stop at the suggested price, size = qty column.
-   - If portfolio rules block: **do not take the trade**, even if it "looks great." That's the system working.
-4. **If a position's exit reason fires** (stop hit, regime flip): close immediately, no questions.
-5. **Log the trade** (open or close) in your journal. Eventually this will be a one-click export.
+1. Open **PAPER → Check paper track** (or read the robot's push).
+2. **New entry ("BUY")?** Place a **market order** promptly. **Never** use a resting
+   limit at the close: it fills on the trades that go nowhere and misses the
+   breakouts that run. Size = the quantity shown for your account and risk.
+3. **Every open position:** make sure a **reduce-only stop-market sell** rests at the
+   stop shown (trigger on Mark price if you use perpetuals). Move it **up** to the new
+   level after each close. **Never move it down.** It fires intraday when price trades
+   through it; there is no waiting for a daily close.
+4. **"Closed yesterday by stop"?** Check that your exchange stop filled. If it didn't,
+   sell now.
+5. **Log** any fill in the Trade Log (system lane).
 
-## What to do when you feel like overriding the system
+That's the whole job. There are no targets, no exits on regime flips, no shorts and
+no averaging down.
 
-This will happen. Especially when:
-- The system says LONG and the chart "looks toppy"
-- The system is FLAT for 6 weeks and you're bored
-- The system just had three stop-outs in a row
-- A YouTube analyst makes a compelling case for the opposite trade
-- You "just know" this one is going to work
+### Portfolio rules (the engine applies them; know them so nothing surprises you)
 
-**The rule**: you may *skip* a system entry (mechanical → discretionary FLAT). You may NOT take an entry the system didn't signal, and you may NOT skip an exit the system signaled.
+- At most **4 positions**: at most **1 of BTC/ETH** plus at most **3 others**.
+- At most **1 new entry per day**. When several coins signal the same day, the
+  engine takes the **widest stop (as % of price)** first.
+- **3-day cooldown** after a stop-out on the same coin.
+- Nothing is entered while a coin's last weekly close is below its 50-week average.
 
-Skipping a signal is allowed because the system is opt-in. Taking a non-signal trade and calling it "discretionary" while sizing it like a system trade is what kills accounts.
+## Execution and risk (from the 2026-10 audit)
 
-If you skip an entry, write down why in the journal *before* the bar closes. Read those notes monthly. If you're skipping 30% of signals and your skipped-signal hypothetical PnL is positive, you're sabotaging the system. Either fix your discipline or fix the rules.
+- **Venue: spot.** Perpetual funding cost about 0.1R per trade in the backtest; spot
+  removes it and the system never needs leverage. On perps: isolated margin, 1x, a
+  reduce-only stop-market order, Mark-price trigger.
+- **Risk per trade: 0.35%** of the account (the audit's pre-registered rule; up to
+  0.5% if you accept a real chance of a 25-30% drawdown over several years).
+- **Drawdown rules**, measured on the live account from its highest value:
+  - at **−15%**: halve risk; go back to full risk once the drawdown is shallower than −7.5%;
+  - at **−20%**: stop new entries, let the stops run, review data and execution.
+    Resume at half risk only if nothing was wrong.
+- **Step up risk** only after **100+ closed trades** with clean execution (every
+  robot entry and exit matched by a live order on the same UTC day). Never step up
+  because of a good month.
 
-## Monthly review
+## Weekly (5 minutes, any day)
 
-Time: 30 minutes.
+1. **Scanner → Run scan.** Note which coins are in a bull regime (weekly close above
+   the 50-week average). That is the whole tradeable universe for the week.
+2. Check that your exchange stops match the PAPER tab.
+3. Check the robot's daily "ran OK" pushes arrived every day. **No push means the
+   robot did not run**: wake the Mac or run `node scripts/papertrade.mjs`.
 
-1. Open the journal. Read every entry from the month.
-2. **Count**: signals fired, signals taken, signals skipped, trades stopped out, trades closed at regime flip.
-3. **Compute**: your actual realized P&L vs the "if I had taken every signal" hypothetical.
-4. **Note the worst moment** of the month emotionally. Did you stick to the system? If no, what made you deviate?
-5. **Re-run the backtest** with the latest data. Has the equity curve and max DD shape changed meaningfully? If yes — investigate. If no — you're on track.
+## When you feel like overriding the system
 
-## What success looks like after 6 months
+This will happen, especially when:
+- the system says buy and the chart "looks toppy";
+- the system has been in cash for weeks and you're bored;
+- the system just had three stop-outs in a row;
+- someone makes a compelling case for the opposite trade.
 
-- You took every signal the system fired (or skipped a small minority with documented reasons).
-- You did not take any non-signal trades and call them "system trades."
-- Your realized P&L is within ~20% of the backtest expectation for the same period.
-- You can describe a losing month without emotional charge — "this is what drawdown looks like."
+**The rules:** you may NOT take an entry the system didn't give, and you may NOT skip
+an exit. Skipping system entries is technically possible but costly. A trend system
+makes almost all its money on a few trades: in the 2020-26 backtest the top 5 of
+205 trades made over half the profit. A skipped entry is very likely to be one of
+those. If you skip one anyway, write down why in the journal before the next close.
 
-If all four are true, the system is working *and you are working with it*. That's the harder of the two.
+## Monthly review (30 minutes)
+
+1. Read every journal entry from the month.
+2. **Count:** system entries, entries taken, entries skipped, stop-outs.
+3. **Parity check:** compare your live fills to the robot's fills for the same trades.
+   Median entry difference should be ≤ 0.15% and stop fills ≤ 0.30%. This measures
+   execution, which you control.
+4. Note the worst moment of the month emotionally. Did you stick to the system?
+
+## What to expect, and what not to conclude
+
+- **Live results are very noisy.** Even with the full historical edge, 22% of
+  12-month windows lost money, and the longest stretch without a new equity high was
+  about two years. Six months of P&L says almost nothing about whether the edge is
+  real; that takes **years** of trades.
+- So judge the first year on **execution parity** (did you do what the engine did?),
+  not on profit.
+- The audit's planning figure is about **0.15-0.45R per trade**, with 0.16R as the
+  cautious planning number. At 0.35% risk that is a few percent a year on top of what
+  the idle cash earns, not the backtest's 20%. A losing year is normal.

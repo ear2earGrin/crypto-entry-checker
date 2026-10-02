@@ -46,25 +46,31 @@ npm run dev               # http://localhost:5173
 npm test                  # 115 tests, all should pass
 npm run build             # production build
 npm run lint
-npm run backtest          # headless wind-tunnel: whole universe, walk-forward,
-                          # monte carlo → writes reports/backtest-<date>.md + .json
+npm run backtest          # headless wind-tunnel: whole universe, benchmarks,
+                          # sub-period stability, drawdown bootstrap, permutation
+                          # tests → writes reports/backtest-<date>.md + .json
 npm run backtest -- --from 2021 --asset BTC --risk 0.5   # flags pass through
+npm run backtest -- --to 2026-07-18 --perm-runs 999      # reproducible end date
 npm run backtest:selftest # synthetic data, no network — proves the pipeline runs
 ```
 
 The headless backtest (`scripts/backtest.mjs`) imports the **same** pure
 indicator/strategy/backtest modules the UI uses, so there is zero drift between
 what you validate and what the Scanner shows live. It runs single-asset +
-portfolio backtests, per-asset walk-forward (with degradation), and Monte Carlo
-(outcome distribution + edge p-value), then writes a Markdown + JSON report.
-This is the "wind tunnel": run it before trusting any signal.
+portfolio backtests, risk-adjusted benchmarks, per-asset sub-period stability,
+a block-bootstrap drawdown distribution and two permutation tests, then writes a
+Markdown + JSON report stamped with the data's sha256 (pin the window with
+`--to YYYY-MM-DD` to reproduce a run). This is the "wind tunnel": run it before
+trusting any signal.
 
 ## Methodological guarantees
 
 The backtest engine and metrics are designed to *not* fool you:
 
-- **Walk-forward** (`src/backtest/walkforward.js`) — tunes on 2-year in-sample, evaluates on forward 6-month out-of-sample, reports degradation. > 60% degradation = your edge is overfitting.
-- **Monte Carlo** (`src/backtest/montecarlo.js`) — bootstraps your trade list 2000 times to estimate the range of realistic outcomes; permutation test for whether the edge is statistically distinguishable from luck.
+- **Sub-period stability** (`src/backtest/walkforward.js`) — the harness runs the frozen preset on consecutive 6-month windows and reports each. Nothing is fitted (no param grid), and the preset was selected on this same history, so this is a stability check, **not** out-of-sample evidence; paper trading is the out-of-sample.
+- **Bar-permutation test** (`barPermutationTest` in `src/backtest/montecarlo.js`) — re-runs the portfolio on drift-preserving joint permutations of daily bars (each coin keeps its total return, each day keeps its cross-asset move, only the order changes). Reports p and the timing component (observed − null median closed-trade mean R). This is the test for timing skill. The older sign-flip test (`permutationEdgeTest`) only checks mean trade P&L > 0 and is passed by drift alone.
+- **Drawdown bootstrap** (`blockBootstrapMaxDrawdown`) — stationary block bootstrap of the portfolio's daily mark-to-market returns; p50/p90/p95/p99 max drawdown, also with half the historical drift.
+- **Benchmarks** (`src/backtest/benchmarks.js`) — BTC and equal-weight buy-and-hold plus "regime-hold" (hold each coin whose last closed weekly close is above its 50W SMA, weekly rebalance), all with Sharpe, vol and max drawdown on the same timeline and costs.
 - **Portfolio backtest** (`src/backtest/portfolio.js`) — multi-asset replay that actually respects correlation caps, daily entry limits, and re-entry cooldowns. Single-asset numbers are *not* portfolio numbers; trust this engine, not the single-asset one, when evaluating the live system.
 - **Property-based indicator tests** (`src/indicators/__tests__/properties.test.js`) — fast-check verifies invariants on randomized inputs so a successor model cannot silently break the math.
 - **Live unclosed candle is always dropped** — never read forming data. If you "fix" this to include the current bar, every backtest is silently invalid.

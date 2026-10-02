@@ -18,7 +18,11 @@
  * State: data/paper/state.json (announced-event keys, epoch).
  * Log:   data/paper/paper-log.md (append-only event journal)
  * Status: data/paper/status.md (current portfolio snapshot, overwritten)
- * Notifications: macOS notification center (best-effort, skipped elsewhere).
+ * Notifications: macOS notification center (best-effort, skipped elsewhere),
+ *   plus ntfy.sh phone pushes (see notifyPhone). Besides trade events the robot
+ *   pushes a once-a-day "ran OK" heartbeat with every open position's stop, and
+ *   a failure alert (at most every 6 h) when a run crashes, so silence is never
+ *   ambiguous: no heartbeat by mid-morning UTC means the robot did not run.
  *
  * Usage:
  *   node scripts/papertrade.mjs             # one run (launchd runs this hourly)
@@ -31,7 +35,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 import { backtestPortfolio } from "../src/backtest/portfolio.js";
-import { PRESET_V2 } from "../src/strategy/presets.js";
+import { PRESET_V2, PAPER_EPOCH } from "../src/strategy/presets.js";
 import { computeRegime } from "../src/strategy/regime.js";
 import {
   UNIVERSE, fetchKlinesRange, dropUnclosed, loadFunding, synth, synthFunding, f,
@@ -53,6 +57,8 @@ const SELFTEST = process.argv.includes("--selftest");
 const STATE_PATH = join(DIR, SELFTEST ? "selftest-state.json" : "state.json");
 const LOG_PATH = join(DIR, SELFTEST ? "selftest-log.md" : "paper-log.md");
 const STATUS_PATH = join(DIR, SELFTEST ? "selftest-status.md" : "status.md");
+const ALERT_PATH = join(DIR, SELFTEST ? "selftest-alert.json" : "alert.json");
+const FAILURE_PUSH_EVERY_MS = 6 * 3600 * 1000;
 
 function loadState() {
   try { return JSON.parse(readFileSync(STATE_PATH, "utf8")); } catch { return null; }
@@ -98,6 +104,7 @@ async function loadData(epochMs) {
   const weeklyStart = epochMs - 55 * 7 * 86400 * 1000;
   const dailyStart = epochMs - CFG.warmupDays * 86400 * 1000;
   const dailyByAsset = {}, weeklyByAsset = {}, fundingByAsset = {};
+  const fundingMissing = [];
   for (const asset of UNIVERSE) {
     const symbol = `${asset}USDT`;
     const [weeklyRaw, dailyRaw] = await Promise.all([
@@ -121,8 +128,9 @@ async function loadData(epochMs) {
     try {
       fundingByAsset[asset] = await loadFunding(asset, new Date(dailyStart).getUTCFullYear());
     } catch { fundingByAsset[asset] = null; }
+    if (!fundingByAsset[asset]?.length) fundingMissing.push(asset);
   }
-  return { dailyByAsset, weeklyByAsset, fundingByAsset };
+  return { dailyByAsset, weeklyByAsset, fundingByAsset, fundingMissing };
 }
 
 function loadSelftestData() {
@@ -133,7 +141,7 @@ function loadSelftestData() {
     weeklyByAsset[asset] = weekly;
     fundingByAsset[asset] = synthFunding(700);
   });
-  return { dailyByAsset, weeklyByAsset, fundingByAsset };
+  return { dailyByAsset, weeklyByAsset, fundingByAsset, fundingMissing: [] };
 }
 
 async function main() {
@@ -141,7 +149,9 @@ async function main() {
   let state = loadState();
   if (!state) {
     state = {
-      paperEpoch: SELFTEST ? "2020-02-15" : new Date().toISOString().slice(0, 10),
+      // The shared epoch, so the robot, the Paper tab and the backtest all
+      // count the same trades (an install date would silently differ).
+      paperEpoch: SELFTEST ? "2020-02-15" : PAPER_EPOCH,
       announced: {},
       stops: {},
       createdAt: nowIso,
@@ -251,16 +261,44 @@ async function main() {
     `_${allEvents.length ? allEvents.length + " new event(s) this run." : "No new events this run."}_`,
   ].filter((l) => l !== "").join("\n") + "\n");
 
+  // Daily heartbeat: the first successful run of each UTC day pushes a short
+  // "ran OK" with every open stop, so a missing message means a missed run.
+  const today = nowIso.slice(0, 10);
+  const openNow = res.openPositions.filter((p) => p.entryTime >= epochSec);
+  const warnings = [];
+  if (data.fundingMissing?.length) warnings.push(`funding unavailable for ${data.fundingMissing.join(", ")} (not charged this run)`);
+  if (!SELFTEST && state.paperEpoch !== PAPER_EPOCH) warnings.push(`robot epoch ${state.paperEpoch} differs from the app's ${PAPER_EPOCH}`);
+  if (state.lastHeartbeatDay !== today) {
+    const stops = openNow.length ? openNow.map((p) => `${p.asset} stop ${f(p.stop, 4)}`).join(", ") : "no open positions (in cash)";
+    const msg = `✅ Daily check OK ${today}: ${stops}.${warnings.length ? " ⚠️ " + warnings.join("; ") + "." : ""}`;
+    logLine(`- ${nowIso} ${msg}`);
+    notifyMac("Crypto System", msg.replace(/^[^\s]+\s/, ""));
+    await notifyPhone("Crypto System", msg);
+    state.lastHeartbeatDay = today;
+  }
+
   state.lastRunAt = nowIso;
   saveState(state);
+  try { writeFileSync(ALERT_PATH, JSON.stringify({ lastFailurePushAt: null })); } catch { /* best-effort */ }
 
   console.log(`\n[paper] run complete ${nowIso}: ${allEvents.length} new event(s), ` +
     `${res.openPositions.filter((p) => p.entryTime >= epochSec).length} open, ` +
     `${paperTrades.length} closed since epoch. Status: ${STATUS_PATH}`);
 }
 
-main().catch((e) => {
-  logLine(`- ${new Date().toISOString()} ⚠️ paper run FAILED: ${e.message}`);
+main().catch(async (e) => {
+  const nowIso = new Date().toISOString();
+  logLine(`- ${nowIso} ⚠️ paper run FAILED: ${e.message}`);
   console.error(e);
+  // Push failures too (they used to reach only the local log), but at most
+  // once per 6 h so an hourly run during an outage doesn't spam the phone.
+  let last = null;
+  try { last = JSON.parse(readFileSync(ALERT_PATH, "utf8")).lastFailurePushAt; } catch { /* first failure */ }
+  if (!last || Date.now() - Date.parse(last) >= FAILURE_PUSH_EVERY_MS) {
+    const msg = `⚠️ Paper robot FAILED: ${e.message}. Stops are NOT being updated until it runs again.`;
+    notifyMac("Crypto System", msg);
+    await notifyPhone("Crypto System", msg);
+    try { mkdirSync(DIR, { recursive: true }); writeFileSync(ALERT_PATH, JSON.stringify({ lastFailurePushAt: nowIso })); } catch { /* best-effort */ }
+  }
   process.exit(1);
 });

@@ -35,6 +35,25 @@ export const PRESET_V2 = {
 
 export const PRODUCTION_PRESET = PRESET_V2;
 
+// Costs the production validation charges on every fill (fee is per side; the
+// engines apply it to entry and exit notional). Funding is passed separately.
+export const PRODUCTION_COSTS = { feePct: 0.08, slippagePct: 0.05 };
+
+/**
+ * Engine options for running the production system: the frozen rules plus the
+ * validated costs. Every page that replays the system must spread these into
+ * backtestOne/backtestPortfolio instead of relying on the engines' defaults,
+ * which are the older v1.1 rules with no slippage.
+ */
+export function productionEngineOptions() {
+  return {
+    signalParams: PRODUCTION_PRESET.signalParams,
+    regimeParams: PRODUCTION_PRESET.regimeParams,
+    exitOnRegimeFlip: PRODUCTION_PRESET.exitOnRegimeFlip,
+    ...PRODUCTION_COSTS,
+  };
+}
+
 // Official start of the paper-trading phase (matches the Mac mini robot's epoch).
 // The Paper tab replays the portfolio from this date; trades before it don't count.
 export const PAPER_EPOCH = "2026-07-18";

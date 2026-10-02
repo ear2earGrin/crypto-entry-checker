@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { fetchKlinesRange, fetchFundingHistory, dropUnclosedCandle } from "../data/binance.js";
-import { backtestPortfolio } from "../backtest/portfolio.js";
+import { replayPaper, todaysOrders, scaleToAccount, PAPER_CFG } from "../backtest/paperReplay.js";
 import { markOpenPosition } from "../backtest/markToMarket.js";
 import { estimateLiquidation, stopToLiqBufferPct } from "../strategy/liquidation.js";
-import { PRODUCTION_PRESET, PAPER_EPOCH } from "../strategy/presets.js";
+import { PAPER_EPOCH, PRODUCTION_COSTS } from "../strategy/presets.js";
 import { T, ui, signColor } from "../ui/theme.js";
 import { Page, PageHeader, Tile } from "../ui/Page.jsx";
 
@@ -17,9 +16,7 @@ import { Page, PageHeader, Tile } from "../ui/Page.jsx";
  * every event that appeared since your last visit (tracked in localStorage).
  */
 
-const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOGE"];
-// Must match scripts/papertrade.mjs CFG so browser and robot agree exactly.
-const CFG = { equity: 100000, riskPct: 1, feePct: 0.08, slippagePct: 0.05, warmupDays: 45 };
+const CFG = { ...PAPER_CFG, ...PRODUCTION_COSTS };
 const SEEN_KEY = "paperSeen.v1";
 // The robot sizes by risk and never uses leverage, so margin is shown for the
 // leverage you would trade it at. Defaults to the Scanner's setting.
@@ -33,7 +30,17 @@ function loadLeverage() {
     const scanner = Number(JSON.parse(localStorage.getItem("scanner.config.v1") || "{}").leverage);
     if (LEVERAGES.includes(scanner)) return scanner;
   } catch { /* empty */ }
-  return 5;
+  return 1;
+}
+
+// Your own account, for sizing today's orders (per viewer, this browser only).
+// Risk defaults to 0.35%, the level the 2026-10 audit's pre-registered rule gives.
+const ACCT_KEY = "paper.account.v1";
+function loadAccount() {
+  try {
+    const a = JSON.parse(localStorage.getItem(ACCT_KEY) || "{}");
+    return { equity: Number(a.equity) > 0 ? Number(a.equity) : 100000, riskPct: Number(a.riskPct) > 0 ? Number(a.riskPct) : 0.35 };
+  } catch { return { equity: 100000, riskPct: 0.35 }; }
 }
 
 function fmt(n, d = 2) {
@@ -49,35 +56,6 @@ function saveSeen(keys) {
   try { localStorage.setItem(SEEN_KEY, JSON.stringify([...keys])); } catch { /* empty */ }
 }
 
-async function loadAssetData(asset, epochMs) {
-  const dailyStart = epochMs - CFG.warmupDays * 86400 * 1000;
-  const weeklyStart = epochMs - 55 * 7 * 86400 * 1000;
-  const [weeklyRaw, dailyRaw] = await Promise.all([
-    fetchKlinesRange({ asset, timeframe: "1W", startTime: weeklyStart }),
-    fetchKlinesRange({ asset, timeframe: "1D", startTime: dailyStart }),
-  ]);
-  const weekly = dropUnclosedCandle(weeklyRaw);
-  const closed = dropUnclosedCandle(dailyRaw);
-  // Forming bar becomes a synthetic open-only bar (high=low=close=open):
-  // yesterday's signals fill at today's real open, but no stop can trigger on
-  // an unfinished day. Identical convention to the Mac robot.
-  const forming = dailyRaw.length > closed.length ? dailyRaw[dailyRaw.length - 1] : null;
-  const daily = forming
-    ? [...closed, {
-        time: forming.time, closeTime: forming.closeTime,
-        open: forming.open, high: forming.open, low: forming.open, close: forming.open,
-        volume: 0, takerBuyBase: 0,
-      }]
-    : closed;
-  let funding = null;
-  try { funding = await fetchFundingHistory({ asset, startTime: dailyStart }); } catch { /* best-effort */ }
-  // Mark price for open positions: the forming candle's close is Binance's
-  // latest trade. Display only — the engine above never sees it.
-  const lastRaw = dailyRaw[dailyRaw.length - 1];
-  const mark = lastRaw && Number.isFinite(lastRaw.close) ? lastRaw.close : null;
-  return { daily, weekly, funding, mark };
-}
-
 export default function PaperTrack() {
   const [status, setStatus] = useState({ state: "idle", message: "" });
   const [result, setResult] = useState(null);
@@ -86,37 +64,17 @@ export default function PaperTrack() {
     setLeverageState(v);
     try { localStorage.setItem(LEV_KEY, String(v)); } catch { /* empty */ }
   };
+  const [account, setAccountState] = useState(loadAccount);
+  const setAccount = (patch) => {
+    const next = { ...account, ...patch };
+    setAccountState(next);
+    try { localStorage.setItem(ACCT_KEY, JSON.stringify(next)); } catch { /* empty */ }
+  };
 
   async function check() {
     setStatus({ state: "loading", message: `Replaying paper track since ${PAPER_EPOCH}...` });
     try {
-      const epochMs = Date.UTC(
-        Number(PAPER_EPOCH.slice(0, 4)), Number(PAPER_EPOCH.slice(5, 7)) - 1, Number(PAPER_EPOCH.slice(8, 10)),
-      );
-      const epochSec = Math.floor(epochMs / 1000);
-
-      const settled = await Promise.allSettled(UNIVERSE.map((a) => loadAssetData(a, epochMs)));
-      const dailyByAsset = {}, weeklyByAsset = {}, fundingByAsset = {}, markByAsset = {};
-      const failed = [];
-      settled.forEach((r, i) => {
-        if (r.status === "fulfilled") {
-          dailyByAsset[UNIVERSE[i]] = r.value.daily;
-          weeklyByAsset[UNIVERSE[i]] = r.value.weekly;
-          fundingByAsset[UNIVERSE[i]] = r.value.funding;
-          markByAsset[UNIVERSE[i]] = r.value.mark;
-        } else failed.push(UNIVERSE[i]);
-      });
-      if (Object.keys(dailyByAsset).length === 0) throw new Error("No asset data loaded — check network.");
-
-      const res = backtestPortfolio({
-        dailyByAsset, weeklyByAsset, fundingByAsset,
-        startEquity: CFG.equity, riskPct: CFG.riskPct,
-        feePct: CFG.feePct, slippagePct: CFG.slippagePct,
-        signalParams: PRODUCTION_PRESET.signalParams,
-        regimeParams: PRODUCTION_PRESET.regimeParams,
-        exitOnRegimeFlip: PRODUCTION_PRESET.exitOnRegimeFlip,
-      });
-
+      const { res, epochSec, markByAsset, todayTime, failed } = await replayPaper();
       const realized = res.trades.filter((t) => t.exitReason !== "end of data" && t.entryTime >= epochSec);
       // Unrealized PnL: what each open position would net if closed at the
       // latest price (after slippage, fees and funding, as the engine settles
@@ -162,6 +120,7 @@ export default function PaperTrack() {
       setResult({
         events, freshKeys: new Set(fresh.map((e) => e.key)), open, realized, pnl, wins, failed,
         unrealized, unmarked, markedAt: new Date(),
+        orders: todaysOrders({ res, epochSec, todayTime }), todayTime,
       });
       setStatus({
         state: "ok",
@@ -245,6 +204,8 @@ export default function PaperTrack() {
               sub={rows.length ? `${fmt((totalMargin / equityNow) * 100, 1)}% of equity · exposure ${fmt(totalNotional / equityNow, 2)}x` : "no open positions"}
             />
           </div>
+
+          <TodaysOrders result={result} account={account} setAccount={setAccount} />
 
           <div className="panel-head">
             <h2 style={ui.h2}>Open paper positions</h2>
@@ -337,6 +298,83 @@ export default function PaperTrack() {
         </div>
       )}
     </Page>
+  );
+}
+
+/**
+ * The day's instructions, read off the engine: buys filled at today's open,
+ * the stop every open position should have resting on the exchange, and
+ * positions a stop closed yesterday. Quantities are scaled from the paper
+ * robot's 1% sizing to your account and risk.
+ */
+function TodaysOrders({ result, account, setAccount }) {
+  const { orders, todayTime } = result;
+  if (!orders) return null;
+  const size = (p) => scaleToAccount(p, account);
+  const day = todayTime ? new Date(todayTime * 1000).toISOString().slice(0, 10) : "today";
+  return (
+    <section style={{ ...ui.panel, borderColor: "var(--accent)" }} aria-label="Today's orders">
+      <div className="panel-head">
+        <h2 style={ui.h2}>Today&apos;s orders · {day}</h2>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={ui.label}>Your account (USDT)</span>
+            <input id="acct-equity" inputMode="decimal" value={account.equity} onChange={(e) => setAccount({ equity: Number(e.target.value.replace(",", ".")) || 0 })} style={{ ...ui.input, width: 120, padding: "4px 8px" }} />
+          </label>
+          <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={ui.label}>Risk per trade %</span>
+            <input id="acct-risk" inputMode="decimal" value={account.riskPct} onChange={(e) => setAccount({ riskPct: Number(e.target.value.replace(",", ".")) || 0 })} style={{ ...ui.input, width: 70, padding: "4px 8px" }} />
+          </label>
+        </div>
+      </div>
+
+      {orders.buys.length === 0 && orders.stoppedOut.length === 0 ? (
+        <p className="muted">No new entries or exits today. Keep the resting stops below in place.</p>
+      ) : null}
+
+      {orders.buys.map((p) => {
+        const q = size(p);
+        return (
+          <div key={"b" + p.asset} style={{ ...ui.bannerGood }}>
+            <b>BUY {p.asset}</b> at market now (the system filled at today&apos;s open, {fmt(p.entry, 4)}): about <b className="mono">{fmt(q, 6)}</b> {p.asset}
+            {q ? <> ≈ {fmt(q * p.entry, 0)} USDT</> : null}. Then place a <b>stop-market sell at {fmt(p.stop, 4)}</b> for the whole position.
+          </div>
+        );
+      })}
+
+      {orders.stoppedOut.map((t) => (
+        <div key={"x" + t.asset + t.exitTime} style={{ ...ui.bannerWarn }}>
+          <b>{t.asset} closed yesterday</b> by its stop at {fmt(t.exit, 4)}. If your exchange stop filled, nothing to do. If it did not, sell the position now.
+        </div>
+      ))}
+
+      {orders.stops.length ? (
+        <div style={ui.tableWrap}>
+          <table style={ui.table}>
+            <thead><tr>
+              <th style={styles.th}>Asset</th><th style={styles.th}>Resting stop (sell, stop-market)</th>
+              <th style={styles.th}>Your size</th><th style={styles.th}>Since</th>
+            </tr></thead>
+            <tbody>
+              {orders.stops.map((s) => (
+                <tr key={"s" + s.asset}>
+                  <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600 }}>{s.asset}{s.isNew ? <span style={styles.newTag}>NEW</span> : null}</td>
+                  <td style={{ ...styles.td, color: T.accent }}>{fmt(s.stop, 4)}</td>
+                  <td style={styles.td}>{fmt(size(s), 6)}</td>
+                  <td style={styles.td}>{ymd(s.entryTime)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+      <p style={ui.foot}>
+        Act after the daily close (00:00 UTC), 7 days a week. Use market orders for entries, never a limit at the
+        close. Move each resting stop up to the level shown; it never moves down. Sizes are the paper robot&apos;s
+        positions scaled to your account and risk ({fmt(account.riskPct, 2)}% of {fmt(account.equity, 0)} USDT);
+        spot needs no leverage.
+      </p>
+    </section>
   );
 }
 
