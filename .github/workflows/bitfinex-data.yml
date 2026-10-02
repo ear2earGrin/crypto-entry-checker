@@ -1,0 +1,35 @@
+# Downloads daily USD candles from Bitfinex's public API on a GitHub runner and
+# publishes them to the `market-data-bitfinex` branch. Used by the strategy
+# audit as pre-2020 holdout data (Bitfinex history reaches back to 2013-2016;
+# Binance's archive starts mid-2017). Public data, no keys. Lives on its own
+# branch so it never touches the app code or the Binance snapshot.
+name: Bitfinex daily history (audit)
+
+on:
+  push:
+    branches: [audit/bitfinex-data]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Bitfinex daily candles
+        run: python3 fetch_bitfinex.py out
+      - name: Publish to the market-data-bitfinex branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp README.md out/README.md
+          cd out
+          git init -q -b market-data-bitfinex
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Bitfinex daily snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" market-data-bitfinex
