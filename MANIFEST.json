@@ -1,0 +1,8225 @@
+{
+ "excluded": [
+  "1INCHDOWN",
+  "1INCHUP",
+  "AAVEDOWN",
+  "AAVEUP",
+  "ADADOWN",
+  "ADAUP",
+  "AEUR",
+  "AUD",
+  "BCHDOWN",
+  "BCHUP",
+  "BETH",
+  "BKRW",
+  "BNBBEAR",
+  "BNBBULL",
+  "BNBDOWN",
+  "BNBUP",
+  "BTCDOWN",
+  "BTCUP",
+  "BUSD",
+  "DAI",
+  "DOTDOWN",
+  "DOTUP",
+  "EOSBEAR",
+  "EOSBULL",
+  "EOSDOWN",
+  "EOSUP",
+  "ETHBEAR",
+  "ETHBULL",
+  "ETHDOWN",
+  "ETHUP",
+  "EUR",
+  "EURI",
+  "FDUSD",
+  "FILDOWN",
+  "FILUP",
+  "GBP",
+  "LINKDOWN",
+  "LINKUP",
+  "LTCDOWN",
+  "LTCUP",
+  "PAX",
+  "PAXG",
+  "RLUSD",
+  "SUSD",
+  "SUSHIDOWN",
+  "SUSHIUP",
+  "SXPDOWN",
+  "SXPUP",
+  "TRXDOWN",
+  "TRXUP",
+  "TUSD",
+  "UNIDOWN",
+  "UNIUP",
+  "USD1",
+  "USDC",
+  "USDE",
+  "USDP",
+  "USDS",
+  "USDSB",
+  "UST",
+  "USTC",
+  "WBETH",
+  "WBTC",
+  "XLMDOWN",
+  "XLMUP",
+  "XRPBEAR",
+  "XRPBULL",
+  "XRPDOWN",
+  "XRPUP",
+  "XTZDOWN",
+  "XTZUP",
+  "XUSD",
+  "YFIDOWN",
+  "YFIUP"
+ ],
+ "fetchedAt": "2026-10-02T11:46:07.734023+00:00",
+ "source": "data.binance.vision (+ data-api.binance.vision, fapi.binance.com for the current month)",
+ "symbols": {
+  "0G": {
+   "daily": {
+    "first": 1758499200,
+    "last": 1790899200,
+    "rows": 376,
+    "sha": "8470a1c36a99eec8"
+   },
+   "funding": {
+    "first": 1758124800,
+    "last": 1790798400,
+    "rows": 3622,
+    "sha": "f2d45c760ec58ca0"
+   }
+  },
+  "1000CAT": {
+   "daily": {
+    "first": 1734393600,
+    "last": 1790899200,
+    "rows": 655,
+    "sha": "eda6a492a5a2bbdd"
+   },
+   "funding": {
+    "first": 1729526400,
+    "last": 1790798400,
+    "rows": 4255,
+    "sha": "e0b75e05d52b9cf7"
+   }
+  },
+  "1000CHEEMS": {
+   "daily": {
+    "first": 1739059200,
+    "last": 1790899200,
+    "rows": 601,
+    "sha": "0d7c731f1db59a20"
+   },
+   "funding": {
+    "first": 1732536000,
+    "last": 1790798400,
+    "rows": 4046,
+    "sha": "e527e99be4ca2015"
+   }
+  },
+  "1000SATS": {
+   "daily": {
+    "first": 1702339200,
+    "last": 1790899200,
+    "rows": 1026,
+    "sha": "392ace08a089de84"
+   },
+   "funding": {
+    "first": 1702396800,
+    "last": 1790798400,
+    "rows": 6139,
+    "sha": "eb020bcca83f537e"
+   }
+  },
+  "1INCH": {
+   "daily": {
+    "first": 1608854400,
+    "last": 1790899200,
+    "rows": 2108,
+    "sha": "69e80f3f0e0f55f4"
+   },
+   "funding": {
+    "first": 1608912000,
+    "last": 1790784000,
+    "rows": 6316,
+    "sha": "7a0b04fb7cb12a53"
+   }
+  },
+  "1MBABYDOGE": {
+   "daily": {
+    "first": 1726444800,
+    "last": 1790899200,
+    "rows": 747,
+    "sha": "4dbbc9a934d5cc99"
+   },
+   "funding": {
+    "first": 1726488000,
+    "last": 1790798400,
+    "rows": 4466,
+    "sha": "e66bd2d30f69bd22"
+   }
+  },
+  "2Z": {
+   "daily": {
+    "first": 1759363200,
+    "last": 1790899200,
+    "rows": 366,
+    "sha": "55a8e98b14868517"
+   },
+   "funding": {
+    "first": 1759406400,
+    "last": 1790798400,
+    "rows": 2181,
+    "sha": "69fbeff3cbcc819b"
+   }
+  },
+  "A": {
+   "daily": {
+    "first": 1748390400,
+    "last": 1790899200,
+    "rows": 493,
+    "sha": "6fd5091b052d1bc3"
+   },
+   "funding": {
+    "first": 1748419200,
+    "last": 1790798400,
+    "rows": 2943,
+    "sha": "c1ebcd3b05698ebd"
+   }
+  },
+  "A2Z": {
+   "daily": {
+    "first": 1753833600,
+    "last": 1775001600,
+    "rows": 246,
+    "sha": "cc55f71ec0b4ab2b"
+   },
+   "funding": {
+    "first": 1753862400,
+    "last": 1774339200,
+    "rows": 1423,
+    "sha": "3146fc78c9c199dc"
+   }
+  },
+  "AAOIB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "9e1e2efa72f51d57"
+   }
+  },
+  "AAPLB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "d5c066db5aaffd5a"
+   }
+  },
+  "AAVE": {
+   "daily": {
+    "first": 1602720000,
+    "last": 1790899200,
+    "rows": 2179,
+    "sha": "c14dc8d9b35fa557"
+   },
+   "funding": {
+    "first": 1602835200,
+    "last": 1790784000,
+    "rows": 6527,
+    "sha": "565ec30e74e146b9"
+   }
+  },
+  "ACA": {
+   "daily": {
+    "first": 1643068800,
+    "last": 1770940800,
+    "rows": 1481,
+    "sha": "87ee3cad9f6e8d4a"
+   }
+  },
+  "ACE": {
+   "daily": {
+    "first": 1702857600,
+    "last": 1790899200,
+    "rows": 1020,
+    "sha": "6be2a4717e887a06"
+   },
+   "funding": {
+    "first": 1702900800,
+    "last": 1790798400,
+    "rows": 6361,
+    "sha": "195a7ac79973a6de"
+   }
+  },
+  "ACH": {
+   "daily": {
+    "first": 1641772800,
+    "last": 1790899200,
+    "rows": 1727,
+    "sha": "e3fcd98389662c60"
+   },
+   "funding": {
+    "first": 1677052800,
+    "last": 1790784000,
+    "rows": 3950,
+    "sha": "6254287bb73b4004"
+   }
+  },
+  "ACM": {
+   "daily": {
+    "first": 1614124800,
+    "last": 1790899200,
+    "rows": 2047,
+    "sha": "9af34fb51cc8e167"
+   }
+  },
+  "ACT": {
+   "daily": {
+    "first": 1731283200,
+    "last": 1790899200,
+    "rows": 691,
+    "sha": "404e64bada7ac6bb"
+   },
+   "funding": {
+    "first": 1731340800,
+    "last": 1790798400,
+    "rows": 4129,
+    "sha": "f2a77be6160980c8"
+   }
+  },
+  "ACX": {
+   "daily": {
+    "first": 1733443200,
+    "last": 1786924800,
+    "rows": 620,
+    "sha": "c7648198889dfec0"
+   },
+   "funding": {
+    "first": 1733500800,
+    "last": 1786089600,
+    "rows": 3652,
+    "sha": "75829bef85cf08e8"
+   }
+  },
+  "ADA": {
+   "daily": {
+    "first": 1523923200,
+    "last": 1790899200,
+    "rows": 3091,
+    "sha": "febf89e08377d481"
+   },
+   "funding": {
+    "first": 1579449600,
+    "last": 1790784000,
+    "rows": 7339,
+    "sha": "1509b7af53917e7f"
+   },
+   "weekly": {
+    "first": 1523836800,
+    "last": 1790553600,
+    "rows": 434,
+    "sha": "cdfc52c03adaf81b"
+   }
+  },
+  "ADX": {
+   "daily": {
+    "first": 1635465600,
+    "last": 1790899200,
+    "rows": 1800,
+    "sha": "06b90414a47e9edb"
+   }
+  },
+  "AERGO": {
+   "daily": {
+    "first": 1683244800,
+    "last": 1743120000,
+    "rows": 694,
+    "sha": "8955f25f0a8602d3"
+   },
+   "funding": {
+    "first": 1725984000,
+    "last": 1782849600,
+    "rows": 4002,
+    "sha": "5e14918ed2610ca3"
+   }
+  },
+  "AERO": {
+   "daily": {
+    "first": 1784246400,
+    "last": 1790899200,
+    "rows": 78,
+    "sha": "ba885b71ba7bc8ae"
+   },
+   "funding": {
+    "first": 1733328000,
+    "last": 1790798400,
+    "rows": 3991,
+    "sha": "8c51d9b7ee729419"
+   }
+  },
+  "AEVO": {
+   "daily": {
+    "first": 1710288000,
+    "last": 1790899200,
+    "rows": 934,
+    "sha": "c6cb36078a17e824"
+   },
+   "funding": {
+    "first": 1710345600,
+    "last": 1790798400,
+    "rows": 5587,
+    "sha": "93ffffec38096578"
+   }
+  },
+  "AGIX": {
+   "daily": {
+    "first": 1676592000,
+    "last": 1719792000,
+    "rows": 501,
+    "sha": "140f46a2fa7142e9"
+   },
+   "funding": {
+    "first": 1676476800,
+    "last": 1750320000,
+    "rows": 2565,
+    "sha": "8b2c57d225b90b16"
+   }
+  },
+  "AGLD": {
+   "daily": {
+    "first": 1633392000,
+    "last": 1790899200,
+    "rows": 1824,
+    "sha": "653364ace6e46d44"
+   },
+   "funding": {
+    "first": 1690560000,
+    "last": 1790784000,
+    "rows": 3481,
+    "sha": "f7b9b77b01f5ec44"
+   }
+  },
+  "AI": {
+   "daily": {
+    "first": 1704326400,
+    "last": 1790899200,
+    "rows": 1003,
+    "sha": "0ab2a7625fc66540"
+   },
+   "funding": {
+    "first": 1704729600,
+    "last": 1777363200,
+    "rows": 5045,
+    "sha": "e1c0f1920f77dea1"
+   }
+  },
+  "AIGENSYN": {
+   "daily": {
+    "first": 1778716800,
+    "last": 1790899200,
+    "rows": 142,
+    "sha": "a91db899dc584bbd"
+   },
+   "funding": {
+    "first": 1777478400,
+    "last": 1790798400,
+    "rows": 925,
+    "sha": "39bf75cd915ab2c7"
+   }
+  },
+  "AION": {
+   "daily": {
+    "first": 1582070400,
+    "last": 1677456000,
+    "rows": 1105,
+    "sha": "4e33e93fb81b2756"
+   }
+  },
+  "AIXBT": {
+   "daily": {
+    "first": 1736467200,
+    "last": 1790899200,
+    "rows": 631,
+    "sha": "4e79a7da45d27b50"
+   },
+   "funding": {
+    "first": 1734724800,
+    "last": 1790798400,
+    "rows": 3894,
+    "sha": "34540f78aeb9713d"
+   }
+  },
+  "AKRO": {
+   "daily": {
+    "first": 1604275200,
+    "last": 1735084800,
+    "rows": 1515,
+    "sha": "5aae93452ec2bbbe"
+   },
+   "funding": {
+    "first": 1611043200,
+    "last": 1653638400,
+    "rows": 1480,
+    "sha": "3f7d765270ca1fda"
+   }
+  },
+  "ALABB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "3833cbc0f532ea1e"
+   }
+  },
+  "ALCX": {
+   "daily": {
+    "first": 1638230400,
+    "last": 1783641600,
+    "rows": 1684,
+    "sha": "8f1f6538c6c5f6f4"
+   }
+  },
+  "ALGO": {
+   "daily": {
+    "first": 1561161600,
+    "last": 1790899200,
+    "rows": 2660,
+    "sha": "6780069a6e90b913"
+   },
+   "funding": {
+    "first": 1590969600,
+    "last": 1790784000,
+    "rows": 6939,
+    "sha": "42f5b7b70a2e9690"
+   }
+  },
+  "ALICE": {
+   "daily": {
+    "first": 1615766400,
+    "last": 1790899200,
+    "rows": 2028,
+    "sha": "cce0413ef85f418a"
+   },
+   "funding": {
+    "first": 1615824000,
+    "last": 1790798400,
+    "rows": 6780,
+    "sha": "9b14479bb61248c8"
+   }
+  },
+  "ALLO": {
+   "daily": {
+    "first": 1762819200,
+    "last": 1790899200,
+    "rows": 326,
+    "sha": "aacb0f45b7b27130"
+   },
+   "funding": {
+    "first": 1762862400,
+    "last": 1790798400,
+    "rows": 1940,
+    "sha": "f1a2f857bd720b7e"
+   }
+  },
+  "ALPACA": {
+   "daily": {
+    "first": 1628640000,
+    "last": 1746144000,
+    "rows": 1361,
+    "sha": "f01bb29a1743aca3"
+   },
+   "funding": {
+    "first": 1724328000,
+    "last": 1750323600,
+    "rows": 2801,
+    "sha": "e4f812ca0879f7c4"
+   }
+  },
+  "ALPHA": {
+   "daily": {
+    "first": 1602288000,
+    "last": 1751587200,
+    "rows": 1729,
+    "sha": "66e1bb4188e89416"
+   },
+   "funding": {
+    "first": 1606118400,
+    "last": 1758614400,
+    "rows": 5296,
+    "sha": "acb071585c1d0f7c"
+   }
+  },
+  "ALPINE": {
+   "daily": {
+    "first": 1645401600,
+    "last": 1790899200,
+    "rows": 1685,
+    "sha": "52876fb536bc1c39"
+   },
+   "funding": {
+    "first": 1746532800,
+    "last": 1790798400,
+    "rows": 3074,
+    "sha": "f86dbe8540ead8f7"
+   }
+  },
+  "ALT": {
+   "daily": {
+    "first": 1706140800,
+    "last": 1790899200,
+    "rows": 982,
+    "sha": "97f15afd5073d53f"
+   },
+   "funding": {
+    "first": 1706198400,
+    "last": 1790798400,
+    "rows": 5875,
+    "sha": "c27bcaca0e8409ec"
+   }
+  },
+  "AMATB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "25325e2f31d5cef7"
+   }
+  },
+  "AMB": {
+   "daily": {
+    "first": 1677801600,
+    "last": 1740355200,
+    "rows": 725,
+    "sha": "95e33a6c942d8692"
+   },
+   "funding": {
+    "first": 1680163200,
+    "last": 1750320000,
+    "rows": 4285,
+    "sha": "1710d1f968b9e0cf"
+   }
+  },
+  "AMDB": {
+   "daily": {
+    "first": 1782172800,
+    "last": 1790899200,
+    "rows": 102,
+    "sha": "fecddd16b5fae53a"
+   }
+  },
+  "AMP": {
+   "daily": {
+    "first": 1637625600,
+    "last": 1790899200,
+    "rows": 1775,
+    "sha": "248f6d57de65d151"
+   }
+  },
+  "AMZNB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "4647da489d7b0042"
+   }
+  },
+  "ANC": {
+   "daily": {
+    "first": 1643068800,
+    "last": 1672099200,
+    "rows": 337,
+    "sha": "98c40ab2714ba890"
+   },
+   "funding": {
+    "first": 1646726400,
+    "last": 1652400000,
+    "rows": 198,
+    "sha": "886ea77565fdf10c"
+   }
+  },
+  "ANIME": {
+   "daily": {
+    "first": 1737590400,
+    "last": 1790899200,
+    "rows": 618,
+    "sha": "d02cee23425fb628"
+   },
+   "funding": {
+    "first": 1737662400,
+    "last": 1790798400,
+    "rows": 3970,
+    "sha": "df9c4e9006776f1c"
+   }
+  },
+  "ANKR": {
+   "daily": {
+    "first": 1563840000,
+    "last": 1790899200,
+    "rows": 2629,
+    "sha": "079f32c855ba90cb"
+   },
+   "funding": {
+    "first": 1611590400,
+    "last": 1790798400,
+    "rows": 6844,
+    "sha": "fc66dcd5c3413172"
+   }
+  },
+  "ANT": {
+   "daily": {
+    "first": 1597276800,
+    "last": 1708387200,
+    "rows": 1287,
+    "sha": "87662c74567e35fa"
+   },
+   "funding": {
+    "first": 1640592000,
+    "last": 1721347200,
+    "rows": 2805,
+    "sha": "94515bca2cfe1790"
+   }
+  },
+  "ANY": {
+   "daily": {
+    "first": 1638576000,
+    "last": 1648598400,
+    "rows": 117,
+    "sha": "f92753923f6e3385"
+   }
+  },
+  "APE": {
+   "daily": {
+    "first": 1647475200,
+    "last": 1790899200,
+    "rows": 1661,
+    "sha": "fd8b3c4c2c74e371"
+   },
+   "funding": {
+    "first": 1647532800,
+    "last": 1790784000,
+    "rows": 4975,
+    "sha": "fd66565e74fc2a13"
+   }
+  },
+  "API3": {
+   "daily": {
+    "first": 1642723200,
+    "last": 1790899200,
+    "rows": 1716,
+    "sha": "64dcb2b2f69e509b"
+   },
+   "funding": {
+    "first": 1645459200,
+    "last": 1790798400,
+    "rows": 8889,
+    "sha": "3a4b16c4a32df900"
+   }
+  },
+  "APT": {
+   "daily": {
+    "first": 1666137600,
+    "last": 1790899200,
+    "rows": 1445,
+    "sha": "f5a414a989609b2c"
+   },
+   "funding": {
+    "first": 1666108800,
+    "last": 1790784000,
+    "rows": 4330,
+    "sha": "314ad8e270dab43d"
+   }
+  },
+  "AR": {
+   "daily": {
+    "first": 1620950400,
+    "last": 1790899200,
+    "rows": 1968,
+    "sha": "870b8ae1622b97ea"
+   },
+   "funding": {
+    "first": 1632729600,
+    "last": 1790784000,
+    "rows": 5489,
+    "sha": "dfb7817b4d7bcbfd"
+   }
+  },
+  "ARB": {
+   "daily": {
+    "first": 1679529600,
+    "last": 1790899200,
+    "rows": 1290,
+    "sha": "69b45797c7ec750d"
+   },
+   "funding": {
+    "first": 1679558400,
+    "last": 1790784000,
+    "rows": 3863,
+    "sha": "734853568246f0f0"
+   }
+  },
+  "ARDR": {
+   "daily": {
+    "first": 1589500800,
+    "last": 1783641600,
+    "rows": 2248,
+    "sha": "7aa8c57014f32a89"
+   }
+  },
+  "ARK": {
+   "daily": {
+    "first": 1695340800,
+    "last": 1790899200,
+    "rows": 1107,
+    "sha": "6c8e699f32c2d97a"
+   },
+   "funding": {
+    "first": 1695139200,
+    "last": 1790809200,
+    "rows": 5158,
+    "sha": "6e092e9fa91e1f9d"
+   }
+  },
+  "ARKM": {
+   "daily": {
+    "first": 1689638400,
+    "last": 1790899200,
+    "rows": 1173,
+    "sha": "fc3da2de518da589"
+   },
+   "funding": {
+    "first": 1690473600,
+    "last": 1790784000,
+    "rows": 3484,
+    "sha": "a79ac2bbc81e91e6"
+   }
+  },
+  "ARMB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "f6f101a52f2dd78f"
+   }
+  },
+  "ARPA": {
+   "daily": {
+    "first": 1572998400,
+    "last": 1790899200,
+    "rows": 2523,
+    "sha": "34f63768922cc3b9"
+   },
+   "funding": {
+    "first": 1634630400,
+    "last": 1790784000,
+    "rows": 5423,
+    "sha": "741f4716e96c2449"
+   }
+  },
+  "ASMLB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "19532ac5669d7a39"
+   }
+  },
+  "ASR": {
+   "daily": {
+    "first": 1609286400,
+    "last": 1790899200,
+    "rows": 2103,
+    "sha": "62a602593a15303c"
+   },
+   "funding": {
+    "first": 1746532800,
+    "last": 1790798400,
+    "rows": 3074,
+    "sha": "2aac3465c79f90e9"
+   }
+  },
+  "AST": {
+   "daily": {
+    "first": 1684454400,
+    "last": 1743120000,
+    "rows": 680,
+    "sha": "1f8879533bd4acb4"
+   }
+  },
+  "ASTER": {
+   "daily": {
+    "first": 1759708800,
+    "last": 1790899200,
+    "rows": 362,
+    "sha": "d21b33f91032c78e"
+   },
+   "funding": {
+    "first": 1758283200,
+    "last": 1790798400,
+    "rows": 2258,
+    "sha": "56d1191300bc58c4"
+   }
+  },
+  "ASTR": {
+   "daily": {
+    "first": 1646006400,
+    "last": 1790899200,
+    "rows": 1678,
+    "sha": "5b287382b08b0864"
+   },
+   "funding": {
+    "first": 1676275200,
+    "last": 1790784000,
+    "rows": 3977,
+    "sha": "45696e2d3831245e"
+   }
+  },
+  "ASTSB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "7aba8f2a636ff2f0"
+   }
+  },
+  "AT": {
+   "daily": {
+    "first": 1764201600,
+    "last": 1790899200,
+    "rows": 310,
+    "sha": "4e4d1df761d1906b"
+   },
+   "funding": {
+    "first": 1761739200,
+    "last": 1790798400,
+    "rows": 2018,
+    "sha": "68b48597d3e5c6b6"
+   }
+  },
+  "ATA": {
+   "daily": {
+    "first": 1623024000,
+    "last": 1779840000,
+    "rows": 1816,
+    "sha": "c0cda96287f0245b"
+   },
+   "funding": {
+    "first": 1630310400,
+    "last": 1779177600,
+    "rows": 5170,
+    "sha": "1ec9c067fe5e4878"
+   }
+  },
+  "ATM": {
+   "daily": {
+    "first": 1609286400,
+    "last": 1790899200,
+    "rows": 2103,
+    "sha": "1b3d6627790c57b5"
+   }
+  },
+  "ATOM": {
+   "daily": {
+    "first": 1556496000,
+    "last": 1790899200,
+    "rows": 2714,
+    "sha": "1f908a9a4d072e82"
+   },
+   "funding": {
+    "first": 1581004800,
+    "last": 1790784000,
+    "rows": 7285,
+    "sha": "c7e29de561977fb8"
+   }
+  },
+  "AUCTION": {
+   "daily": {
+    "first": 1635465600,
+    "last": 1790899200,
+    "rows": 1800,
+    "sha": "0b964d396e13f7d8"
+   },
+   "funding": {
+    "first": 1702656000,
+    "last": 1790798400,
+    "rows": 6183,
+    "sha": "4c29b426068cf227"
+   }
+  },
+  "AUDIO": {
+   "daily": {
+    "first": 1603411200,
+    "last": 1790899200,
+    "rows": 2171,
+    "sha": "0f4d06bd05ab8e96"
+   },
+   "funding": {
+    "first": 1629360000,
+    "last": 1721347200,
+    "rows": 3195,
+    "sha": "7eb6010b2c0a3765"
+   }
+  },
+  "AUTO": {
+   "daily": {
+    "first": 1617321600,
+    "last": 1681776000,
+    "rows": 747,
+    "sha": "c8291d0253a76fab"
+   }
+  },
+  "AVA": {
+   "daily": {
+    "first": 1606176000,
+    "last": 1790899200,
+    "rows": 2139,
+    "sha": "9f3d3b4ce2109ec6"
+   },
+   "funding": {
+    "first": 1734105600,
+    "last": 1790798400,
+    "rows": 3937,
+    "sha": "839d14e9039f1b8b"
+   }
+  },
+  "AVAX": {
+   "daily": {
+    "first": 1600732800,
+    "last": 1790899200,
+    "rows": 2202,
+    "sha": "eb1ddc2a469b8730"
+   },
+   "funding": {
+    "first": 1600790400,
+    "last": 1790784000,
+    "rows": 6598,
+    "sha": "767a308d76302134"
+   },
+   "weekly": {
+    "first": 1600646400,
+    "last": 1790553600,
+    "rows": 308,
+    "sha": "76f2dddf4e6d9ae3"
+   }
+  },
+  "AVGOB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "aed8c49167ae8f2d"
+   }
+  },
+  "AVNT": {
+   "daily": {
+    "first": 1757894400,
+    "last": 1790899200,
+    "rows": 383,
+    "sha": "6baba61196f01290"
+   },
+   "funding": {
+    "first": 1757433600,
+    "last": 1790798400,
+    "rows": 2317,
+    "sha": "c8a00cfcbf5abe9b"
+   }
+  },
+  "AWE": {
+   "daily": {
+    "first": 1747785600,
+    "last": 1790899200,
+    "rows": 500,
+    "sha": "5f917edc6adbb879"
+   },
+   "funding": {
+    "first": 1747814400,
+    "last": 1790798400,
+    "rows": 2985,
+    "sha": "3e34b2309b065c4b"
+   }
+  },
+  "AXL": {
+   "daily": {
+    "first": 1709251200,
+    "last": 1790899200,
+    "rows": 946,
+    "sha": "cfcf870b196072dd"
+   },
+   "funding": {
+    "first": 1709308800,
+    "last": 1790798400,
+    "rows": 6349,
+    "sha": "62c6570489ebb832"
+   }
+  },
+  "AXS": {
+   "daily": {
+    "first": 1604448000,
+    "last": 1790899200,
+    "rows": 2159,
+    "sha": "c0d83f7aeaac104f"
+   },
+   "funding": {
+    "first": 1605859200,
+    "last": 1790798400,
+    "rows": 7346,
+    "sha": "b9ce02f8b08b097a"
+   }
+  },
+  "AXTIB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "16460f01cadad68c"
+   }
+  },
+  "BABAB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "0a47ddf6f7bb68d6"
+   }
+  },
+  "BABY": {
+   "daily": {
+    "first": 1744243200,
+    "last": 1790899200,
+    "rows": 541,
+    "sha": "d872884fdf86c80c"
+   },
+   "funding": {
+    "first": 1743868800,
+    "last": 1790798400,
+    "rows": 3307,
+    "sha": "b1dc83b35f776a56"
+   }
+  },
+  "BADGER": {
+   "daily": {
+    "first": 1614643200,
+    "last": 1744761600,
+    "rows": 1507,
+    "sha": "13a2de433e22820a"
+   },
+   "funding": {
+    "first": 1699516800,
+    "last": 1750320000,
+    "rows": 3528,
+    "sha": "71cd73db045778ec"
+   }
+  },
+  "BAKE": {
+   "daily": {
+    "first": 1619740800,
+    "last": 1758067200,
+    "rows": 1602,
+    "sha": "769781deabc5c719"
+   },
+   "funding": {
+    "first": 1621411200,
+    "last": 1759478400,
+    "rows": 4795,
+    "sha": "bef826d8bf80aa23"
+   }
+  },
+  "BAL": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1744761600,
+    "rows": 1710,
+    "sha": "d6271d359ed78b2d"
+   },
+   "funding": {
+    "first": 1598947200,
+    "last": 1750320000,
+    "rows": 5257,
+    "sha": "ae48a7eedde77f75"
+   }
+  },
+  "BANANA": {
+   "daily": {
+    "first": 1721433600,
+    "last": 1790899200,
+    "rows": 805,
+    "sha": "96c840c44775fbbb"
+   },
+   "funding": {
+    "first": 1723651200,
+    "last": 1790798400,
+    "rows": 4815,
+    "sha": "83e79658450399b6"
+   }
+  },
+  "BANANAS31": {
+   "daily": {
+    "first": 1743033600,
+    "last": 1790899200,
+    "rows": 555,
+    "sha": "a035bc1b7c04e824"
+   },
+   "funding": {
+    "first": 1742486400,
+    "last": 1790798400,
+    "rows": 3350,
+    "sha": "f42ffa96c947e0f4"
+   }
+  },
+  "BAND": {
+   "daily": {
+    "first": 1568764800,
+    "last": 1790899200,
+    "rows": 2572,
+    "sha": "387223cc25c1b47f"
+   },
+   "funding": {
+    "first": 1596009600,
+    "last": 1790784000,
+    "rows": 6764,
+    "sha": "b0e07a7b1700eb22"
+   }
+  },
+  "BANK": {
+   "daily": {
+    "first": 1762992000,
+    "last": 1790899200,
+    "rows": 324,
+    "sha": "db1e2403d015d1b8"
+   },
+   "funding": {
+    "first": 1745006400,
+    "last": 1790798400,
+    "rows": 3283,
+    "sha": "83362ea3078e2732"
+   }
+  },
+  "BAR": {
+   "daily": {
+    "first": 1618963200,
+    "last": 1790899200,
+    "rows": 1991,
+    "sha": "dac4dccad258aa2d"
+   }
+  },
+  "BARD": {
+   "daily": {
+    "first": 1758153600,
+    "last": 1790899200,
+    "rows": 380,
+    "sha": "260cb3f961f7d1ef"
+   },
+   "funding": {
+    "first": 1758182400,
+    "last": 1790798400,
+    "rows": 2916,
+    "sha": "d38cb536afb9147a"
+   }
+  },
+  "BAT": {
+   "daily": {
+    "first": 1551657600,
+    "last": 1790899200,
+    "rows": 2770,
+    "sha": "faeed3c129a4629c"
+   },
+   "funding": {
+    "first": 1581580800,
+    "last": 1790784000,
+    "rows": 7265,
+    "sha": "b122ecb54f48ffc7"
+   }
+  },
+  "BB": {
+   "daily": {
+    "first": 1715558400,
+    "last": 1790899200,
+    "rows": 873,
+    "sha": "cc67ad29534fa7e6"
+   },
+   "funding": {
+    "first": 1715616000,
+    "last": 1790798400,
+    "rows": 5221,
+    "sha": "3a01804398d64965"
+   }
+  },
+  "BCC": {
+   "daily": {
+    "first": 1510358400,
+    "last": 1542672000,
+    "rows": 371,
+    "sha": "c0a4bd47cf9af95e"
+   }
+  },
+  "BCH": {
+   "daily": {
+    "first": 1574899200,
+    "last": 1790899200,
+    "rows": 2501,
+    "sha": "fd312bef1fbc05d8"
+   },
+   "funding": {
+    "first": 1577836800,
+    "last": 1790784000,
+    "rows": 7395,
+    "sha": "5d6f5d9ace929746"
+   }
+  },
+  "BCHABC": {
+   "daily": {
+    "first": 1542326400,
+    "last": 1574899200,
+    "rows": 378,
+    "sha": "52039767cc26c4cf"
+   }
+  },
+  "BCHSV": {
+   "daily": {
+    "first": 1542326400,
+    "last": 1555891200,
+    "rows": 158,
+    "sha": "816a15dafd0acf21"
+   }
+  },
+  "BEAM": {
+   "daily": {
+    "first": 1569024000,
+    "last": 1674691200,
+    "rows": 1224,
+    "sha": "5bf080783bb7f536"
+   }
+  },
+  "BEAMX": {
+   "daily": {
+    "first": 1699920000,
+    "last": 1790899200,
+    "rows": 1054,
+    "sha": "6a52345a38afc420"
+   },
+   "funding": {
+    "first": 1700208000,
+    "last": 1790798400,
+    "rows": 6290,
+    "sha": "8fdc58561e4ab891"
+   }
+  },
+  "BEAR": {
+   "daily": {
+    "first": 1579219200,
+    "last": 1585612800,
+    "rows": 75,
+    "sha": "6878e2820fcd28ec"
+   }
+  },
+  "BEB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "0783569889140334"
+   }
+  },
+  "BEL": {
+   "daily": {
+    "first": 1600128000,
+    "last": 1790899200,
+    "rows": 2209,
+    "sha": "617f97388c57f928"
+   },
+   "funding": {
+    "first": 1605686400,
+    "last": 1790784000,
+    "rows": 6428,
+    "sha": "60ecaacc27995ea3"
+   }
+  },
+  "BERA": {
+   "daily": {
+    "first": 1738800000,
+    "last": 1790899200,
+    "rows": 604,
+    "sha": "d79004757fcda9d5"
+   },
+   "funding": {
+    "first": 1738857600,
+    "last": 1790798400,
+    "rows": 3607,
+    "sha": "672890931c1884ac"
+   }
+  },
+  "BETA": {
+   "daily": {
+    "first": 1633651200,
+    "last": 1744761600,
+    "rows": 1287,
+    "sha": "e31027bb338afc63"
+   }
+  },
+  "BFUSD": {
+   "daily": {
+    "first": 1755043200,
+    "last": 1790899200,
+    "rows": 416,
+    "sha": "d2988aedb942f67a"
+   }
+  },
+  "BICO": {
+   "daily": {
+    "first": 1639008000,
+    "last": 1790899200,
+    "rows": 1759,
+    "sha": "ff9aeee7e8bc8338"
+   },
+   "funding": {
+    "first": 1695888000,
+    "last": 1790784000,
+    "rows": 3296,
+    "sha": "8219f6391182ca47"
+   }
+  },
+  "BIFI": {
+   "daily": {
+    "first": 1648771200,
+    "last": 1776902400,
+    "rows": 1484,
+    "sha": "6fbb663713f6be30"
+   }
+  },
+  "BIGTIME": {
+   "daily": {
+    "first": 1744329600,
+    "last": 1790899200,
+    "rows": 540,
+    "sha": "915fea78d40c7569"
+   },
+   "funding": {
+    "first": 1697126400,
+    "last": 1790798400,
+    "rows": 6505,
+    "sha": "b5833e95cd57d1de"
+   }
+  },
+  "BIO": {
+   "daily": {
+    "first": 1735862400,
+    "last": 1790899200,
+    "rows": 638,
+    "sha": "6aa45d7099b1e4a8"
+   },
+   "funding": {
+    "first": 1735920000,
+    "last": 1790798400,
+    "rows": 4623,
+    "sha": "a68540eced9f61da"
+   }
+  },
+  "BLUR": {
+   "daily": {
+    "first": 1700784000,
+    "last": 1790899200,
+    "rows": 1044,
+    "sha": "99ab688a4f817a6b"
+   },
+   "funding": {
+    "first": 1682611200,
+    "last": 1790798400,
+    "rows": 4347,
+    "sha": "550a2dc0aa76fb55"
+   }
+  },
+  "BLZ": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1735084800,
+    "rows": 1598,
+    "sha": "b7f3e66ddfe720f3"
+   },
+   "funding": {
+    "first": 1600272000,
+    "last": 1750320000,
+    "rows": 7133,
+    "sha": "11ed7e9e3fd026f7"
+   }
+  },
+  "BMNRB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "285cd2dda8487ae9"
+   }
+  },
+  "BMT": {
+   "daily": {
+    "first": 1742256000,
+    "last": 1790899200,
+    "rows": 564,
+    "sha": "87813c6eeeeee304"
+   },
+   "funding": {
+    "first": 1742227200,
+    "last": 1790798400,
+    "rows": 3373,
+    "sha": "48ef4620222fa652"
+   }
+  },
+  "BNB": {
+   "daily": {
+    "first": 1509926400,
+    "last": 1790899200,
+    "rows": 3253,
+    "sha": "bcade277b751a40d"
+   },
+   "funding": {
+    "first": 1581321600,
+    "last": 1790784000,
+    "rows": 7274,
+    "sha": "a51f7ebad18a9e14"
+   },
+   "weekly": {
+    "first": 1509926400,
+    "last": 1790553600,
+    "rows": 457,
+    "sha": "530c8b06bca073b0"
+   }
+  },
+  "BNSOL": {
+   "daily": {
+    "first": 1729123200,
+    "last": 1790899200,
+    "rows": 716,
+    "sha": "3ffbe8247b8787f3"
+   }
+  },
+  "BNT": {
+   "daily": {
+    "first": 1580947200,
+    "last": 1790899200,
+    "rows": 2431,
+    "sha": "23f6028c5b345138"
+   },
+   "funding": {
+    "first": 1609459200,
+    "last": 1790784000,
+    "rows": 3796,
+    "sha": "461f5e98fcfe1893"
+   }
+  },
+  "BNX": {
+   "daily": {
+    "first": 1635984000,
+    "last": 1742256000,
+    "rows": 1226,
+    "sha": "0895917c2a7e1bc5"
+   },
+   "funding": {
+    "first": 1675209600,
+    "last": 1750320000,
+    "rows": 2998,
+    "sha": "bee8402774f9f8bc"
+   }
+  },
+  "BOME": {
+   "daily": {
+    "first": 1710547200,
+    "last": 1790899200,
+    "rows": 931,
+    "sha": "7c48558e222421b1"
+   },
+   "funding": {
+    "first": 1710547200,
+    "last": 1790798400,
+    "rows": 5571,
+    "sha": "716d2448d22a27f1"
+   }
+  },
+  "BOND": {
+   "daily": {
+    "first": 1625443200,
+    "last": 1721606400,
+    "rows": 1114,
+    "sha": "52bf93b4421592df"
+   },
+   "funding": {
+    "first": 1697385600,
+    "last": 1750320000,
+    "rows": 3677,
+    "sha": "2988dc00b31fac08"
+   }
+  },
+  "BONK": {
+   "daily": {
+    "first": 1702598400,
+    "last": 1790899200,
+    "rows": 1023,
+    "sha": "2c8cff9e5f0e8a05"
+   }
+  },
+  "BREV": {
+   "daily": {
+    "first": 1767657600,
+    "last": 1790899200,
+    "rows": 270,
+    "sha": "599e393f8fcd6c37"
+   },
+   "funding": {
+    "first": 1767096000,
+    "last": 1790798400,
+    "rows": 1646,
+    "sha": "23ffaee5e6ac55dd"
+   }
+  },
+  "BROCCOLI714": {
+   "daily": {
+    "first": 1743033600,
+    "last": 1790899200,
+    "rows": 555,
+    "sha": "5b0fb7d63faad0a5"
+   },
+   "funding": {
+    "first": 1742486400,
+    "last": 1790798400,
+    "rows": 3386,
+    "sha": "bd14693997900d82"
+   }
+  },
+  "BSW": {
+   "daily": {
+    "first": 1647820800,
+    "last": 1751587200,
+    "rows": 1202,
+    "sha": "5a8444fa671b636c"
+   },
+   "funding": {
+    "first": 1725523200,
+    "last": 1757923200,
+    "rows": 2251,
+    "sha": "75dc724cd0ae24e8"
+   }
+  },
+  "BTC": {
+   "daily": {
+    "first": 1502928000,
+    "last": 1790899200,
+    "rows": 3334,
+    "sha": "2fcad50087eb49d0"
+   },
+   "funding": {
+    "first": 1577836800,
+    "last": 1790784000,
+    "rows": 7395,
+    "sha": "8cddbd833376c96b"
+   },
+   "weekly": {
+    "first": 1502668800,
+    "last": 1790553600,
+    "rows": 469,
+    "sha": "725b6b1e20aa8062"
+   }
+  },
+  "BTCST": {
+   "daily": {
+    "first": 1610496000,
+    "last": 1669593600,
+    "rows": 682,
+    "sha": "fc8cf33df9ff9678"
+   },
+   "funding": {
+    "first": 1614844800,
+    "last": 1782835200,
+    "rows": 5631,
+    "sha": "f5560556d34e11ed"
+   }
+  },
+  "BTG": {
+   "daily": {
+    "first": 1618531200,
+    "last": 1666569600,
+    "rows": 557,
+    "sha": "603db41fa3e48897"
+   }
+  },
+  "BTS": {
+   "daily": {
+    "first": 1580947200,
+    "last": 1701907200,
+    "rows": 1401,
+    "sha": "b4d21f9d64074828"
+   },
+   "funding": {
+    "first": 1612166400,
+    "last": 1723708800,
+    "rows": 3874,
+    "sha": "622070c15504a73f"
+   }
+  },
+  "BTT": {
+   "daily": {
+    "first": 1548892800,
+    "last": 1642377600,
+    "rows": 1083,
+    "sha": "f5d2a80175ba580d"
+   },
+   "funding": {
+    "first": 1617696000,
+    "last": 1643356800,
+    "rows": 892,
+    "sha": "e78e4aa9f3e5629d"
+   }
+  },
+  "BTTC": {
+   "daily": {
+    "first": 1643068800,
+    "last": 1790899200,
+    "rows": 1712,
+    "sha": "5942b581c6dff0d8"
+   }
+  },
+  "BULL": {
+   "daily": {
+    "first": 1579219200,
+    "last": 1585612800,
+    "rows": 75,
+    "sha": "4c263932d1a5dddd"
+   }
+  },
+  "BURGER": {
+   "daily": {
+    "first": 1619740800,
+    "last": 1743120000,
+    "rows": 1429,
+    "sha": "0d6a33c09772edb2"
+   }
+  },
+  "BZRX": {
+   "daily": {
+    "first": 1598832000,
+    "last": 1639958400,
+    "rows": 477,
+    "sha": "6bcbb47cb09b745f"
+   },
+   "funding": {
+    "first": 1599235200,
+    "last": 1640822400,
+    "rows": 1445,
+    "sha": "0000c928bd7c27f1"
+   }
+  },
+  "C": {
+   "daily": {
+    "first": 1752796800,
+    "last": 1790899200,
+    "rows": 442,
+    "sha": "55077210f73d54f1"
+   },
+   "funding": {
+    "first": 1752580800,
+    "last": 1790798400,
+    "rows": 2782,
+    "sha": "9fdb4642a1bfccb4"
+   }
+  },
+  "C98": {
+   "daily": {
+    "first": 1626998400,
+    "last": 1790899200,
+    "rows": 1898,
+    "sha": "8727a9feaf4cb2ba"
+   },
+   "funding": {
+    "first": 1629792000,
+    "last": 1790784000,
+    "rows": 5591,
+    "sha": "187d1133155414e4"
+   }
+  },
+  "CAKE": {
+   "daily": {
+    "first": 1613692800,
+    "last": 1790899200,
+    "rows": 2052,
+    "sha": "a7ab9f661b0ff6e1"
+   },
+   "funding": {
+    "first": 1698940800,
+    "last": 1790798400,
+    "rows": 6379,
+    "sha": "313877a4d936d13e"
+   }
+  },
+  "CATI": {
+   "daily": {
+    "first": 1726790400,
+    "last": 1790899200,
+    "rows": 743,
+    "sha": "1be86796f77cc15a"
+   },
+   "funding": {
+    "first": 1726675200,
+    "last": 1790798400,
+    "rows": 4448,
+    "sha": "2fab8a586b81d548"
+   }
+  },
+  "CBRSB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "a4bf36cecff64e38"
+   }
+  },
+  "CELO": {
+   "daily": {
+    "first": 1609804800,
+    "last": 1790899200,
+    "rows": 2097,
+    "sha": "bcf69e3fe3cfa8ff"
+   },
+   "funding": {
+    "first": 1632729600,
+    "last": 1790784000,
+    "rows": 5489,
+    "sha": "8743f55afe951648"
+   }
+  },
+  "CELR": {
+   "daily": {
+    "first": 1553472000,
+    "last": 1790899200,
+    "rows": 2749,
+    "sha": "a2b434cea5a73c5a"
+   },
+   "funding": {
+    "first": 1617004800,
+    "last": 1790784000,
+    "rows": 6035,
+    "sha": "598936ba0c510411"
+   }
+  },
+  "CETUS": {
+   "daily": {
+    "first": 1730851200,
+    "last": 1790899200,
+    "rows": 696,
+    "sha": "e29568c9e7efa3a6"
+   },
+   "funding": {
+    "first": 1730908800,
+    "last": 1790798400,
+    "rows": 4159,
+    "sha": "5bd2d43da1718d58"
+   }
+  },
+  "CFG": {
+   "daily": {
+    "first": 1773619200,
+    "last": 1790899200,
+    "rows": 201,
+    "sha": "ffcde3db2b1c16b9"
+   },
+   "funding": {
+    "first": 1773676800,
+    "last": 1790798400,
+    "rows": 1189,
+    "sha": "70848b2946b2bdd9"
+   }
+  },
+  "CFX": {
+   "daily": {
+    "first": 1616976000,
+    "last": 1790899200,
+    "rows": 2014,
+    "sha": "739e59f36b2de10b"
+   },
+   "funding": {
+    "first": 1676880000,
+    "last": 1790784000,
+    "rows": 3956,
+    "sha": "7c2d6370e11fd16d"
+   }
+  },
+  "CGPT": {
+   "daily": {
+    "first": 1736467200,
+    "last": 1790899200,
+    "rows": 631,
+    "sha": "b4efd520e9d8d731"
+   },
+   "funding": {
+    "first": 1734724800,
+    "last": 1790798400,
+    "rows": 3894,
+    "sha": "e049d2a39459e36b"
+   }
+  },
+  "CHESS": {
+   "daily": {
+    "first": 1634860800,
+    "last": 1770940800,
+    "rows": 1576,
+    "sha": "5fee324ac6a9fecb"
+   },
+   "funding": {
+    "first": 1724918400,
+    "last": 1770364800,
+    "rows": 3157,
+    "sha": "f274ebdb954f6460"
+   }
+  },
+  "CHIP": {
+   "daily": {
+    "first": 1776729600,
+    "last": 1790899200,
+    "rows": 165,
+    "sha": "f46b0cf173c3f446"
+   },
+   "funding": {
+    "first": 1776326400,
+    "last": 1790798400,
+    "rows": 1005,
+    "sha": "ea12abe9e6278c71"
+   }
+  },
+  "CHR": {
+   "daily": {
+    "first": 1588809600,
+    "last": 1790899200,
+    "rows": 2340,
+    "sha": "2c7aba64af1b2ed6"
+   },
+   "funding": {
+    "first": 1615536000,
+    "last": 1790784000,
+    "rows": 6086,
+    "sha": "191f25a7c6ba91c7"
+   }
+  },
+  "CHZ": {
+   "daily": {
+    "first": 1567728000,
+    "last": 1790899200,
+    "rows": 2584,
+    "sha": "d64d7d925513a9e4"
+   },
+   "funding": {
+    "first": 1609459200,
+    "last": 1790784000,
+    "rows": 6297,
+    "sha": "8e6efe3f302bfeb4"
+   }
+  },
+  "CITY": {
+   "daily": {
+    "first": 1636502400,
+    "last": 1790899200,
+    "rows": 1788,
+    "sha": "bcd8f9525c2149b0"
+   }
+  },
+  "CKB": {
+   "daily": {
+    "first": 1611619200,
+    "last": 1790899200,
+    "rows": 2076,
+    "sha": "8807cab90ffd27dd"
+   },
+   "funding": {
+    "first": 1677571200,
+    "last": 1790784000,
+    "rows": 3932,
+    "sha": "712fb2b809651eb1"
+   }
+  },
+  "CLV": {
+   "daily": {
+    "first": 1627516800,
+    "last": 1740355200,
+    "rows": 1307,
+    "sha": "161cffe4aa5fbfe2"
+   }
+  },
+  "COCOS": {
+   "daily": {
+    "first": 1566345600,
+    "last": 1685318400,
+    "rows": 1375,
+    "sha": "e8e04623c5efd94f"
+   },
+   "funding": {
+    "first": 1676966400,
+    "last": 1721347200,
+    "rows": 1542,
+    "sha": "c2d9495558dfbf39"
+   }
+  },
+  "COHRB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "f9d10264d997d361"
+   }
+  },
+  "COINB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "81084fc8b2aa51b9"
+   }
+  },
+  "COMBO": {
+   "daily": {
+    "first": 1685664000,
+    "last": 1743120000,
+    "rows": 666,
+    "sha": "822d30a45d7346a8"
+   },
+   "funding": {
+    "first": 1685692800,
+    "last": 1750320000,
+    "rows": 2245,
+    "sha": "d1d6175d887bdcc6"
+   }
+  },
+  "COMP": {
+   "daily": {
+    "first": 1593043200,
+    "last": 1790899200,
+    "rows": 2291,
+    "sha": "e80a7c82c272d2dc"
+   },
+   "funding": {
+    "first": 1593504000,
+    "last": 1790784000,
+    "rows": 6851,
+    "sha": "c1071a44b76357aa"
+   }
+  },
+  "COOKIE": {
+   "daily": {
+    "first": 1736467200,
+    "last": 1790899200,
+    "rows": 631,
+    "sha": "1f56d94b0b52cf85"
+   },
+   "funding": {
+    "first": 1736251200,
+    "last": 1790798400,
+    "rows": 3788,
+    "sha": "342649599bbd7acc"
+   }
+  },
+  "COS": {
+   "daily": {
+    "first": 1564790400,
+    "last": 1781827200,
+    "rows": 2513,
+    "sha": "0315ec1758de6bf8"
+   },
+   "funding": {
+    "first": 1727712000,
+    "last": 1781164800,
+    "rows": 3794,
+    "sha": "d9261920d503a6c7"
+   }
+  },
+  "COTI": {
+   "daily": {
+    "first": 1582675200,
+    "last": 1790899200,
+    "rows": 2411,
+    "sha": "114ef5f79c4bb8e9"
+   },
+   "funding": {
+    "first": 1615363200,
+    "last": 1790798400,
+    "rows": 6914,
+    "sha": "ceeecdfd426b1a15"
+   }
+  },
+  "COW": {
+   "daily": {
+    "first": 1730851200,
+    "last": 1790899200,
+    "rows": 696,
+    "sha": "0567894748898d06"
+   },
+   "funding": {
+    "first": 1730908800,
+    "last": 1790798400,
+    "rows": 4159,
+    "sha": "cfd82beafa257fca"
+   }
+  },
+  "CRCLB": {
+   "daily": {
+    "first": 1781136000,
+    "last": 1790899200,
+    "rows": 114,
+    "sha": "6ad203c94d31a4e4"
+   }
+  },
+  "CRDOB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "560e24b3654863df"
+   }
+  },
+  "CREAM": {
+   "daily": {
+    "first": 1695340800,
+    "last": 1744761600,
+    "rows": 573,
+    "sha": "dd595ab5393f5f61"
+   }
+  },
+  "CRV": {
+   "daily": {
+    "first": 1597449600,
+    "last": 1790899200,
+    "rows": 2240,
+    "sha": "d79efe3c96aba1b0"
+   },
+   "funding": {
+    "first": 1598947200,
+    "last": 1790784000,
+    "rows": 6662,
+    "sha": "4df5ee08b0964500"
+   }
+  },
+  "CRWVB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "250f5251588ff37f"
+   }
+  },
+  "CTK": {
+   "daily": {
+    "first": 1603756800,
+    "last": 1790899200,
+    "rows": 2167,
+    "sha": "80ed0b41bc733151"
+   },
+   "funding": {
+    "first": 1605772800,
+    "last": 1790798400,
+    "rows": 7980,
+    "sha": "8737c1261ba0459e"
+   }
+  },
+  "CTSI": {
+   "daily": {
+    "first": 1587600000,
+    "last": 1790899200,
+    "rows": 2354,
+    "sha": "4157175254620f7c"
+   },
+   "funding": {
+    "first": 1635235200,
+    "last": 1790784000,
+    "rows": 5402,
+    "sha": "ceb39912ba53bd09"
+   }
+  },
+  "CTXC": {
+   "daily": {
+    "first": 1574380800,
+    "last": 1744761600,
+    "rows": 1973,
+    "sha": "e2ea55d1285b9efa"
+   }
+  },
+  "CVC": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1790899200,
+    "rows": 2441,
+    "sha": "03201bab46c3cb90"
+   },
+   "funding": {
+    "first": 1605081600,
+    "last": 1790798400,
+    "rows": 8498,
+    "sha": "1d61df4057422ac9"
+   }
+  },
+  "CVP": {
+   "daily": {
+    "first": 1633305600,
+    "last": 1724630400,
+    "rows": 1058,
+    "sha": "c72f5fc1a3b112e3"
+   }
+  },
+  "CVX": {
+   "daily": {
+    "first": 1640217600,
+    "last": 1790899200,
+    "rows": 1745,
+    "sha": "d4cd17e10ac9870f"
+   },
+   "funding": {
+    "first": 1663833600,
+    "last": 1790798400,
+    "rows": 5611,
+    "sha": "81aef81108154808"
+   }
+  },
+  "CYBER": {
+   "daily": {
+    "first": 1692057600,
+    "last": 1790899200,
+    "rows": 1145,
+    "sha": "fe2cacfa39ee419b"
+   },
+   "funding": {
+    "first": 1692201600,
+    "last": 1790798400,
+    "rows": 6701,
+    "sha": "77b8c919bd5cc3d7"
+   }
+  },
+  "D": {
+   "daily": {
+    "first": 1736380800,
+    "last": 1781827200,
+    "rows": 527,
+    "sha": "685898b6215acb45"
+   },
+   "funding": {
+    "first": 1736424000,
+    "last": 1781164800,
+    "rows": 3201,
+    "sha": "86afef6e47315147"
+   }
+  },
+  "DAR": {
+   "daily": {
+    "first": 1635984000,
+    "last": 1736121600,
+    "rows": 1160,
+    "sha": "700889187f5d05ab"
+   },
+   "funding": {
+    "first": 1651219200,
+    "last": 1750320000,
+    "rows": 3442,
+    "sha": "ee3febd481709543"
+   }
+  },
+  "DASH": {
+   "daily": {
+    "first": 1553731200,
+    "last": 1790899200,
+    "rows": 2746,
+    "sha": "e383c13645d3e22b"
+   },
+   "funding": {
+    "first": 1580803200,
+    "last": 1790784000,
+    "rows": 7292,
+    "sha": "0217b4db674de41c"
+   }
+  },
+  "DATA": {
+   "daily": {
+    "first": 1586217600,
+    "last": 1770940800,
+    "rows": 2139,
+    "sha": "2bf7465bc28a79e9"
+   }
+  },
+  "DCR": {
+   "daily": {
+    "first": 1596067200,
+    "last": 1790899200,
+    "rows": 2256,
+    "sha": "9838f7e94fa57267"
+   }
+  },
+  "DEGO": {
+   "daily": {
+    "first": 1615334400,
+    "last": 1777334400,
+    "rows": 1876,
+    "sha": "b551dabc1f398eee"
+   },
+   "funding": {
+    "first": 1734105600,
+    "last": 1776758400,
+    "rows": 2996,
+    "sha": "adab38083551df17"
+   }
+  },
+  "DELLB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "46d385e45a28b6dd"
+   }
+  },
+  "DENT": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1777334400,
+    "rows": 2437,
+    "sha": "edfdd297ebb1ef4e"
+   },
+   "funding": {
+    "first": 1616572800,
+    "last": 1776758400,
+    "rows": 5563,
+    "sha": "02c79bf2e82ee2ba"
+   }
+  },
+  "DEXE": {
+   "daily": {
+    "first": 1626998400,
+    "last": 1790899200,
+    "rows": 1898,
+    "sha": "a3f8634bdf02a6c6"
+   },
+   "funding": {
+    "first": 1735041600,
+    "last": 1790798400,
+    "rows": 4177,
+    "sha": "13cb62cd4e47bb77"
+   }
+  },
+  "DF": {
+   "daily": {
+    "first": 1632441600,
+    "last": 1770940800,
+    "rows": 1604,
+    "sha": "e571ec7a3a8ec97b"
+   },
+   "funding": {
+    "first": 1735560000,
+    "last": 1770364800,
+    "rows": 2418,
+    "sha": "b3c8bb99ff37cd19"
+   }
+  },
+  "DGB": {
+   "daily": {
+    "first": 1595203200,
+    "last": 1790899200,
+    "rows": 2266,
+    "sha": "d4e3f4c9ec761e45"
+   },
+   "funding": {
+    "first": 1618934400,
+    "last": 1750320000,
+    "rows": 4563,
+    "sha": "56a88cc1f1c26a35"
+   }
+  },
+  "DIA": {
+   "daily": {
+    "first": 1599177600,
+    "last": 1790899200,
+    "rows": 2220,
+    "sha": "07151ab7c6553990"
+   },
+   "funding": {
+    "first": 1727884800,
+    "last": 1790798400,
+    "rows": 4369,
+    "sha": "fa0ebb2f0116e4ca"
+   }
+  },
+  "DJTB": {
+   "daily": {
+    "first": 1787702400,
+    "last": 1790899200,
+    "rows": 38,
+    "sha": "c75f05644fc0cd6c"
+   }
+  },
+  "DNT": {
+   "daily": {
+    "first": 1604966400,
+    "last": 1666569600,
+    "rows": 714,
+    "sha": "6e00db7c0cedac48"
+   }
+  },
+  "DOCK": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1721606400,
+    "rows": 1792,
+    "sha": "4022c512cd768e4f"
+   }
+  },
+  "DODO": {
+   "daily": {
+    "first": 1613692800,
+    "last": 1790899200,
+    "rows": 2052,
+    "sha": "70c9a4097a12b285"
+   },
+   "funding": {
+    "first": 1613750400,
+    "last": 1653638400,
+    "rows": 1386,
+    "sha": "18c28a8fa457ea65"
+   }
+  },
+  "DOGE": {
+   "daily": {
+    "first": 1562284800,
+    "last": 1790899200,
+    "rows": 2647,
+    "sha": "22a096dc26695376"
+   },
+   "funding": {
+    "first": 1594368000,
+    "last": 1790784000,
+    "rows": 6821,
+    "sha": "945b310ea4afc781"
+   },
+   "weekly": {
+    "first": 1561939200,
+    "last": 1790553600,
+    "rows": 371,
+    "sha": "5122b88d7e1f14a9"
+   }
+  },
+  "DOGS": {
+   "daily": {
+    "first": 1724630400,
+    "last": 1790899200,
+    "rows": 768,
+    "sha": "8d1920063828188c"
+   },
+   "funding": {
+    "first": 1724688000,
+    "last": 1790798400,
+    "rows": 4591,
+    "sha": "132f9c5c3fb48c97"
+   }
+  },
+  "DOLO": {
+   "daily": {
+    "first": 1756252800,
+    "last": 1790899200,
+    "rows": 402,
+    "sha": "d57ef0fe6a44a58b"
+   },
+   "funding": {
+    "first": 1746057600,
+    "last": 1790798400,
+    "rows": 3107,
+    "sha": "5fa50abc5fc9b8f4"
+   }
+  },
+  "DOT": {
+   "daily": {
+    "first": 1597708800,
+    "last": 1790899200,
+    "rows": 2237,
+    "sha": "86cf25678dbc6acf"
+   },
+   "funding": {
+    "first": 1597910400,
+    "last": 1790784000,
+    "rows": 6698,
+    "sha": "47dd8ae411e9ac7f"
+   }
+  },
+  "DRAMB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "659ce67096005a08"
+   }
+  },
+  "DREP": {
+   "daily": {
+    "first": 1579132800,
+    "last": 1712102400,
+    "rows": 1537,
+    "sha": "b22442b00010442f"
+   }
+  },
+  "DUSK": {
+   "daily": {
+    "first": 1563753600,
+    "last": 1790899200,
+    "rows": 2630,
+    "sha": "c07f42392803580c"
+   },
+   "funding": {
+    "first": 1641484800,
+    "last": 1790798400,
+    "rows": 6032,
+    "sha": "d71e04c9c2c3a429"
+   }
+  },
+  "DYDX": {
+   "daily": {
+    "first": 1631145600,
+    "last": 1790899200,
+    "rows": 1850,
+    "sha": "1ddca1c847ff9369"
+   },
+   "funding": {
+    "first": 1631203200,
+    "last": 1790784000,
+    "rows": 5542,
+    "sha": "dc392a633e42f982"
+   }
+  },
+  "DYM": {
+   "daily": {
+    "first": 1707177600,
+    "last": 1790899200,
+    "rows": 970,
+    "sha": "ac72d4600a32b1ca"
+   },
+   "funding": {
+    "first": 1707292800,
+    "last": 1790798400,
+    "rows": 5799,
+    "sha": "16014246d6ce8b95"
+   }
+  },
+  "EDEN": {
+   "daily": {
+    "first": 1759190400,
+    "last": 1790899200,
+    "rows": 368,
+    "sha": "9bb4a0b3c022ad65"
+   },
+   "funding": {
+    "first": 1759219200,
+    "last": 1790798400,
+    "rows": 2193,
+    "sha": "c33e88eba21ebdb5"
+   }
+  },
+  "EDU": {
+   "daily": {
+    "first": 1682640000,
+    "last": 1790899200,
+    "rows": 1254,
+    "sha": "da6b46ed6520e9d9"
+   },
+   "funding": {
+    "first": 1682697600,
+    "last": 1790784000,
+    "rows": 3754,
+    "sha": "78fdab390558f8fd"
+   }
+  },
+  "EGLD": {
+   "daily": {
+    "first": 1599091200,
+    "last": 1790899200,
+    "rows": 2221,
+    "sha": "a46f25a4a4b5e454"
+   },
+   "funding": {
+    "first": 1600012800,
+    "last": 1790784000,
+    "rows": 6625,
+    "sha": "28129c4e6dbd0e37"
+   }
+  },
+  "EIGEN": {
+   "daily": {
+    "first": 1727740800,
+    "last": 1790899200,
+    "rows": 732,
+    "sha": "5edc6a4d144bc51e"
+   },
+   "funding": {
+    "first": 1727769600,
+    "last": 1790798400,
+    "rows": 4377,
+    "sha": "21cc098e814160e4"
+   }
+  },
+  "ELF": {
+   "daily": {
+    "first": 1631059200,
+    "last": 1744761600,
+    "rows": 1317,
+    "sha": "e343bf88c8835b19"
+   }
+  },
+  "ENA": {
+   "daily": {
+    "first": 1712016000,
+    "last": 1790899200,
+    "rows": 914,
+    "sha": "050f8f223d34a606"
+   },
+   "funding": {
+    "first": 1712073600,
+    "last": 1790798400,
+    "rows": 5467,
+    "sha": "8f47b990c64f6527"
+   }
+  },
+  "ENJ": {
+   "daily": {
+    "first": 1555545600,
+    "last": 1790899200,
+    "rows": 2725,
+    "sha": "122bb9a526d8113a"
+   },
+   "funding": {
+    "first": 1601366400,
+    "last": 1790798400,
+    "rows": 7437,
+    "sha": "40c9a6c1c506996f"
+   }
+  },
+  "ENS": {
+   "daily": {
+    "first": 1636502400,
+    "last": 1790899200,
+    "rows": 1788,
+    "sha": "432ccc888a1f534a"
+   },
+   "funding": {
+    "first": 1638201600,
+    "last": 1790784000,
+    "rows": 5299,
+    "sha": "fa398ca93e4acec4"
+   }
+  },
+  "ENSO": {
+   "daily": {
+    "first": 1760400000,
+    "last": 1790899200,
+    "rows": 354,
+    "sha": "ec4dd693e4f4c56b"
+   },
+   "funding": {
+    "first": 1760428800,
+    "last": 1790798400,
+    "rows": 2250,
+    "sha": "9fe581f138343753"
+   }
+  },
+  "EOS": {
+   "daily": {
+    "first": 1527465600,
+    "last": 1748217600,
+    "rows": 2556,
+    "sha": "1e807787142164c2"
+   },
+   "funding": {
+    "first": 1578470400,
+    "last": 1790784000,
+    "rows": 7373,
+    "sha": "bce0ba76994262c6"
+   }
+  },
+  "EPIC": {
+   "daily": {
+    "first": 1741824000,
+    "last": 1790899200,
+    "rows": 569,
+    "sha": "9e62b97f40fdaaf1"
+   },
+   "funding": {
+    "first": 1741852800,
+    "last": 1790798400,
+    "rows": 3443,
+    "sha": "dba08898c1452f80"
+   }
+  },
+  "EPS": {
+   "daily": {
+    "first": 1617321600,
+    "last": 1652054400,
+    "rows": 403,
+    "sha": "3f702a226df66e41"
+   }
+  },
+  "EPX": {
+   "daily": {
+    "first": 1653264000,
+    "last": 1724630400,
+    "rows": 827,
+    "sha": "df509bbd5753b010"
+   }
+  },
+  "ERA": {
+   "daily": {
+    "first": 1752710400,
+    "last": 1790899200,
+    "rows": 443,
+    "sha": "a16c4d1fed01df6a"
+   },
+   "funding": {
+    "first": 1752753600,
+    "last": 1790798400,
+    "rows": 3002,
+    "sha": "bfbc1cc39ac10a95"
+   }
+  },
+  "ERD": {
+   "daily": {
+    "first": 1562198400,
+    "last": 1598832000,
+    "rows": 425,
+    "sha": "801c61e98e810866"
+   }
+  },
+  "ERN": {
+   "daily": {
+    "first": 1624320000,
+    "last": 1741564800,
+    "rows": 1358,
+    "sha": "f1bbf01ff8f23419"
+   }
+  },
+  "ESP": {
+   "daily": {
+    "first": 1770854400,
+    "last": 1790899200,
+    "rows": 233,
+    "sha": "c9f27ddde1bd8feb"
+   },
+   "funding": {
+    "first": 1770724800,
+    "last": 1790798400,
+    "rows": 1566,
+    "sha": "440e5c2b52d098c7"
+   }
+  },
+  "ETC": {
+   "daily": {
+    "first": 1528761600,
+    "last": 1790899200,
+    "rows": 3035,
+    "sha": "1619ecef647bb7ee"
+   },
+   "funding": {
+    "first": 1579161600,
+    "last": 1790784000,
+    "rows": 7349,
+    "sha": "535bcd5dbaa49b83"
+   }
+  },
+  "ETH": {
+   "daily": {
+    "first": 1502928000,
+    "last": 1790899200,
+    "rows": 3334,
+    "sha": "e608e10fbdbba5ae"
+   },
+   "funding": {
+    "first": 1577836800,
+    "last": 1790784000,
+    "rows": 7395,
+    "sha": "f026301c134317bd"
+   },
+   "weekly": {
+    "first": 1502668800,
+    "last": 1790553600,
+    "rows": 469,
+    "sha": "2f0a4da30b5fb770"
+   }
+  },
+  "ETHFI": {
+   "daily": {
+    "first": 1710720000,
+    "last": 1790899200,
+    "rows": 929,
+    "sha": "7a5311a6c9c281f1"
+   },
+   "funding": {
+    "first": 1710777600,
+    "last": 1790798400,
+    "rows": 5557,
+    "sha": "ed4c5605045b189d"
+   }
+  },
+  "EUL": {
+   "daily": {
+    "first": 1760313600,
+    "last": 1790899200,
+    "rows": 355,
+    "sha": "eb8a184ed488382d"
+   },
+   "funding": {
+    "first": 1760356800,
+    "last": 1790798400,
+    "rows": 2114,
+    "sha": "164e9a69b33df0ee"
+   }
+  },
+  "EWYB": {
+   "daily": {
+    "first": 1782172800,
+    "last": 1790899200,
+    "rows": 102,
+    "sha": "25836f87c228ffa9"
+   }
+  },
+  "F": {
+   "daily": {
+    "first": 1761350400,
+    "last": 1790899200,
+    "rows": 343,
+    "sha": "045d05324ee30c42"
+   },
+   "funding": {
+    "first": 1750248000,
+    "last": 1790798400,
+    "rows": 3101,
+    "sha": "e533e0f28dc7b037"
+   }
+  },
+  "FARM": {
+   "daily": {
+    "first": 1628640000,
+    "last": 1779840000,
+    "rows": 1751,
+    "sha": "82fda7fdf32c4f2a"
+   }
+  },
+  "FET": {
+   "daily": {
+    "first": 1551312000,
+    "last": 1790899200,
+    "rows": 2774,
+    "sha": "eb02fbad5b1498ff"
+   },
+   "funding": {
+    "first": 1673856000,
+    "last": 1790784000,
+    "rows": 4061,
+    "sha": "b8ccb50130c1ada9"
+   }
+  },
+  "FF": {
+   "daily": {
+    "first": 1759104000,
+    "last": 1790899200,
+    "rows": 369,
+    "sha": "3dce4602d8dd9f18"
+   },
+   "funding": {
+    "first": 1759147200,
+    "last": 1790798400,
+    "rows": 2198,
+    "sha": "c8e45d86de13465a"
+   }
+  },
+  "FIDA": {
+   "daily": {
+    "first": 1632960000,
+    "last": 1790899200,
+    "rows": 1829,
+    "sha": "c647e95988896230"
+   },
+   "funding": {
+    "first": 1726761600,
+    "last": 1790798400,
+    "rows": 4488,
+    "sha": "8c4a98bbe1f14873"
+   }
+  },
+  "FIL": {
+   "daily": {
+    "first": 1602720000,
+    "last": 1790899200,
+    "rows": 2179,
+    "sha": "e6eac77bd0efce81"
+   },
+   "funding": {
+    "first": 1602835200,
+    "last": 1790784000,
+    "rows": 6527,
+    "sha": "1fefd6912276cbd3"
+   }
+  },
+  "FIO": {
+   "daily": {
+    "first": 1599177600,
+    "last": 1776902400,
+    "rows": 2058,
+    "sha": "8748c1df9e012aa3"
+   },
+   "funding": {
+    "first": 1726833600,
+    "last": 1776240000,
+    "rows": 3456,
+    "sha": "68bd85b8742f11ef"
+   }
+  },
+  "FIRO": {
+   "daily": {
+    "first": 1611878400,
+    "last": 1744761600,
+    "rows": 1539,
+    "sha": "1aca2b52170e9a1a"
+   }
+  },
+  "FIS": {
+   "daily": {
+    "first": 1614729600,
+    "last": 1765929600,
+    "rows": 1751,
+    "sha": "d251d277adfa67cf"
+   },
+   "funding": {
+    "first": 1745568000,
+    "last": 1765353600,
+    "rows": 1375,
+    "sha": "e97280c747c4da11"
+   }
+  },
+  "FLM": {
+   "daily": {
+    "first": 1601251200,
+    "last": 1762905600,
+    "rows": 1872,
+    "sha": "8e2f99bbb0980338"
+   },
+   "funding": {
+    "first": 1601366400,
+    "last": 1763712000,
+    "rows": 8483,
+    "sha": "1451fb587b5b454d"
+   }
+  },
+  "FLNCB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "ad2a4933a6ba7239"
+   }
+  },
+  "FLOKI": {
+   "daily": {
+    "first": 1683244800,
+    "last": 1790899200,
+    "rows": 1247,
+    "sha": "16a08b636fa84cdb"
+   }
+  },
+  "FLOW": {
+   "daily": {
+    "first": 1627603200,
+    "last": 1790899200,
+    "rows": 1891,
+    "sha": "ef29e810667af3a2"
+   },
+   "funding": {
+    "first": 1644422400,
+    "last": 1790798400,
+    "rows": 6285,
+    "sha": "09410b5a5a4c32c1"
+   }
+  },
+  "FLUX": {
+   "daily": {
+    "first": 1639094400,
+    "last": 1790899200,
+    "rows": 1758,
+    "sha": "a6b8c808b5e02c39"
+   },
+   "funding": {
+    "first": 1725350400,
+    "last": 1790798400,
+    "rows": 4545,
+    "sha": "1253ddd9e3e0c881"
+   }
+  },
+  "FOGO": {
+   "daily": {
+    "first": 1768435200,
+    "last": 1790899200,
+    "rows": 261,
+    "sha": "0c48ad6b6a44ce10"
+   },
+   "funding": {
+    "first": 1768060800,
+    "last": 1790798400,
+    "rows": 1579,
+    "sha": "60c6c562b82a3313"
+   }
+  },
+  "FOR": {
+   "daily": {
+    "first": 1629417600,
+    "last": 1724630400,
+    "rows": 1103,
+    "sha": "ea0374693290ca31"
+   }
+  },
+  "FORM": {
+   "daily": {
+    "first": 1742342400,
+    "last": 1790899200,
+    "rows": 563,
+    "sha": "8d69ce0c339ee601"
+   },
+   "funding": {
+    "first": 1742371200,
+    "last": 1790798400,
+    "rows": 3363,
+    "sha": "2fb710950f5b3ab8"
+   }
+  },
+  "FORTH": {
+   "daily": {
+    "first": 1619136000,
+    "last": 1775001600,
+    "rows": 1805,
+    "sha": "3d75e1b8bc9fef27"
+   },
+   "funding": {
+    "first": 1744099200,
+    "last": 1774339200,
+    "rows": 2101,
+    "sha": "8e82edc3d0385dca"
+   }
+  },
+  "FRAX": {
+   "daily": {
+    "first": 1768435200,
+    "last": 1790899200,
+    "rows": 261,
+    "sha": "c2467f587d028397"
+   },
+   "funding": {
+    "first": 1768464000,
+    "last": 1790798400,
+    "rows": 1551,
+    "sha": "029a4949b8a71b14"
+   }
+  },
+  "FRONT": {
+   "daily": {
+    "first": 1633305600,
+    "last": 1724716800,
+    "rows": 1059,
+    "sha": "fcd896a39bd486aa"
+   },
+   "funding": {
+    "first": 1695398400,
+    "last": 1790784000,
+    "rows": 3313,
+    "sha": "273b0a3f336dbdbe"
+   }
+  },
+  "FTM": {
+   "daily": {
+    "first": 1560211200,
+    "last": 1736726400,
+    "rows": 2044,
+    "sha": "a90c62bffeb8c18e"
+   },
+   "funding": {
+    "first": 1600876800,
+    "last": 1750320000,
+    "rows": 5190,
+    "sha": "5a395aad446feaa5"
+   }
+  },
+  "FTT": {
+   "daily": {
+    "first": 1576800000,
+    "last": 1790899200,
+    "rows": 2169,
+    "sha": "e2e3a1d26bfa8faf"
+   },
+   "funding": {
+    "first": 1649952000,
+    "last": 1750320000,
+    "rows": 3522,
+    "sha": "324dd53c7708c8cf"
+   }
+  },
+  "FUN": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1776902400,
+    "rows": 2432,
+    "sha": "366a2157b3294246"
+   },
+   "funding": {
+    "first": 1743422400,
+    "last": 1776240000,
+    "rows": 2823,
+    "sha": "8b86c7567e9d66d2"
+   }
+  },
+  "FXS": {
+   "daily": {
+    "first": 1639094400,
+    "last": 1768262400,
+    "rows": 1496,
+    "sha": "f8cefdcdcfeac5ec"
+   },
+   "funding": {
+    "first": 1674201600,
+    "last": 1767686400,
+    "rows": 3247,
+    "sha": "17e4c898bddc80e5"
+   }
+  },
+  "G": {
+   "daily": {
+    "first": 1721347200,
+    "last": 1790899200,
+    "rows": 806,
+    "sha": "f50f31f3e1df2df9"
+   },
+   "funding": {
+    "first": 1723737600,
+    "last": 1790798400,
+    "rows": 4783,
+    "sha": "983a22165630dfd0"
+   }
+  },
+  "GAL": {
+   "daily": {
+    "first": 1651708800,
+    "last": 1721001600,
+    "rows": 803,
+    "sha": "12d8a7da591afe2b"
+   },
+   "funding": {
+    "first": 1651766400,
+    "last": 1723708800,
+    "rows": 2499,
+    "sha": "5cb208de4922bb5f"
+   }
+  },
+  "GALA": {
+   "daily": {
+    "first": 1631491200,
+    "last": 1790899200,
+    "rows": 1846,
+    "sha": "89602c0e5a4d85e8"
+   },
+   "funding": {
+    "first": 1631894400,
+    "last": 1790784000,
+    "rows": 5518,
+    "sha": "3d7d5683fc812850"
+   }
+  },
+  "GAS": {
+   "daily": {
+    "first": 1679011200,
+    "last": 1790899200,
+    "rows": 1296,
+    "sha": "1b1318b9ad420584"
+   },
+   "funding": {
+    "first": 1698163200,
+    "last": 1790798400,
+    "rows": 6469,
+    "sha": "f4e650577a958182"
+   }
+  },
+  "GENIUS": {
+   "daily": {
+    "first": 1779408000,
+    "last": 1790899200,
+    "rows": 134,
+    "sha": "48b0f63225e73525"
+   },
+   "funding": {
+    "first": 1776312000,
+    "last": 1790798400,
+    "rows": 1006,
+    "sha": "dae1cc3e472a5795"
+   }
+  },
+  "GFT": {
+   "daily": {
+    "first": 1695340800,
+    "last": 1733184000,
+    "rows": 439,
+    "sha": "1d02355df08129a0"
+   }
+  },
+  "GHST": {
+   "daily": {
+    "first": 1629417600,
+    "last": 1770940800,
+    "rows": 1639,
+    "sha": "ed75d25864262b2c"
+   },
+   "funding": {
+    "first": 1727107200,
+    "last": 1770364800,
+    "rows": 3005,
+    "sha": "5cd7c45dc32b8b66"
+   }
+  },
+  "GIGGLE": {
+   "daily": {
+    "first": 1761350400,
+    "last": 1790899200,
+    "rows": 343,
+    "sha": "186182f270438013"
+   },
+   "funding": {
+    "first": 1760011200,
+    "last": 1790798400,
+    "rows": 2139,
+    "sha": "fa234116bbd608c7"
+   }
+  },
+  "GLM": {
+   "daily": {
+    "first": 1679011200,
+    "last": 1790899200,
+    "rows": 1296,
+    "sha": "27a8d9a774fd0fbf"
+   },
+   "funding": {
+    "first": 1708588800,
+    "last": 1790798400,
+    "rows": 5709,
+    "sha": "151e25ff83487eec"
+   }
+  },
+  "GLMR": {
+   "daily": {
+    "first": 1641859200,
+    "last": 1790899200,
+    "rows": 1726,
+    "sha": "49a569fc17dc9cb9"
+   },
+   "funding": {
+    "first": 1695657600,
+    "last": 1750320000,
+    "rows": 1899,
+    "sha": "8a7816b7edc600fd"
+   }
+  },
+  "GLWB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "33464bfe94448143"
+   }
+  },
+  "GMEB": {
+   "daily": {
+    "first": 1786492800,
+    "last": 1790899200,
+    "rows": 52,
+    "sha": "83d51e69bad62a9b"
+   }
+  },
+  "GMT": {
+   "daily": {
+    "first": 1646784000,
+    "last": 1790899200,
+    "rows": 1669,
+    "sha": "cf5499730d1dbe46"
+   },
+   "funding": {
+    "first": 1647273600,
+    "last": 1790798400,
+    "rows": 5866,
+    "sha": "7c504a5c8142b7ab"
+   }
+  },
+  "GMX": {
+   "daily": {
+    "first": 1664928000,
+    "last": 1790899200,
+    "rows": 1459,
+    "sha": "c575ab052d734d73"
+   },
+   "funding": {
+    "first": 1676620800,
+    "last": 1790784000,
+    "rows": 3965,
+    "sha": "9b3f45f6a09696f9"
+   }
+  },
+  "GNO": {
+   "daily": {
+    "first": 1630281600,
+    "last": 1790899200,
+    "rows": 1860,
+    "sha": "dac93ecab6b103d4"
+   }
+  },
+  "GNS": {
+   "daily": {
+    "first": 1676592000,
+    "last": 1790899200,
+    "rows": 1324,
+    "sha": "7668145ebc87f0c4"
+   }
+  },
+  "GOOGLB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "cd1fbbc8e549b5fb"
+   }
+  },
+  "GPS": {
+   "daily": {
+    "first": 1741046400,
+    "last": 1790899200,
+    "rows": 578,
+    "sha": "643bb6b52548b95d"
+   },
+   "funding": {
+    "first": 1739822400,
+    "last": 1790798400,
+    "rows": 4043,
+    "sha": "ede5688829a937d0"
+   }
+  },
+  "GRAM": {
+   "daily": {
+    "first": 1782950400,
+    "last": 1790899200,
+    "rows": 93,
+    "sha": "7757d7483ee5ef49"
+   },
+   "funding": {
+    "first": 1782979200,
+    "last": 1790798400,
+    "rows": 544,
+    "sha": "010ee87438d3f472"
+   }
+  },
+  "GRT": {
+   "daily": {
+    "first": 1608163200,
+    "last": 1790899200,
+    "rows": 2116,
+    "sha": "a5ba8016850ba713"
+   },
+   "funding": {
+    "first": 1608364800,
+    "last": 1790784000,
+    "rows": 6335,
+    "sha": "bc3838c3b3df9701"
+   }
+  },
+  "GSB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "d9e1c7ced8846268"
+   }
+  },
+  "GTC": {
+   "daily": {
+    "first": 1623283200,
+    "last": 1790899200,
+    "rows": 1941,
+    "sha": "f4256b6a6db072f3"
+   },
+   "funding": {
+    "first": 1623398400,
+    "last": 1790784000,
+    "rows": 5813,
+    "sha": "9a3164d8858419d3"
+   }
+  },
+  "GTO": {
+   "daily": {
+    "first": 1561939200,
+    "last": 1669593600,
+    "rows": 1247,
+    "sha": "c2e1fad7d6f5c6cb"
+   }
+  },
+  "GUN": {
+   "daily": {
+    "first": 1743379200,
+    "last": 1790899200,
+    "rows": 551,
+    "sha": "e4b0b36af9851c65"
+   },
+   "funding": {
+    "first": 1743436800,
+    "last": 1790798400,
+    "rows": 3289,
+    "sha": "9b98d3cf34cb125a"
+   }
+  },
+  "GXS": {
+   "daily": {
+    "first": 1589328000,
+    "last": 1650844800,
+    "rows": 713,
+    "sha": "9f180dbc031f00fd"
+   }
+  },
+  "HAEDAL": {
+   "daily": {
+    "first": 1747785600,
+    "last": 1790899200,
+    "rows": 500,
+    "sha": "adf8a6c63ab47018"
+   },
+   "funding": {
+    "first": 1746057600,
+    "last": 1790798400,
+    "rows": 3107,
+    "sha": "6b2103ac3b541e78"
+   }
+  },
+  "HARD": {
+   "daily": {
+    "first": 1604620800,
+    "last": 1744761600,
+    "rows": 1623,
+    "sha": "fc80f9e3edeec962"
+   }
+  },
+  "HBAR": {
+   "daily": {
+    "first": 1569715200,
+    "last": 1790899200,
+    "rows": 2561,
+    "sha": "2dde134ed22bbfd3"
+   },
+   "funding": {
+    "first": 1615968000,
+    "last": 1790784000,
+    "rows": 6071,
+    "sha": "a84693eadc10c830"
+   }
+  },
+  "HC": {
+   "daily": {
+    "first": 1569369600,
+    "last": 1604966400,
+    "rows": 413,
+    "sha": "733c0c9a8fbf3f1f"
+   }
+  },
+  "HEI": {
+   "daily": {
+    "first": 1739404800,
+    "last": 1790899200,
+    "rows": 597,
+    "sha": "5b416c808ef5191e"
+   },
+   "funding": {
+    "first": 1739448000,
+    "last": 1790798400,
+    "rows": 3580,
+    "sha": "1d8b8ea9955e9e76"
+   }
+  },
+  "HEMI": {
+   "daily": {
+    "first": 1758585600,
+    "last": 1790899200,
+    "rows": 375,
+    "sha": "1b72b2d1db9d592a"
+   },
+   "funding": {
+    "first": 1756411200,
+    "last": 1790798400,
+    "rows": 2388,
+    "sha": "2c2ed35d00132e4f"
+   }
+  },
+  "HFT": {
+   "daily": {
+    "first": 1667779200,
+    "last": 1786924800,
+    "rows": 1380,
+    "sha": "3f94fae09338f3f1"
+   },
+   "funding": {
+    "first": 1680710400,
+    "last": 1786089600,
+    "rows": 3667,
+    "sha": "10b2c789676d0b43"
+   }
+  },
+  "HIFI": {
+   "daily": {
+    "first": 1673481600,
+    "last": 1758067200,
+    "rows": 980,
+    "sha": "d863f76bc30470aa"
+   },
+   "funding": {
+    "first": 1694851200,
+    "last": 1759478400,
+    "rows": 4414,
+    "sha": "6b2b868c548c756b"
+   }
+  },
+  "HIGH": {
+   "daily": {
+    "first": 1639699200,
+    "last": 1781827200,
+    "rows": 1646,
+    "sha": "9bafc5a70f0348bf"
+   },
+   "funding": {
+    "first": 1675411200,
+    "last": 1781164800,
+    "rows": 3673,
+    "sha": "eb28062608cea7fb"
+   }
+  },
+  "HIVE": {
+   "daily": {
+    "first": 1587945600,
+    "last": 1790899200,
+    "rows": 2350,
+    "sha": "313817f10a4ffb2e"
+   },
+   "funding": {
+    "first": 1734955200,
+    "last": 1790798400,
+    "rows": 3961,
+    "sha": "3d0c6a187d4b8d26"
+   }
+  },
+  "HMSTR": {
+   "daily": {
+    "first": 1727308800,
+    "last": 1790899200,
+    "rows": 737,
+    "sha": "ebf305b1cb2b395c"
+   },
+   "funding": {
+    "first": 1727366400,
+    "last": 1790798400,
+    "rows": 4405,
+    "sha": "dc70731563ad3357"
+   }
+  },
+  "HNT": {
+   "daily": {
+    "first": 1600905600,
+    "last": 1665705600,
+    "rows": 751,
+    "sha": "e05b00b3b227289c"
+   },
+   "funding": {
+    "first": 1601280000,
+    "last": 1723708800,
+    "rows": 4266,
+    "sha": "daabd8dfd3fcc37c"
+   }
+  },
+  "HOLO": {
+   "daily": {
+    "first": 1757548800,
+    "last": 1790899200,
+    "rows": 387,
+    "sha": "2b9614c90ee73e93"
+   },
+   "funding": {
+    "first": 1757577600,
+    "last": 1790798400,
+    "rows": 2307,
+    "sha": "7161e0af3a79de1e"
+   }
+  },
+  "HOME": {
+   "daily": {
+    "first": 1749686400,
+    "last": 1790899200,
+    "rows": 478,
+    "sha": "dd09a633c5944692"
+   },
+   "funding": {
+    "first": 1749556800,
+    "last": 1790798400,
+    "rows": 3209,
+    "sha": "b6c7fe5667bf746f"
+   }
+  },
+  "HOODB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "578ac4e2d6289d2d"
+   }
+  },
+  "HOOK": {
+   "daily": {
+    "first": 1669852800,
+    "last": 1775001600,
+    "rows": 1218,
+    "sha": "79f3fe0fa0b5c9a9"
+   },
+   "funding": {
+    "first": 1674201600,
+    "last": 1774339200,
+    "rows": 3478,
+    "sha": "7a1db44add4a18a4"
+   }
+  },
+  "HOT": {
+   "daily": {
+    "first": 1550448000,
+    "last": 1790899200,
+    "rows": 2784,
+    "sha": "f357875d8ccd5a59"
+   },
+   "funding": {
+    "first": 1617091200,
+    "last": 1790784000,
+    "rows": 6032,
+    "sha": "e7b7d3fc05608327"
+   }
+  },
+  "HUMA": {
+   "daily": {
+    "first": 1748217600,
+    "last": 1790899200,
+    "rows": 495,
+    "sha": "d5d7211b6163c4bd"
+   },
+   "funding": {
+    "first": 1748275200,
+    "last": 1790798400,
+    "rows": 2953,
+    "sha": "1c23b8313a9a85f7"
+   }
+  },
+  "HYPER": {
+   "daily": {
+    "first": 1745280000,
+    "last": 1790899200,
+    "rows": 529,
+    "sha": "fb6f706731ed3375"
+   },
+   "funding": {
+    "first": 1745337600,
+    "last": 1790798400,
+    "rows": 3307,
+    "sha": "9103b52a396b49b1"
+   }
+  },
+  "IBMB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "a8cfacc02b440c02"
+   }
+  },
+  "ICP": {
+   "daily": {
+    "first": 1620691200,
+    "last": 1790899200,
+    "rows": 1971,
+    "sha": "b422db1d4d9ae55d"
+   },
+   "funding": {
+    "first": 1661990400,
+    "last": 1790784000,
+    "rows": 4473,
+    "sha": "11997c0f677241ee"
+   }
+  },
+  "ICX": {
+   "daily": {
+    "first": 1528848000,
+    "last": 1788393600,
+    "rows": 3005,
+    "sha": "f40f9129f854d872"
+   },
+   "funding": {
+    "first": 1600099200,
+    "last": 1787731200,
+    "rows": 7052,
+    "sha": "79c2a04188090690"
+   }
+  },
+  "ID": {
+   "daily": {
+    "first": 1679443200,
+    "last": 1790899200,
+    "rows": 1291,
+    "sha": "d248930230a81d11"
+   },
+   "funding": {
+    "first": 1679558400,
+    "last": 1790798400,
+    "rows": 4307,
+    "sha": "e5a3e8fe9bff782b"
+   }
+  },
+  "IDEX": {
+   "daily": {
+    "first": 1631145600,
+    "last": 1775001600,
+    "rows": 1666,
+    "sha": "079ef00323ecbe8a"
+   },
+   "funding": {
+    "first": 1683014400,
+    "last": 1750320000,
+    "rows": 2338,
+    "sha": "67abd242379118a7"
+   }
+  },
+  "ILV": {
+   "daily": {
+    "first": 1632268800,
+    "last": 1790899200,
+    "rows": 1837,
+    "sha": "3ca72bf83903f686"
+   },
+   "funding": {
+    "first": 1699632000,
+    "last": 1790798400,
+    "rows": 6331,
+    "sha": "854ab28f8347f711"
+   }
+  },
+  "IMX": {
+   "daily": {
+    "first": 1641772800,
+    "last": 1790899200,
+    "rows": 1727,
+    "sha": "ff5cb5c290a4fae6"
+   },
+   "funding": {
+    "first": 1644566400,
+    "last": 1790798400,
+    "rows": 8331,
+    "sha": "ab22754d7b26549c"
+   }
+  },
+  "INIT": {
+   "daily": {
+    "first": 1745452800,
+    "last": 1790899200,
+    "rows": 527,
+    "sha": "4b232bf4bf176c56"
+   },
+   "funding": {
+    "first": 1744790400,
+    "last": 1790798400,
+    "rows": 3253,
+    "sha": "299a44e93fc17b8f"
+   }
+  },
+  "INJ": {
+   "daily": {
+    "first": 1603238400,
+    "last": 1790899200,
+    "rows": 2173,
+    "sha": "fae9a242517ddbd4"
+   },
+   "funding": {
+    "first": 1660665600,
+    "last": 1790784000,
+    "rows": 4519,
+    "sha": "2fa7f3106c84dfab"
+   }
+  },
+  "INTCB": {
+   "daily": {
+    "first": 1782172800,
+    "last": 1790899200,
+    "rows": 102,
+    "sha": "d86a82a644aec0e5"
+   }
+  },
+  "INTWB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "0649d92d66a194b0"
+   }
+  },
+  "IO": {
+   "daily": {
+    "first": 1718064000,
+    "last": 1790899200,
+    "rows": 844,
+    "sha": "76140c4e6cd5eed2"
+   },
+   "funding": {
+    "first": 1718121600,
+    "last": 1790798400,
+    "rows": 5047,
+    "sha": "92468a28f21b1c32"
+   }
+  },
+  "IOST": {
+   "daily": {
+    "first": 1553212800,
+    "last": 1790899200,
+    "rows": 2752,
+    "sha": "11ab204c05aece40"
+   },
+   "funding": {
+    "first": 1582272000,
+    "last": 1790798400,
+    "rows": 7407,
+    "sha": "60f368f0b1b8583b"
+   }
+  },
+  "IOTA": {
+   "daily": {
+    "first": 1527724800,
+    "last": 1790899200,
+    "rows": 3047,
+    "sha": "3540656ba767fd75"
+   },
+   "funding": {
+    "first": 1581494400,
+    "last": 1790784000,
+    "rows": 7268,
+    "sha": "e30632b36e319a57"
+   }
+  },
+  "IOTX": {
+   "daily": {
+    "first": 1573689600,
+    "last": 1790899200,
+    "rows": 2515,
+    "sha": "56532da084b0c9ac"
+   },
+   "funding": {
+    "first": 1628697600,
+    "last": 1790784000,
+    "rows": 5629,
+    "sha": "cf6916a91791e35f"
+   }
+  },
+  "IQ": {
+   "daily": {
+    "first": 1695340800,
+    "last": 1790899200,
+    "rows": 1107,
+    "sha": "830f095c467ad280"
+   }
+  },
+  "IRENB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "2ef4a923d1f82a4b"
+   }
+  },
+  "IRIS": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1733788800,
+    "rows": 1583,
+    "sha": "128bbecb09ede2fa"
+   }
+  },
+  "JASMY": {
+   "daily": {
+    "first": 1637539200,
+    "last": 1790899200,
+    "rows": 1776,
+    "sha": "1378006ff93b8818"
+   },
+   "funding": {
+    "first": 1650355200,
+    "last": 1790784000,
+    "rows": 4877,
+    "sha": "02115de4aef12cac"
+   }
+  },
+  "JOE": {
+   "daily": {
+    "first": 1640649600,
+    "last": 1790899200,
+    "rows": 1740,
+    "sha": "07576edf2af31002"
+   },
+   "funding": {
+    "first": 1680019200,
+    "last": 1790784000,
+    "rows": 3847,
+    "sha": "c69916280a462e4a"
+   }
+  },
+  "JST": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1790899200,
+    "rows": 2244,
+    "sha": "c93a9a2132c1a349"
+   },
+   "funding": {
+    "first": 1745841600,
+    "last": 1790798400,
+    "rows": 3122,
+    "sha": "11f4aba9f23ea3eb"
+   }
+  },
+  "JTO": {
+   "daily": {
+    "first": 1701907200,
+    "last": 1790899200,
+    "rows": 1031,
+    "sha": "1547174a65379414"
+   },
+   "funding": {
+    "first": 1702036800,
+    "last": 1790798400,
+    "rows": 6164,
+    "sha": "8499abeef3f7792f"
+   }
+  },
+  "JUP": {
+   "daily": {
+    "first": 1706659200,
+    "last": 1790899200,
+    "rows": 976,
+    "sha": "2fb54f9cadb558a6"
+   },
+   "funding": {
+    "first": 1706760000,
+    "last": 1790798400,
+    "rows": 5836,
+    "sha": "c5f0ad0337e3ab87"
+   }
+  },
+  "JUV": {
+   "daily": {
+    "first": 1608508800,
+    "last": 1790899200,
+    "rows": 2112,
+    "sha": "ae5a2a7ac9d451d6"
+   }
+  },
+  "KAIA": {
+   "daily": {
+    "first": 1730332800,
+    "last": 1790899200,
+    "rows": 702,
+    "sha": "b72b78329a22824b"
+   },
+   "funding": {
+    "first": 1733328000,
+    "last": 1790798400,
+    "rows": 3991,
+    "sha": "e18db4f611309ca1"
+   }
+  },
+  "KAITO": {
+   "daily": {
+    "first": 1740009600,
+    "last": 1790899200,
+    "rows": 590,
+    "sha": "b9fb5ba0a754f3ab"
+   },
+   "funding": {
+    "first": 1740067200,
+    "last": 1790798400,
+    "rows": 3523,
+    "sha": "4b88cbd795e6d741"
+   }
+  },
+  "KAT": {
+   "daily": {
+    "first": 1773792000,
+    "last": 1790899200,
+    "rows": 199,
+    "sha": "aea2e72d6ad5362b"
+   },
+   "funding": {
+    "first": 1772438400,
+    "last": 1790798400,
+    "rows": 1275,
+    "sha": "18cfa7b93583fb23"
+   }
+  },
+  "KAVA": {
+   "daily": {
+    "first": 1571961600,
+    "last": 1790899200,
+    "rows": 2535,
+    "sha": "101d9ec31f057632"
+   },
+   "funding": {
+    "first": 1595923200,
+    "last": 1790798400,
+    "rows": 8489,
+    "sha": "1a60bdcee76a08d5"
+   }
+  },
+  "KDA": {
+   "daily": {
+    "first": 1646956800,
+    "last": 1762905600,
+    "rows": 1343,
+    "sha": "17798908ac6d4b99"
+   },
+   "funding": {
+    "first": 1726675200,
+    "last": 1762416000,
+    "rows": 2483,
+    "sha": "5b0eaccd29f76e94"
+   }
+  },
+  "KEEP": {
+   "daily": {
+    "first": 1623888000,
+    "last": 1644969600,
+    "rows": 245,
+    "sha": "08aef3650cc268cf"
+   },
+   "funding": {
+    "first": 1624348800,
+    "last": 1644883200,
+    "rows": 714,
+    "sha": "5fbd1c34b7f5de16"
+   }
+  },
+  "KERNEL": {
+   "daily": {
+    "first": 1744588800,
+    "last": 1790899200,
+    "rows": 537,
+    "sha": "3344d5a0d26a0137"
+   },
+   "funding": {
+    "first": 1744646400,
+    "last": 1790798400,
+    "rows": 3205,
+    "sha": "55c2ffc4fafd1945"
+   }
+  },
+  "KEY": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1733788800,
+    "rows": 1906,
+    "sha": "61c0a12ac6a022dd"
+   },
+   "funding": {
+    "first": 1684857600,
+    "last": 1750320000,
+    "rows": 2274,
+    "sha": "231ada1b74640c0e"
+   }
+  },
+  "KGST": {
+   "daily": {
+    "first": 1766534400,
+    "last": 1790899200,
+    "rows": 283,
+    "sha": "8b1951ad4fc80839"
+   }
+  },
+  "KITE": {
+   "daily": {
+    "first": 1762128000,
+    "last": 1790899200,
+    "rows": 334,
+    "sha": "d01956e6aeff06cb"
+   },
+   "funding": {
+    "first": 1761739200,
+    "last": 1790798400,
+    "rows": 2018,
+    "sha": "10dcfcd265535619"
+   }
+  },
+  "KLAY": {
+   "daily": {
+    "first": 1624492800,
+    "last": 1730246400,
+    "rows": 1225,
+    "sha": "e4555455a708524b"
+   },
+   "funding": {
+    "first": 1633968000,
+    "last": 1750320000,
+    "rows": 4041,
+    "sha": "1155c35fe0045a2f"
+   }
+  },
+  "KMD": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1751587200,
+    "rows": 1789,
+    "sha": "02ba029a586d6a0e"
+   }
+  },
+  "KMNO": {
+   "daily": {
+    "first": 1746489600,
+    "last": 1790899200,
+    "rows": 515,
+    "sha": "a46663e428802e3c"
+   },
+   "funding": {
+    "first": 1734724800,
+    "last": 1790798400,
+    "rows": 3894,
+    "sha": "e19a35581b6cba3e"
+   }
+  },
+  "KNC": {
+   "daily": {
+    "first": 1591920000,
+    "last": 1790899200,
+    "rows": 2304,
+    "sha": "769bb555710ed6fe"
+   },
+   "funding": {
+    "first": 1592812800,
+    "last": 1790784000,
+    "rows": 6875,
+    "sha": "b2c1d82512018a77"
+   }
+  },
+  "KORUB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "a81160657e8ea206"
+   }
+  },
+  "KP3R": {
+   "daily": {
+    "first": 1636675200,
+    "last": 1730851200,
+    "rows": 1091,
+    "sha": "ef7552e40a937ca7"
+   }
+  },
+  "KSM": {
+   "daily": {
+    "first": 1599177600,
+    "last": 1790899200,
+    "rows": 2220,
+    "sha": "eab2f9bd60fe7b67"
+   },
+   "funding": {
+    "first": 1602662400,
+    "last": 1790784000,
+    "rows": 6533,
+    "sha": "c0f97ffc194835d9"
+   }
+  },
+  "LA": {
+   "daily": {
+    "first": 1752019200,
+    "last": 1790899200,
+    "rows": 451,
+    "sha": "04027d6f803bf5b8"
+   },
+   "funding": {
+    "first": 1749110400,
+    "last": 1790798400,
+    "rows": 4648,
+    "sha": "61e11a1fba0f172a"
+   }
+  },
+  "LAYER": {
+   "daily": {
+    "first": 1739232000,
+    "last": 1790899200,
+    "rows": 599,
+    "sha": "eb8f765966978241"
+   },
+   "funding": {
+    "first": 1739289600,
+    "last": 1790798400,
+    "rows": 5694,
+    "sha": "7648fdaf273f4d70"
+   }
+  },
+  "LAZIO": {
+   "daily": {
+    "first": 1634774400,
+    "last": 1790899200,
+    "rows": 1808,
+    "sha": "0e221a0e6d8c3e29"
+   }
+  },
+  "LDO": {
+   "daily": {
+    "first": 1652054400,
+    "last": 1790899200,
+    "rows": 1608,
+    "sha": "990be94f360e0e7a"
+   },
+   "funding": {
+    "first": 1663833600,
+    "last": 1790784000,
+    "rows": 4409,
+    "sha": "062e8150e76439cd"
+   }
+  },
+  "LEND": {
+   "daily": {
+    "first": 1589500800,
+    "last": 1602460800,
+    "rows": 151,
+    "sha": "e40844c5d479ee5c"
+   },
+   "funding": {
+    "first": 1595318400,
+    "last": 1602288000,
+    "rows": 243,
+    "sha": "5e88e66a81355c78"
+   }
+  },
+  "LEVER": {
+   "daily": {
+    "first": 1657670400,
+    "last": 1751587200,
+    "rows": 1088,
+    "sha": "e0fa743210a70fac"
+   },
+   "funding": {
+    "first": 1680163200,
+    "last": 1756886400,
+    "rows": 2665,
+    "sha": "df0e56731e6e39b6"
+   }
+  },
+  "LINA": {
+   "daily": {
+    "first": 1616025600,
+    "last": 1743120000,
+    "rows": 1472,
+    "sha": "2fc15319c7570424"
+   },
+   "funding": {
+    "first": 1616140800,
+    "last": 1750320000,
+    "rows": 4660,
+    "sha": "1044b7b703a16e12"
+   }
+  },
+  "LINEA": {
+   "daily": {
+    "first": 1757462400,
+    "last": 1790899200,
+    "rows": 388,
+    "sha": "80f9203acc22dbde"
+   },
+   "funding": {
+    "first": 1756728000,
+    "last": 1790798400,
+    "rows": 2366,
+    "sha": "32c452323cb10b41"
+   }
+  },
+  "LINK": {
+   "daily": {
+    "first": 1547596800,
+    "last": 1790899200,
+    "rows": 2817,
+    "sha": "72ed21ccaa4ee47f"
+   },
+   "funding": {
+    "first": 1579248000,
+    "last": 1790784000,
+    "rows": 7346,
+    "sha": "16b0319425352760"
+   },
+   "weekly": {
+    "first": 1547424000,
+    "last": 1790553600,
+    "rows": 395,
+    "sha": "25e2d87353143b66"
+   }
+  },
+  "LISTA": {
+   "daily": {
+    "first": 1718841600,
+    "last": 1790899200,
+    "rows": 835,
+    "sha": "97400dabb5f8e760"
+   },
+   "funding": {
+    "first": 1718899200,
+    "last": 1790798400,
+    "rows": 4993,
+    "sha": "ff3f4b06ad1ba9d1"
+   }
+  },
+  "LIT": {
+   "daily": {
+    "first": 1612396800,
+    "last": 1739145600,
+    "rows": 1468,
+    "sha": "fc7facec4684fe9b"
+   },
+   "funding": {
+    "first": 1613635200,
+    "last": 1790798400,
+    "rows": 6433,
+    "sha": "132142831922e5fd"
+   }
+  },
+  "LITEB": {
+   "daily": {
+    "first": 1782777600,
+    "last": 1790899200,
+    "rows": 95,
+    "sha": "2ae8ce2c27cf0f03"
+   }
+  },
+  "LOKA": {
+   "daily": {
+    "first": 1642636800,
+    "last": 1753660800,
+    "rows": 1286,
+    "sha": "fa38ee9b68d4515b"
+   },
+   "funding": {
+    "first": 1727179200,
+    "last": 1753084800,
+    "rows": 1800,
+    "sha": "2c23ed062f65720d"
+   }
+  },
+  "LOOM": {
+   "daily": {
+    "first": 1679616000,
+    "last": 1724630400,
+    "rows": 522,
+    "sha": "b4c0a9d23f02c79f"
+   },
+   "funding": {
+    "first": 1697011200,
+    "last": 1750320000,
+    "rows": 3702,
+    "sha": "1711888550c3d4e9"
+   }
+  },
+  "LPT": {
+   "daily": {
+    "first": 1622160000,
+    "last": 1790899200,
+    "rows": 1954,
+    "sha": "912e72980f6998dd"
+   },
+   "funding": {
+    "first": 1636617600,
+    "last": 1790798400,
+    "rows": 9519,
+    "sha": "85d4a6cfea8bf800"
+   }
+  },
+  "LQTY": {
+   "daily": {
+    "first": 1677542400,
+    "last": 1790899200,
+    "rows": 1313,
+    "sha": "5721dfc99a50448f"
+   },
+   "funding": {
+    "first": 1678377600,
+    "last": 1790784000,
+    "rows": 3904,
+    "sha": "0961e0ebebe037eb"
+   }
+  },
+  "LRC": {
+   "daily": {
+    "first": 1591920000,
+    "last": 1775001600,
+    "rows": 2120,
+    "sha": "5615e992cf1dd20e"
+   },
+   "funding": {
+    "first": 1603094400,
+    "last": 1774339200,
+    "rows": 6662,
+    "sha": "c3fd4ae5f86a6ff0"
+   }
+  },
+  "LSK": {
+   "daily": {
+    "first": 1580947200,
+    "last": 1790899200,
+    "rows": 2431,
+    "sha": "1e0c250faa497a6b"
+   },
+   "funding": {
+    "first": 1706198400,
+    "last": 1790798400,
+    "rows": 7026,
+    "sha": "578718934dc644bc"
+   }
+  },
+  "LTC": {
+   "daily": {
+    "first": 1513123200,
+    "last": 1790899200,
+    "rows": 3216,
+    "sha": "61f3a41b1eec98df"
+   },
+   "funding": {
+    "first": 1578556800,
+    "last": 1790784000,
+    "rows": 7370,
+    "sha": "82980b2e19cef12f"
+   }
+  },
+  "LTO": {
+   "daily": {
+    "first": 1581033600,
+    "last": 1751587200,
+    "rows": 1975,
+    "sha": "c4540b7a997f6868"
+   }
+  },
+  "LUMIA": {
+   "daily": {
+    "first": 1729209600,
+    "last": 1790899200,
+    "rows": 715,
+    "sha": "d8432dfbf8befc15"
+   },
+   "funding": {
+    "first": 1734523200,
+    "last": 1790798400,
+    "rows": 3908,
+    "sha": "7de65342b83f1615"
+   }
+  },
+  "LUNA": {
+   "daily": {
+    "first": 1597968000,
+    "last": 1790899200,
+    "rows": 2217,
+    "sha": "18e71d23fc022a66"
+   },
+   "funding": {
+    "first": 1611820800,
+    "last": 1652400000,
+    "rows": 1410,
+    "sha": "10afdbf5eaed6ae9"
+   }
+  },
+  "LUNC": {
+   "daily": {
+    "first": 1662681600,
+    "last": 1790899200,
+    "rows": 1485,
+    "sha": "f5ae22efbc038262"
+   }
+  },
+  "MAGIC": {
+   "daily": {
+    "first": 1670803200,
+    "last": 1790899200,
+    "rows": 1391,
+    "sha": "85565c0e6e2bd5f1"
+   },
+   "funding": {
+    "first": 1674489600,
+    "last": 1790798400,
+    "rows": 5620,
+    "sha": "a387d41ca2453396"
+   }
+  },
+  "MANA": {
+   "daily": {
+    "first": 1596672000,
+    "last": 1790899200,
+    "rows": 2249,
+    "sha": "5482a9597910fe8f"
+   },
+   "funding": {
+    "first": 1615795200,
+    "last": 1790784000,
+    "rows": 6077,
+    "sha": "1c0e0c4b728d60eb"
+   }
+  },
+  "MANTA": {
+   "daily": {
+    "first": 1705536000,
+    "last": 1790899200,
+    "rows": 989,
+    "sha": "0e1744d700d57f53"
+   },
+   "funding": {
+    "first": 1705593600,
+    "last": 1790798400,
+    "rows": 5917,
+    "sha": "6fc431e3120f865d"
+   }
+  },
+  "MANTRA": {
+   "daily": {
+    "first": 1772582400,
+    "last": 1790899200,
+    "rows": 213,
+    "sha": "e5d10f8900f0f878"
+   },
+   "funding": {
+    "first": 1772611200,
+    "last": 1790798400,
+    "rows": 1263,
+    "sha": "73d69a4fa6a8fd19"
+   }
+  },
+  "MASK": {
+   "daily": {
+    "first": 1621900800,
+    "last": 1790899200,
+    "rows": 1957,
+    "sha": "c859b8b6c72fc0b3"
+   },
+   "funding": {
+    "first": 1629964800,
+    "last": 1790798400,
+    "rows": 7777,
+    "sha": "f6621ec359efda6c"
+   }
+  },
+  "MATIC": {
+   "daily": {
+    "first": 1556236800,
+    "last": 1725926400,
+    "rows": 1965,
+    "sha": "c90f07c7cb8c9f73"
+   },
+   "funding": {
+    "first": 1603353600,
+    "last": 1790784000,
+    "rows": 6509,
+    "sha": "a33a343807a96f89"
+   }
+  },
+  "MAV": {
+   "daily": {
+    "first": 1687910400,
+    "last": 1790899200,
+    "rows": 1193,
+    "sha": "2a57a65be98627ac"
+   },
+   "funding": {
+    "first": 1687968000,
+    "last": 1790784000,
+    "rows": 3571,
+    "sha": "5cc7172c7e0a7add"
+   }
+  },
+  "MBL": {
+   "daily": {
+    "first": 1582243200,
+    "last": 1790899200,
+    "rows": 2416,
+    "sha": "812814bfe19e715d"
+   },
+   "funding": {
+    "first": 1699977600,
+    "last": 1721361600,
+    "rows": 1486,
+    "sha": "c142ae8847d55084"
+   }
+  },
+  "MBOX": {
+   "daily": {
+    "first": 1629331200,
+    "last": 1781827200,
+    "rows": 1766,
+    "sha": "839bfc85d4a06e2f"
+   },
+   "funding": {
+    "first": 1724846400,
+    "last": 1781164800,
+    "rows": 3978,
+    "sha": "c91bbbc59014f04a"
+   }
+  },
+  "MC": {
+   "daily": {
+    "first": 1638403200,
+    "last": 1699315200,
+    "rows": 706,
+    "sha": "3ad86d698d8dcc97"
+   }
+  },
+  "MCO": {
+   "daily": {
+    "first": 1574121600,
+    "last": 1603411200,
+    "rows": 340,
+    "sha": "91b2ddf1a2583151"
+   }
+  },
+  "MDT": {
+   "daily": {
+    "first": 1591315200,
+    "last": 1776902400,
+    "rows": 2149,
+    "sha": "37d41f2921af73b5"
+   },
+   "funding": {
+    "first": 1688054400,
+    "last": 1750320000,
+    "rows": 2163,
+    "sha": "0f5701995a5c0e42"
+   }
+  },
+  "MDX": {
+   "daily": {
+    "first": 1621814400,
+    "last": 1721606400,
+    "rows": 1156,
+    "sha": "2a941e54aed61f8a"
+   }
+  },
+  "ME": {
+   "daily": {
+    "first": 1733788800,
+    "last": 1790899200,
+    "rows": 662,
+    "sha": "b3e0061e7a4ec9cc"
+   },
+   "funding": {
+    "first": 1733846400,
+    "last": 1790798400,
+    "rows": 5198,
+    "sha": "cc1a5cc2d710f590"
+   }
+  },
+  "MEGA": {
+   "daily": {
+    "first": 1777507200,
+    "last": 1790899200,
+    "rows": 156,
+    "sha": "e7cb4e777a2821bd"
+   },
+   "funding": {
+    "first": 1769774400,
+    "last": 1790798400,
+    "rows": 1460,
+    "sha": "23bc0a1d2e7320fa"
+   }
+  },
+  "MEME": {
+   "daily": {
+    "first": 1698969600,
+    "last": 1790899200,
+    "rows": 1065,
+    "sha": "b122fd4beb57bc2d"
+   },
+   "funding": {
+    "first": 1699027200,
+    "last": 1790798400,
+    "rows": 6373,
+    "sha": "e9852e67e486f0d0"
+   }
+  },
+  "MET": {
+   "daily": {
+    "first": 1762992000,
+    "last": 1790899200,
+    "rows": 324,
+    "sha": "908b9ba55d1cefa3"
+   },
+   "funding": {
+    "first": 1760184000,
+    "last": 1790798400,
+    "rows": 2126,
+    "sha": "98a72b47c03ac7b9"
+   }
+  },
+  "METAB": {
+   "daily": {
+    "first": 1782777600,
+    "last": 1790899200,
+    "rows": 95,
+    "sha": "0fdd2615df49f878"
+   }
+  },
+  "METIS": {
+   "daily": {
+    "first": 1710115200,
+    "last": 1790899200,
+    "rows": 936,
+    "sha": "159b0f405408353b"
+   },
+   "funding": {
+    "first": 1710172800,
+    "last": 1790798400,
+    "rows": 5597,
+    "sha": "05741f9bdf7485ae"
+   }
+  },
+  "MFT": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1672704000,
+    "rows": 1226,
+    "sha": "9cf3ce09a7d6828b"
+   }
+  },
+  "MINA": {
+   "daily": {
+    "first": 1628553600,
+    "last": 1790899200,
+    "rows": 1880,
+    "sha": "b0775329b7305252"
+   },
+   "funding": {
+    "first": 1675411200,
+    "last": 1790784000,
+    "rows": 4007,
+    "sha": "ce5ecfb13d9eb6aa"
+   }
+  },
+  "MIR": {
+   "daily": {
+    "first": 1618790400,
+    "last": 1672099200,
+    "rows": 618,
+    "sha": "8514d7c03c0966f3"
+   }
+  },
+  "MIRA": {
+   "daily": {
+    "first": 1758844800,
+    "last": 1790899200,
+    "rows": 372,
+    "sha": "51eb72bb3bd4cc50"
+   },
+   "funding": {
+    "first": 1758888000,
+    "last": 1790798400,
+    "rows": 2450,
+    "sha": "ae654372dc162492"
+   }
+  },
+  "MITH": {
+   "daily": {
+    "first": 1555632000,
+    "last": 1671667200,
+    "rows": 1344,
+    "sha": "158eb8c2205eda38"
+   }
+  },
+  "MITO": {
+   "daily": {
+    "first": 1756425600,
+    "last": 1790899200,
+    "rows": 400,
+    "sha": "f723b7527d5c527a"
+   },
+   "funding": {
+    "first": 1756382400,
+    "last": 1790798400,
+    "rows": 2390,
+    "sha": "9ed5e2b8b22f18ce"
+   }
+  },
+  "MKR": {
+   "daily": {
+    "first": 1595462400,
+    "last": 1757894400,
+    "rows": 1881,
+    "sha": "a9e2708e597c6493"
+   },
+   "funding": {
+    "first": 1597305600,
+    "last": 1757318400,
+    "rows": 5557,
+    "sha": "6c0f425d9c930043"
+   }
+  },
+  "MLN": {
+   "daily": {
+    "first": 1625443200,
+    "last": 1779840000,
+    "rows": 1788,
+    "sha": "1974957e37aacb5b"
+   },
+   "funding": {
+    "first": 1743422400,
+    "last": 1779177600,
+    "rows": 2484,
+    "sha": "6d5dd2546bbb7c25"
+   }
+  },
+  "MMT": {
+   "daily": {
+    "first": 1762214400,
+    "last": 1790899200,
+    "rows": 333,
+    "sha": "eee6732a61e979bf"
+   },
+   "funding": {
+    "first": 1762257600,
+    "last": 1790798400,
+    "rows": 1982,
+    "sha": "a9658753c99bb6d3"
+   }
+  },
+  "MOB": {
+   "daily": {
+    "first": 1651190400,
+    "last": 1712102400,
+    "rows": 706,
+    "sha": "0fb2a337b44d5d87"
+   }
+  },
+  "MORPHO": {
+   "daily": {
+    "first": 1759449600,
+    "last": 1790899200,
+    "rows": 365,
+    "sha": "ef6d95209065e614"
+   },
+   "funding": {
+    "first": 1732723200,
+    "last": 1790798400,
+    "rows": 4033,
+    "sha": "a28dc83c3e09d768"
+   }
+  },
+  "MOVE": {
+   "daily": {
+    "first": 1733702400,
+    "last": 1790899200,
+    "rows": 663,
+    "sha": "57f9abf4fb713c6c"
+   },
+   "funding": {
+    "first": 1733760000,
+    "last": 1790798400,
+    "rows": 3997,
+    "sha": "17e32e23a018d1b5"
+   }
+  },
+  "MOVR": {
+   "daily": {
+    "first": 1636329600,
+    "last": 1790899200,
+    "rows": 1790,
+    "sha": "9e9dc312aab602e4"
+   },
+   "funding": {
+    "first": 1703606400,
+    "last": 1790798400,
+    "rows": 6055,
+    "sha": "bdb89de733c9fb8c"
+   }
+  },
+  "MRVLB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "ed3480b81be4242b"
+   }
+  },
+  "MSFTB": {
+   "daily": {
+    "first": 1782777600,
+    "last": 1790899200,
+    "rows": 95,
+    "sha": "9d0bc15000aaeec1"
+   }
+  },
+  "MSTRB": {
+   "daily": {
+    "first": 1782172800,
+    "last": 1790899200,
+    "rows": 102,
+    "sha": "d596b06f0e934211"
+   }
+  },
+  "MTL": {
+   "daily": {
+    "first": 1566518400,
+    "last": 1790899200,
+    "rows": 2598,
+    "sha": "8c755cb1a4ca112b"
+   },
+   "funding": {
+    "first": 1617120000,
+    "last": 1790798400,
+    "rows": 6197,
+    "sha": "52f0d451287b13ce"
+   }
+  },
+  "MUB": {
+   "daily": {
+    "first": 1781136000,
+    "last": 1790899200,
+    "rows": 114,
+    "sha": "652c8949b0cb2840"
+   }
+  },
+  "MUBARAK": {
+   "daily": {
+    "first": 1743033600,
+    "last": 1790899200,
+    "rows": 555,
+    "sha": "5c3a6f89f61a5da4"
+   },
+   "funding": {
+    "first": 1742227200,
+    "last": 1790798400,
+    "rows": 3373,
+    "sha": "691f65f44b94d87f"
+   }
+  },
+  "MULTI": {
+   "daily": {
+    "first": 1649203200,
+    "last": 1708387200,
+    "rows": 686,
+    "sha": "426ed902fc1f320e"
+   }
+  },
+  "MUUB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "e9ebf777f9f32141"
+   }
+  },
+  "MVLLB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "10c5f6bb1b9cb050"
+   }
+  },
+  "NANO": {
+   "daily": {
+    "first": 1554249600,
+    "last": 1642982400,
+    "rows": 1028,
+    "sha": "da97b6a6b0618255"
+   }
+  },
+  "NBISB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "cc6e02b54b12801a"
+   }
+  },
+  "NBS": {
+   "daily": {
+    "first": 1600646400,
+    "last": 1666569600,
+    "rows": 764,
+    "sha": "feae00ed35d2db33"
+   }
+  },
+  "NBT": {
+   "daily": {
+    "first": 1646956800,
+    "last": 1694131200,
+    "rows": 528,
+    "sha": "faf16b174e979638"
+   }
+  },
+  "NEAR": {
+   "daily": {
+    "first": 1602633600,
+    "last": 1790899200,
+    "rows": 2180,
+    "sha": "8a03a74dc80a3cad"
+   },
+   "funding": {
+    "first": 1602691200,
+    "last": 1790784000,
+    "rows": 6532,
+    "sha": "c7c925119d31d674"
+   }
+  },
+  "NEBL": {
+   "daily": {
+    "first": 1665705600,
+    "last": 1681776000,
+    "rows": 187,
+    "sha": "8b051be6a9c5e6ed"
+   }
+  },
+  "NEIRO": {
+   "daily": {
+    "first": 1726444800,
+    "last": 1790899200,
+    "rows": 747,
+    "sha": "3583e24eb073d351"
+   },
+   "funding": {
+    "first": 1726488000,
+    "last": 1790798400,
+    "rows": 4466,
+    "sha": "22cbf01eb6bbacea"
+   }
+  },
+  "NEO": {
+   "daily": {
+    "first": 1511136000,
+    "last": 1790899200,
+    "rows": 3239,
+    "sha": "3c44a8cf4475844f"
+   },
+   "funding": {
+    "first": 1581926400,
+    "last": 1790784000,
+    "rows": 7253,
+    "sha": "77c21203a064383a"
+   }
+  },
+  "NEWT": {
+   "daily": {
+    "first": 1750723200,
+    "last": 1790899200,
+    "rows": 466,
+    "sha": "e8980af4178e5bc5"
+   },
+   "funding": {
+    "first": 1750348800,
+    "last": 1790798400,
+    "rows": 3241,
+    "sha": "fd6aaf6df1fd6a35"
+   }
+  },
+  "NEXO": {
+   "daily": {
+    "first": 1651190400,
+    "last": 1790899200,
+    "rows": 1618,
+    "sha": "1dab071e47c746fb"
+   }
+  },
+  "NFLXB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "3632b1e64e8f1717"
+   }
+  },
+  "NFP": {
+   "daily": {
+    "first": 1703635200,
+    "last": 1783641600,
+    "rows": 927,
+    "sha": "0c6e035a3d79c6c8"
+   },
+   "funding": {
+    "first": 1703692800,
+    "last": 1782979200,
+    "rows": 5521,
+    "sha": "435b78a93fc159db"
+   }
+  },
+  "NIGHT": {
+   "daily": {
+    "first": 1773187200,
+    "last": 1790899200,
+    "rows": 206,
+    "sha": "7fcf786f6b54572c"
+   },
+   "funding": {
+    "first": 1765368000,
+    "last": 1790798400,
+    "rows": 1766,
+    "sha": "e7794dc23f4ceeb8"
+   }
+  },
+  "NIL": {
+   "daily": {
+    "first": 1742774400,
+    "last": 1790899200,
+    "rows": 558,
+    "sha": "605d90d4eec161aa"
+   },
+   "funding": {
+    "first": 1742803200,
+    "last": 1790798400,
+    "rows": 3332,
+    "sha": "fd491860c8a9e4e4"
+   }
+  },
+  "NKN": {
+   "daily": {
+    "first": 1570752000,
+    "last": 1770940800,
+    "rows": 2318,
+    "sha": "952217cca0415678"
+   },
+   "funding": {
+    "first": 1617955200,
+    "last": 1770364800,
+    "rows": 6169,
+    "sha": "3ae0096e858c0f2e"
+   }
+  },
+  "NMR": {
+   "daily": {
+    "first": 1597795200,
+    "last": 1790899200,
+    "rows": 2236,
+    "sha": "7ea7693bcce4796c"
+   },
+   "funding": {
+    "first": 1687334400,
+    "last": 1790798400,
+    "rows": 6870,
+    "sha": "3a415a093a6b6165"
+   }
+  },
+  "NOKB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "30f00522fc61a399"
+   }
+  },
+  "NOM": {
+   "daily": {
+    "first": 1759276800,
+    "last": 1790899200,
+    "rows": 367,
+    "sha": "0c69428a39122b49"
+   },
+   "funding": {
+    "first": 1759305600,
+    "last": 1790798400,
+    "rows": 2390,
+    "sha": "60fbcaba42e0f09d"
+   }
+  },
+  "NOT": {
+   "daily": {
+    "first": 1715817600,
+    "last": 1790899200,
+    "rows": 870,
+    "sha": "bb34d5b09f8a086a"
+   },
+   "funding": {
+    "first": 1715875200,
+    "last": 1790798400,
+    "rows": 5203,
+    "sha": "021b9a006d041f8c"
+   }
+  },
+  "NPXS": {
+   "daily": {
+    "first": 1565654400,
+    "last": 1617580800,
+    "rows": 602,
+    "sha": "dae936c130f22c71"
+   }
+  },
+  "NTRN": {
+   "daily": {
+    "first": 1696896000,
+    "last": 1775001600,
+    "rows": 905,
+    "sha": "2e2d424e4c6b055a"
+   },
+   "funding": {
+    "first": 1699948800,
+    "last": 1774339200,
+    "rows": 5166,
+    "sha": "a8b9a050f0f3798c"
+   }
+  },
+  "NU": {
+   "daily": {
+    "first": 1622764800,
+    "last": 1644969600,
+    "rows": 258,
+    "sha": "6a3f596b1b700a96"
+   },
+   "funding": {
+    "first": 1634630400,
+    "last": 1644883200,
+    "rows": 357,
+    "sha": "a80a471260147879"
+   }
+  },
+  "NULS": {
+   "daily": {
+    "first": 1532304000,
+    "last": 1744761600,
+    "rows": 2460,
+    "sha": "006df105f83fcd35"
+   },
+   "funding": {
+    "first": 1724659200,
+    "last": 1750320000,
+    "rows": 1783,
+    "sha": "afc3dd9bc407bcb2"
+   }
+  },
+  "NVDAB": {
+   "daily": {
+    "first": 1781136000,
+    "last": 1790899200,
+    "rows": 114,
+    "sha": "5faf3898d4c5cb7d"
+   }
+  },
+  "NXPC": {
+   "daily": {
+    "first": 1747267200,
+    "last": 1790899200,
+    "rows": 506,
+    "sha": "3d2c8da1d45a7005"
+   },
+   "funding": {
+    "first": 1747296000,
+    "last": 1790798400,
+    "rows": 3021,
+    "sha": "e795c514818513d9"
+   }
+  },
+  "OAX": {
+   "daily": {
+    "first": 1679616000,
+    "last": 1733788800,
+    "rows": 628,
+    "sha": "5742a540ff02ec4d"
+   }
+  },
+  "OCEAN": {
+   "daily": {
+    "first": 1597795200,
+    "last": 1719792000,
+    "rows": 1413,
+    "sha": "b7edfbe703bb094d"
+   },
+   "funding": {
+    "first": 1604332800,
+    "last": 1750320000,
+    "rows": 5070,
+    "sha": "2cb9646ae0b4fd8d"
+   }
+  },
+  "OG": {
+   "daily": {
+    "first": 1609286400,
+    "last": 1790899200,
+    "rows": 2103,
+    "sha": "1e59b78ce86b5026"
+   },
+   "funding": {
+    "first": 1747051200,
+    "last": 1790798400,
+    "rows": 3038,
+    "sha": "885579e3ffe317a7"
+   }
+  },
+  "OGN": {
+   "daily": {
+    "first": 1578528000,
+    "last": 1790899200,
+    "rows": 2459,
+    "sha": "39568348cd9b3c3e"
+   },
+   "funding": {
+    "first": 1617264000,
+    "last": 1790798400,
+    "rows": 6679,
+    "sha": "652f62dfcb7cf573"
+   }
+  },
+  "OM": {
+   "daily": {
+    "first": 1615161600,
+    "last": 1772409600,
+    "rows": 1821,
+    "sha": "aa591d8c51dfa7ed"
+   },
+   "funding": {
+    "first": 1707811200,
+    "last": 1771833600,
+    "rows": 4623,
+    "sha": "fc4ce31517e3acc6"
+   }
+  },
+  "OMG": {
+   "daily": {
+    "first": 1554249600,
+    "last": 1718582400,
+    "rows": 1903,
+    "sha": "50c34cc8f395b6d5"
+   },
+   "funding": {
+    "first": 1593561600,
+    "last": 1750320000,
+    "rows": 5448,
+    "sha": "d24e897c8dc54b8c"
+   }
+  },
+  "OMNI": {
+   "daily": {
+    "first": 1713312000,
+    "last": 1759104000,
+    "rows": 531,
+    "sha": "76258f60f914d410"
+   },
+   "funding": {
+    "first": 1713369600,
+    "last": 1758528000,
+    "rows": 3371,
+    "sha": "d978fe994ff206f6"
+   }
+  },
+  "ONDO": {
+   "daily": {
+    "first": 1744329600,
+    "last": 1790899200,
+    "rows": 540,
+    "sha": "f49a7fc7e1fb93fb"
+   },
+   "funding": {
+    "first": 1705766400,
+    "last": 1790798400,
+    "rows": 5905,
+    "sha": "d4b709fed02e65d8"
+   }
+  },
+  "ONE": {
+   "daily": {
+    "first": 1559347200,
+    "last": 1790899200,
+    "rows": 2681,
+    "sha": "d7644219bdf72fd5"
+   },
+   "funding": {
+    "first": 1616054400,
+    "last": 1790809200,
+    "rows": 6294,
+    "sha": "17b0cea2e7d0dc7b"
+   }
+  },
+  "ONG": {
+   "daily": {
+    "first": 1550275200,
+    "last": 1790899200,
+    "rows": 2786,
+    "sha": "60223a094c2b514d"
+   },
+   "funding": {
+    "first": 1701100800,
+    "last": 1790798400,
+    "rows": 6645,
+    "sha": "6fff9c9846633be3"
+   }
+  },
+  "ONT": {
+   "daily": {
+    "first": 1528416000,
+    "last": 1790899200,
+    "rows": 3039,
+    "sha": "dba69f755db4d4b9"
+   },
+   "funding": {
+    "first": 1581408000,
+    "last": 1790798400,
+    "rows": 8574,
+    "sha": "d28c7df985a4944b"
+   }
+  },
+  "OOKI": {
+   "daily": {
+    "first": 1640304000,
+    "last": 1730851200,
+    "rows": 1049,
+    "sha": "7663acb077826cd3"
+   }
+  },
+  "OP": {
+   "daily": {
+    "first": 1654041600,
+    "last": 1790899200,
+    "rows": 1585,
+    "sha": "d1a5e34ef03ee684"
+   },
+   "funding": {
+    "first": 1654070400,
+    "last": 1790784000,
+    "rows": 4748,
+    "sha": "e2e57e806389ebbb"
+   }
+  },
+  "OPEN": {
+   "daily": {
+    "first": 1757289600,
+    "last": 1790899200,
+    "rows": 390,
+    "sha": "752b2f7dd232155c"
+   },
+   "funding": {
+    "first": 1757001600,
+    "last": 1790798400,
+    "rows": 2347,
+    "sha": "e378fcdb4a6b095c"
+   }
+  },
+  "OPG": {
+   "daily": {
+    "first": 1779408000,
+    "last": 1790899200,
+    "rows": 134,
+    "sha": "7b4759fa5bcf27e0"
+   },
+   "funding": {
+    "first": 1776873600,
+    "last": 1790798400,
+    "rows": 967,
+    "sha": "d6d6a02ec6ec8ba7"
+   }
+  },
+  "OPN": {
+   "daily": {
+    "first": 1772668800,
+    "last": 1790899200,
+    "rows": 212,
+    "sha": "59ed5e40ecd4f9a9"
+   },
+   "funding": {
+    "first": 1771689600,
+    "last": 1790798400,
+    "rows": 1327,
+    "sha": "c5cfd1dbe8278303"
+   }
+  },
+  "ORCA": {
+   "daily": {
+    "first": 1733443200,
+    "last": 1790899200,
+    "rows": 666,
+    "sha": "9acc894e27e7ffe5"
+   },
+   "funding": {
+    "first": 1733500800,
+    "last": 1790798400,
+    "rows": 4997,
+    "sha": "62745fe7b591ee6e"
+   }
+  },
+  "ORCLB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "2e52986b10999628"
+   }
+  },
+  "ORDI": {
+   "daily": {
+    "first": 1699315200,
+    "last": 1790899200,
+    "rows": 1061,
+    "sha": "a1c5070ed50446c2"
+   },
+   "funding": {
+    "first": 1699372800,
+    "last": 1790798400,
+    "rows": 6349,
+    "sha": "0bd0f6616ce634ec"
+   }
+  },
+  "ORN": {
+   "daily": {
+    "first": 1601424000,
+    "last": 1728950400,
+    "rows": 1477,
+    "sha": "95c98aa37a4354f4"
+   }
+  },
+  "OSMO": {
+   "daily": {
+    "first": 1666915200,
+    "last": 1790899200,
+    "rows": 1436,
+    "sha": "24a127151eda208e"
+   }
+  },
+  "OXT": {
+   "daily": {
+    "first": 1600646400,
+    "last": 1776902400,
+    "rows": 2041,
+    "sha": "2a2216ef02fbeb68"
+   },
+   "funding": {
+    "first": 1691683200,
+    "last": 1776240000,
+    "rows": 2937,
+    "sha": "25f82bd7599ec455"
+   }
+  },
+  "PARTI": {
+   "daily": {
+    "first": 1742860800,
+    "last": 1790899200,
+    "rows": 557,
+    "sha": "22c68d242e4129e1"
+   },
+   "funding": {
+    "first": 1742918400,
+    "last": 1790798400,
+    "rows": 3347,
+    "sha": "7608574d34eb20d9"
+   }
+  },
+  "PDA": {
+   "daily": {
+    "first": 1709251200,
+    "last": 1746144000,
+    "rows": 428,
+    "sha": "073a4298b7d194ea"
+   }
+  },
+  "PENDLE": {
+   "daily": {
+    "first": 1688342400,
+    "last": 1790899200,
+    "rows": 1188,
+    "sha": "0028088e627d7a29"
+   },
+   "funding": {
+    "first": 1690300800,
+    "last": 1790784000,
+    "rows": 3490,
+    "sha": "2efc78c97741ed7c"
+   }
+  },
+  "PENGU": {
+   "daily": {
+    "first": 1734393600,
+    "last": 1790899200,
+    "rows": 655,
+    "sha": "2b127152ec9ccdb5"
+   },
+   "funding": {
+    "first": 1734451200,
+    "last": 1790798400,
+    "rows": 3913,
+    "sha": "9b87f41280190b47"
+   }
+  },
+  "PEOPLE": {
+   "daily": {
+    "first": 1640217600,
+    "last": 1790899200,
+    "rows": 1745,
+    "sha": "d9646a3a9729d21a"
+   },
+   "funding": {
+    "first": 1640275200,
+    "last": 1790784000,
+    "rows": 5227,
+    "sha": "96f7aae286181118"
+   }
+  },
+  "PEPE": {
+   "daily": {
+    "first": 1683244800,
+    "last": 1790899200,
+    "rows": 1247,
+    "sha": "da7067ac567732d7"
+   }
+  },
+  "PERL": {
+   "daily": {
+    "first": 1566777600,
+    "last": 1701907200,
+    "rows": 1565,
+    "sha": "b27299ad23cfd1b5"
+   }
+  },
+  "PERP": {
+   "daily": {
+    "first": 1616112000,
+    "last": 1762905600,
+    "rows": 1700,
+    "sha": "8de73e04301b6847"
+   },
+   "funding": {
+    "first": 1677859200,
+    "last": 1763712000,
+    "rows": 5295,
+    "sha": "843a642c6641f1a9"
+   }
+  },
+  "PHA": {
+   "daily": {
+    "first": 1624579200,
+    "last": 1790899200,
+    "rows": 1926,
+    "sha": "d4e0aa608f28e487"
+   },
+   "funding": {
+    "first": 1735560000,
+    "last": 1790798400,
+    "rows": 3836,
+    "sha": "8b425940ff04f0c2"
+   }
+  },
+  "PHB": {
+   "daily": {
+    "first": 1668729600,
+    "last": 1779840000,
+    "rows": 1287,
+    "sha": "d4d6da8488700c0d"
+   },
+   "funding": {
+    "first": 1676476800,
+    "last": 1779177600,
+    "rows": 3567,
+    "sha": "778b233013a50db0"
+   }
+  },
+  "PIVX": {
+   "daily": {
+    "first": 1700092800,
+    "last": 1786924800,
+    "rows": 1006,
+    "sha": "3c9fa6e9e49a03a8"
+   }
+  },
+  "PIXEL": {
+   "daily": {
+    "first": 1708300800,
+    "last": 1790899200,
+    "rows": 957,
+    "sha": "e3f862e489cc7d21"
+   },
+   "funding": {
+    "first": 1708358400,
+    "last": 1790798400,
+    "rows": 5764,
+    "sha": "eea6dab288d48c84"
+   }
+  },
+  "PLA": {
+   "daily": {
+    "first": 1637625600,
+    "last": 1708905600,
+    "rows": 826,
+    "sha": "8e9cbeb94bca1cbe"
+   }
+  },
+  "PLTRB": {
+   "daily": {
+    "first": 1782777600,
+    "last": 1790899200,
+    "rows": 95,
+    "sha": "ad80ab22689ead6e"
+   }
+  },
+  "PLUME": {
+   "daily": {
+    "first": 1755475200,
+    "last": 1790899200,
+    "rows": 411,
+    "sha": "3a55d0cf4c1cb101"
+   },
+   "funding": {
+    "first": 1742572800,
+    "last": 1790798400,
+    "rows": 3977,
+    "sha": "585f84a75289b026"
+   }
+  },
+  "PNT": {
+   "daily": {
+    "first": 1592784000,
+    "last": 1712102400,
+    "rows": 1382,
+    "sha": "4289cbf48b60e6e8"
+   }
+  },
+  "PNUT": {
+   "daily": {
+    "first": 1731283200,
+    "last": 1790899200,
+    "rows": 691,
+    "sha": "7b369d83cdd792fc"
+   },
+   "funding": {
+    "first": 1731340800,
+    "last": 1790798400,
+    "rows": 4129,
+    "sha": "bfd307a678bff5af"
+   }
+  },
+  "POL": {
+   "daily": {
+    "first": 1726185600,
+    "last": 1790899200,
+    "rows": 750,
+    "sha": "d18cea55e975207a"
+   },
+   "funding": {
+    "first": 1726243200,
+    "last": 1790798400,
+    "rows": 4483,
+    "sha": "6f811199eb095b39"
+   }
+  },
+  "POLS": {
+   "daily": {
+    "first": 1621382400,
+    "last": 1721606400,
+    "rows": 1161,
+    "sha": "710793e4582ed960"
+   }
+  },
+  "POLY": {
+   "daily": {
+    "first": 1631145600,
+    "last": 1665360000,
+    "rows": 397,
+    "sha": "e8992d3b7e3c9e71"
+   }
+  },
+  "POLYX": {
+   "daily": {
+    "first": 1665964800,
+    "last": 1790899200,
+    "rows": 1447,
+    "sha": "b60ee9911d7f47d4"
+   },
+   "funding": {
+    "first": 1698163200,
+    "last": 1790798400,
+    "rows": 6531,
+    "sha": "5ca7c02119a654d7"
+   }
+  },
+  "POND": {
+   "daily": {
+    "first": 1615248000,
+    "last": 1783641600,
+    "rows": 1950,
+    "sha": "ea761ce231f89067"
+   }
+  },
+  "PORTAL": {
+   "daily": {
+    "first": 1709164800,
+    "last": 1790899200,
+    "rows": 947,
+    "sha": "9cf1bee27c41156e"
+   },
+   "funding": {
+    "first": 1709222400,
+    "last": 1790798400,
+    "rows": 5665,
+    "sha": "d6236d52130dc638"
+   }
+  },
+  "PORTO": {
+   "daily": {
+    "first": 1637020800,
+    "last": 1790899200,
+    "rows": 1782,
+    "sha": "3ca56d436c66ec7f"
+   }
+  },
+  "POWR": {
+   "daily": {
+    "first": 1637107200,
+    "last": 1790899200,
+    "rows": 1781,
+    "sha": "718dac84fe1665a5"
+   },
+   "funding": {
+    "first": 1698336000,
+    "last": 1790798400,
+    "rows": 6420,
+    "sha": "c4d6ee5bdba9196b"
+   }
+  },
+  "PROM": {
+   "daily": {
+    "first": 1679011200,
+    "last": 1790899200,
+    "rows": 1296,
+    "sha": "1f171c46359d2725"
+   },
+   "funding": {
+    "first": 1736956800,
+    "last": 1790798400,
+    "rows": 3798,
+    "sha": "fdf04cdfd504bfdd"
+   }
+  },
+  "PROS": {
+   "daily": {
+    "first": 1674777600,
+    "last": 1744761600,
+    "rows": 811,
+    "sha": "e5a62204b3261b9e"
+   }
+  },
+  "PROVE": {
+   "daily": {
+    "first": 1754352000,
+    "last": 1790899200,
+    "rows": 424,
+    "sha": "bfb2241dfacface3"
+   },
+   "funding": {
+    "first": 1754409600,
+    "last": 1790798400,
+    "rows": 2560,
+    "sha": "4a68523120c5cbec"
+   }
+  },
+  "PSG": {
+   "daily": {
+    "first": 1608508800,
+    "last": 1790899200,
+    "rows": 2112,
+    "sha": "2e5d60e6b28eb299"
+   }
+  },
+  "PUMP": {
+   "daily": {
+    "first": 1757548800,
+    "last": 1790899200,
+    "rows": 387,
+    "sha": "654eff0976adca50"
+   },
+   "funding": {
+    "first": 1744473600,
+    "last": 1790798400,
+    "rows": 3092,
+    "sha": "f54759772153c76e"
+   }
+  },
+  "PUNDIX": {
+   "daily": {
+    "first": 1617926400,
+    "last": 1790899200,
+    "rows": 2003,
+    "sha": "2557f84709856c28"
+   },
+   "funding": {
+    "first": 1746014400,
+    "last": 1790798400,
+    "rows": 3110,
+    "sha": "5eb5cbb7c936ea6a"
+   }
+  },
+  "PYPLB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "b18379f4612c7d52"
+   }
+  },
+  "PYR": {
+   "daily": {
+    "first": 1637884800,
+    "last": 1786924800,
+    "rows": 1726,
+    "sha": "a16988b1251c417e"
+   }
+  },
+  "PYTH": {
+   "daily": {
+    "first": 1706832000,
+    "last": 1790899200,
+    "rows": 974,
+    "sha": "8e5421ab1b28a97a"
+   },
+   "funding": {
+    "first": 1700668800,
+    "last": 1790798400,
+    "rows": 6259,
+    "sha": "19651da8bfdbfc41"
+   }
+  },
+  "QCOMB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "0c49e9b5cde0addc"
+   }
+  },
+  "QI": {
+   "daily": {
+    "first": 1636934400,
+    "last": 1790899200,
+    "rows": 1783,
+    "sha": "ad88a7ab87e19dd4"
+   }
+  },
+  "QKC": {
+   "daily": {
+    "first": 1679011200,
+    "last": 1790899200,
+    "rows": 1296,
+    "sha": "46757e8e467bbce7"
+   }
+  },
+  "QNT": {
+   "daily": {
+    "first": 1627516800,
+    "last": 1790899200,
+    "rows": 1892,
+    "sha": "795f75cbf8f73781"
+   },
+   "funding": {
+    "first": 1666252800,
+    "last": 1790784000,
+    "rows": 4325,
+    "sha": "ec9f41e642c5f2f3"
+   }
+  },
+  "QNTB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "6bbcb93c740713fe"
+   }
+  },
+  "QQQB": {
+   "daily": {
+    "first": 1782777600,
+    "last": 1790899200,
+    "rows": 95,
+    "sha": "95c1b05be84d9a49"
+   }
+  },
+  "QTUM": {
+   "daily": {
+    "first": 1521417600,
+    "last": 1790899200,
+    "rows": 3120,
+    "sha": "3e5be60e88c747df"
+   },
+   "funding": {
+    "first": 1583020800,
+    "last": 1790784000,
+    "rows": 7215,
+    "sha": "25e4186ee07a087c"
+   }
+  },
+  "QUICK": {
+   "daily": {
+    "first": 1628812800,
+    "last": 1790899200,
+    "rows": 1874,
+    "sha": "2a899eb5538c96af"
+   },
+   "funding": {
+    "first": 1725609600,
+    "last": 1764316800,
+    "rows": 2689,
+    "sha": "2186640ac70a4522"
+   }
+  },
+  "RAD": {
+   "daily": {
+    "first": 1633564800,
+    "last": 1790899200,
+    "rows": 1822,
+    "sha": "456846d172ba990e"
+   },
+   "funding": {
+    "first": 1683302400,
+    "last": 1750320000,
+    "rows": 2328,
+    "sha": "1f9bfb56eb915cea"
+   }
+  },
+  "RAMP": {
+   "daily": {
+    "first": 1616371200,
+    "last": 1656892800,
+    "rows": 470,
+    "sha": "b9212715074bf7cc"
+   }
+  },
+  "RARE": {
+   "daily": {
+    "first": 1633910400,
+    "last": 1790899200,
+    "rows": 1818,
+    "sha": "4d9713696a88c3b3"
+   },
+   "funding": {
+    "first": 1723737600,
+    "last": 1790798400,
+    "rows": 4657,
+    "sha": "5c3bdb8cc7eb30af"
+   }
+  },
+  "RAY": {
+   "daily": {
+    "first": 1628553600,
+    "last": 1790899200,
+    "rows": 1880,
+    "sha": "824a440c4627b902"
+   },
+   "funding": {
+    "first": 1629360000,
+    "last": 1750320000,
+    "rows": 4773,
+    "sha": "ae06586ef427d3fd"
+   }
+  },
+  "RDNT": {
+   "daily": {
+    "first": 1680134400,
+    "last": 1775001600,
+    "rows": 1099,
+    "sha": "ac561fb667a42164"
+   },
+   "funding": {
+    "first": 1680624000,
+    "last": 1774339200,
+    "rows": 3311,
+    "sha": "f3cbac3af11ad95e"
+   }
+  },
+  "RE": {
+   "daily": {
+    "first": 1781740800,
+    "last": 1790899200,
+    "rows": 107,
+    "sha": "884ee209d2fbe1ed"
+   },
+   "funding": {
+    "first": 1781798400,
+    "last": 1790798400,
+    "rows": 625,
+    "sha": "65637b0aafc9de78"
+   }
+  },
+  "RED": {
+   "daily": {
+    "first": 1740700800,
+    "last": 1790899200,
+    "rows": 582,
+    "sha": "0f9161ca2680c682"
+   },
+   "funding": {
+    "first": 1741276800,
+    "last": 1790798400,
+    "rows": 3838,
+    "sha": "cb9ccb33fdeaace8"
+   }
+  },
+  "REEF": {
+   "daily": {
+    "first": 1609200000,
+    "last": 1724630400,
+    "rows": 1337,
+    "sha": "119517581d82024d"
+   },
+   "funding": {
+    "first": 1613980800,
+    "last": 1750320000,
+    "rows": 5473,
+    "sha": "355d3013161faf75"
+   }
+  },
+  "REI": {
+   "daily": {
+    "first": 1651622400,
+    "last": 1765929600,
+    "rows": 1324,
+    "sha": "c4232a335e4e954b"
+   },
+   "funding": {
+    "first": 1727438400,
+    "last": 1765353600,
+    "rows": 2634,
+    "sha": "5f5297058a375404"
+   }
+  },
+  "REN": {
+   "daily": {
+    "first": 1569369600,
+    "last": 1733788800,
+    "rows": 1904,
+    "sha": "2427c86088a59038"
+   },
+   "funding": {
+    "first": 1602576000,
+    "last": 1750320000,
+    "rows": 5131,
+    "sha": "a7aff25ca5fc26a7"
+   }
+  },
+  "RENDER": {
+   "daily": {
+    "first": 1721952000,
+    "last": 1790899200,
+    "rows": 799,
+    "sha": "486014c4cf2df72a"
+   },
+   "funding": {
+    "first": 1721995200,
+    "last": 1790798400,
+    "rows": 4778,
+    "sha": "4417b535885de773"
+   }
+  },
+  "REP": {
+   "daily": {
+    "first": 1591920000,
+    "last": 1671667200,
+    "rows": 924,
+    "sha": "65f9c9dc0446b3c5"
+   }
+  },
+  "REQ": {
+   "daily": {
+    "first": 1629417600,
+    "last": 1790899200,
+    "rows": 1870,
+    "sha": "84906ca3edbc8bce"
+   }
+  },
+  "RESOLV": {
+   "daily": {
+    "first": 1749600000,
+    "last": 1790899200,
+    "rows": 479,
+    "sha": "29e025e010d9aecb"
+   },
+   "funding": {
+    "first": 1749556800,
+    "last": 1790798400,
+    "rows": 3641,
+    "sha": "336f0ee0c19740ec"
+   }
+  },
+  "REZ": {
+   "daily": {
+    "first": 1714435200,
+    "last": 1790899200,
+    "rows": 886,
+    "sha": "864e9c15f4a05a62"
+   },
+   "funding": {
+    "first": 1714492800,
+    "last": 1790798400,
+    "rows": 5299,
+    "sha": "0311d40802a56e37"
+   }
+  },
+  "RGT": {
+   "daily": {
+    "first": 1636070400,
+    "last": 1647216000,
+    "rows": 130,
+    "sha": "946189447ab666aa"
+   }
+  },
+  "RIF": {
+   "daily": {
+    "first": 1609977600,
+    "last": 1790899200,
+    "rows": 2095,
+    "sha": "0900a723d8d54a68"
+   },
+   "funding": {
+    "first": 1697875200,
+    "last": 1790798400,
+    "rows": 6482,
+    "sha": "b66888d45fda6556"
+   }
+  },
+  "RKLBB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "b8d6baa31fe5afde"
+   }
+  },
+  "RLC": {
+   "daily": {
+    "first": 1573689600,
+    "last": 1790899200,
+    "rows": 2515,
+    "sha": "4f6b02d4bdb66705"
+   },
+   "funding": {
+    "first": 1596182400,
+    "last": 1790784000,
+    "rows": 6758,
+    "sha": "d95fbffd8ef2efb9"
+   }
+  },
+  "RNDR": {
+   "daily": {
+    "first": 1637971200,
+    "last": 1721606400,
+    "rows": 969,
+    "sha": "675bbdb27bd2fb06"
+   },
+   "funding": {
+    "first": 1675411200,
+    "last": 1723708800,
+    "rows": 1678,
+    "sha": "630813de8a71854b"
+   }
+  },
+  "ROBO": {
+   "daily": {
+    "first": 1772582400,
+    "last": 1790899200,
+    "rows": 213,
+    "sha": "fcd3da5f76338a1b"
+   },
+   "funding": {
+    "first": 1772193600,
+    "last": 1790798400,
+    "rows": 1292,
+    "sha": "d403cd34f4b24aaf"
+   }
+  },
+  "RONIN": {
+   "daily": {
+    "first": 1707091200,
+    "last": 1790899200,
+    "rows": 971,
+    "sha": "9c7fae3bc0a4797d"
+   },
+   "funding": {
+    "first": 1707148800,
+    "last": 1790798400,
+    "rows": 5807,
+    "sha": "fadf4c11672a660f"
+   }
+  },
+  "ROSE": {
+   "daily": {
+    "first": 1605744000,
+    "last": 1790899200,
+    "rows": 2144,
+    "sha": "5904a22fb78f5b1c"
+   },
+   "funding": {
+    "first": 1640851200,
+    "last": 1790784000,
+    "rows": 5207,
+    "sha": "6052962159c9052a"
+   }
+  },
+  "RPL": {
+   "daily": {
+    "first": 1674000000,
+    "last": 1790899200,
+    "rows": 1354,
+    "sha": "106f8f4456f630fc"
+   },
+   "funding": {
+    "first": 1725897600,
+    "last": 1790798400,
+    "rows": 4610,
+    "sha": "4b1e48557e2757ed"
+   }
+  },
+  "RSR": {
+   "daily": {
+    "first": 1598486400,
+    "last": 1790899200,
+    "rows": 2228,
+    "sha": "8762ce27e3668e2e"
+   },
+   "funding": {
+    "first": 1603094400,
+    "last": 1790784000,
+    "rows": 6518,
+    "sha": "1e9230bd5120e31e"
+   }
+  },
+  "RUNE": {
+   "daily": {
+    "first": 1599177600,
+    "last": 1790899200,
+    "rows": 2220,
+    "sha": "cf81d7e2b8e72860"
+   },
+   "funding": {
+    "first": 1599206400,
+    "last": 1790784000,
+    "rows": 6653,
+    "sha": "931af60d3ccf59f2"
+   }
+  },
+  "RVN": {
+   "daily": {
+    "first": 1569369600,
+    "last": 1790899200,
+    "rows": 2565,
+    "sha": "a48c19e9d8c6dd14"
+   },
+   "funding": {
+    "first": 1614067200,
+    "last": 1790798400,
+    "rows": 8357,
+    "sha": "66ea84ba2d9318a9"
+   }
+  },
+  "S": {
+   "daily": {
+    "first": 1736985600,
+    "last": 1790899200,
+    "rows": 625,
+    "sha": "76e8f3c32e545da0"
+   },
+   "funding": {
+    "first": 1737028800,
+    "last": 1790798400,
+    "rows": 3734,
+    "sha": "d1419b749d21daeb"
+   }
+  },
+  "SAGA": {
+   "daily": {
+    "first": 1712620800,
+    "last": 1790899200,
+    "rows": 907,
+    "sha": "7761cd8289076970"
+   },
+   "funding": {
+    "first": 1712620800,
+    "last": 1790798400,
+    "rows": 5428,
+    "sha": "924e66b6066e32a8"
+   }
+  },
+  "SAHARA": {
+   "daily": {
+    "first": 1750896000,
+    "last": 1790899200,
+    "rows": 464,
+    "sha": "cf0ce3ccdd51a6b1"
+   },
+   "funding": {
+    "first": 1750939200,
+    "last": 1790798400,
+    "rows": 3603,
+    "sha": "e6138a3a6039538a"
+   }
+  },
+  "SAND": {
+   "daily": {
+    "first": 1597363200,
+    "last": 1790899200,
+    "rows": 2241,
+    "sha": "579d040cc1e331d5"
+   },
+   "funding": {
+    "first": 1611561600,
+    "last": 1790784000,
+    "rows": 6224,
+    "sha": "13f03064f6128561"
+   }
+  },
+  "SANTOS": {
+   "daily": {
+    "first": 1638316800,
+    "last": 1790899200,
+    "rows": 1767,
+    "sha": "f0b8cfa1d52c1c07"
+   },
+   "funding": {
+    "first": 1730131200,
+    "last": 1790798400,
+    "rows": 4213,
+    "sha": "2e50fdac1b3e8173"
+   }
+  },
+  "SAPIEN": {
+   "daily": {
+    "first": 1762387200,
+    "last": 1790899200,
+    "rows": 331,
+    "sha": "ffe4a728b8300ebc"
+   },
+   "funding": {
+    "first": 1755720000,
+    "last": 1790798400,
+    "rows": 2436,
+    "sha": "d1e0addb7fc99393"
+   }
+  },
+  "SC": {
+   "daily": {
+    "first": 1593993600,
+    "last": 1790899200,
+    "rows": 2280,
+    "sha": "e9fcbf7f8c70d2cc"
+   },
+   "funding": {
+    "first": 1618214400,
+    "last": 1750320000,
+    "rows": 4588,
+    "sha": "a2e3a30aad109933"
+   }
+  },
+  "SCR": {
+   "daily": {
+    "first": 1728604800,
+    "last": 1790899200,
+    "rows": 722,
+    "sha": "f5840934c74017ec"
+   },
+   "funding": {
+    "first": 1729598400,
+    "last": 1790798400,
+    "rows": 4250,
+    "sha": "cbed7794f7a27b39"
+   }
+  },
+  "SCRT": {
+   "daily": {
+    "first": 1642723200,
+    "last": 1788393600,
+    "rows": 1687,
+    "sha": "7a7cf6247baf29e4"
+   },
+   "funding": {
+    "first": 1732190400,
+    "last": 1787731200,
+    "rows": 3857,
+    "sha": "77e39dc904a61a86"
+   }
+  },
+  "SEI": {
+   "daily": {
+    "first": 1692057600,
+    "last": 1790899200,
+    "rows": 1145,
+    "sha": "aaecbc1fda7815f7"
+   },
+   "funding": {
+    "first": 1692201600,
+    "last": 1790784000,
+    "rows": 3424,
+    "sha": "ae139708288cccd5"
+   }
+  },
+  "SENT": {
+   "daily": {
+    "first": 1769040000,
+    "last": 1790899200,
+    "rows": 254,
+    "sha": "54a6fadc1ec342fa"
+   },
+   "funding": {
+    "first": 1763136000,
+    "last": 1790798400,
+    "rows": 2400,
+    "sha": "5a11411998d8355e"
+   }
+  },
+  "SFP": {
+   "daily": {
+    "first": 1612742400,
+    "last": 1790899200,
+    "rows": 2063,
+    "sha": "eb090b8be962d527"
+   },
+   "funding": {
+    "first": 1614153600,
+    "last": 1790784000,
+    "rows": 6134,
+    "sha": "79b98ab05d7782c0"
+   }
+  },
+  "SHELL": {
+   "daily": {
+    "first": 1740614400,
+    "last": 1790899200,
+    "rows": 583,
+    "sha": "7fd58ffcf4147273"
+   },
+   "funding": {
+    "first": 1739822400,
+    "last": 1790798400,
+    "rows": 3540,
+    "sha": "12829322d044cb60"
+   }
+  },
+  "SHIB": {
+   "daily": {
+    "first": 1620604800,
+    "last": 1790899200,
+    "rows": 1972,
+    "sha": "0e4d11e797a393a4"
+   }
+  },
+  "SIGN": {
+   "daily": {
+    "first": 1745798400,
+    "last": 1790899200,
+    "rows": 523,
+    "sha": "a5955cf0c5d42a0c"
+   },
+   "funding": {
+    "first": 1745841600,
+    "last": 1790798400,
+    "rows": 4708,
+    "sha": "cc93b4fd47bc7f5d"
+   }
+  },
+  "SKHYB": {
+   "daily": {
+    "first": 1783900800,
+    "last": 1790899200,
+    "rows": 82,
+    "sha": "05b1320cc1ffccd9"
+   }
+  },
+  "SKL": {
+   "daily": {
+    "first": 1606780800,
+    "last": 1790899200,
+    "rows": 2132,
+    "sha": "c864c345b386cb3b"
+   },
+   "funding": {
+    "first": 1607414400,
+    "last": 1790798400,
+    "rows": 7484,
+    "sha": "c81164e033353663"
+   }
+  },
+  "SKY": {
+   "daily": {
+    "first": 1758067200,
+    "last": 1790899200,
+    "rows": 381,
+    "sha": "6a869bad6895b221"
+   },
+   "funding": {
+    "first": 1757404800,
+    "last": 1790798400,
+    "rows": 2319,
+    "sha": "e87419a89ba0a371"
+   }
+  },
+  "SLF": {
+   "daily": {
+    "first": 1724976000,
+    "last": 1758067200,
+    "rows": 384,
+    "sha": "604d6d9016b97c1c"
+   }
+  },
+  "SLP": {
+   "daily": {
+    "first": 1619740800,
+    "last": 1790899200,
+    "rows": 1982,
+    "sha": "75a351b123a0b676"
+   },
+   "funding": {
+    "first": 1698739200,
+    "last": 1790798400,
+    "rows": 6189,
+    "sha": "9a518a4c9551a895"
+   }
+  },
+  "SMCIB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "a0d536e72f5dce08"
+   }
+  },
+  "SMHB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "bbdc843f7841ec08"
+   }
+  },
+  "SNDKB": {
+   "daily": {
+    "first": 1781136000,
+    "last": 1790899200,
+    "rows": 114,
+    "sha": "58c7a969a36f379b"
+   }
+  },
+  "SNT": {
+   "daily": {
+    "first": 1684454400,
+    "last": 1744761600,
+    "rows": 699,
+    "sha": "86339cd9ed1fd44a"
+   },
+   "funding": {
+    "first": 1698912000,
+    "last": 1750320000,
+    "rows": 3570,
+    "sha": "ad098f16d5bacd3b"
+   }
+  },
+  "SNX": {
+   "daily": {
+    "first": 1594252800,
+    "last": 1790899200,
+    "rows": 2277,
+    "sha": "eaf7c6c1d6d5a3a6"
+   },
+   "funding": {
+    "first": 1597392000,
+    "last": 1790784000,
+    "rows": 6716,
+    "sha": "5458cdfefc7f92c6"
+   }
+  },
+  "SNXXB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "7a7617e6448848c1"
+   }
+  },
+  "SOL": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1790899200,
+    "rows": 2244,
+    "sha": "8d7531d0e6b0fde0"
+   },
+   "funding": {
+    "first": 1600012800,
+    "last": 1790784000,
+    "rows": 6700,
+    "sha": "e5a9a015beb073fa"
+   },
+   "weekly": {
+    "first": 1597017600,
+    "last": 1790553600,
+    "rows": 313,
+    "sha": "1c40e255aa5f26d0"
+   }
+  },
+  "SOLV": {
+   "daily": {
+    "first": 1737072000,
+    "last": 1790899200,
+    "rows": 624,
+    "sha": "49670263ba847d65"
+   },
+   "funding": {
+    "first": 1737129600,
+    "last": 1790798400,
+    "rows": 3727,
+    "sha": "2823b7e24187b534"
+   }
+  },
+  "SOMI": {
+   "daily": {
+    "first": 1756771200,
+    "last": 1790899200,
+    "rows": 396,
+    "sha": "fb6fab95e5956a61"
+   },
+   "funding": {
+    "first": 1756123200,
+    "last": 1790798400,
+    "rows": 2408,
+    "sha": "10b52771db65b674"
+   }
+  },
+  "SOPH": {
+   "daily": {
+    "first": 1748390400,
+    "last": 1790899200,
+    "rows": 493,
+    "sha": "ae9691206b392420"
+   },
+   "funding": {
+    "first": 1748448000,
+    "last": 1790798400,
+    "rows": 4157,
+    "sha": "5ff6f6abe0b742fb"
+   }
+  },
+  "SOXLB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "58b77738e4d4578f"
+   }
+  },
+  "SOXSB": {
+   "daily": {
+    "first": 1785283200,
+    "last": 1790899200,
+    "rows": 66,
+    "sha": "951410a14b60ae85"
+   }
+  },
+  "SPCXB": {
+   "daily": {
+    "first": 1781222400,
+    "last": 1790899200,
+    "rows": 113,
+    "sha": "286281b2fb439e5c"
+   }
+  },
+  "SPELL": {
+   "daily": {
+    "first": 1640304000,
+    "last": 1790899200,
+    "rows": 1744,
+    "sha": "8aa88267c644d1c0"
+   },
+   "funding": {
+    "first": 1662480000,
+    "last": 1790784000,
+    "rows": 4456,
+    "sha": "ae4120a5b055a55f"
+   }
+  },
+  "SPK": {
+   "daily": {
+    "first": 1750118400,
+    "last": 1790899200,
+    "rows": 473,
+    "sha": "5a8f811b49861acd"
+   },
+   "funding": {
+    "first": 1750161600,
+    "last": 1790798400,
+    "rows": 2822,
+    "sha": "4b8ff85f96978f6f"
+   }
+  },
+  "SPYB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "951b6804b69c5aab"
+   }
+  },
+  "SRM": {
+   "daily": {
+    "first": 1597104000,
+    "last": 1669593600,
+    "rows": 840,
+    "sha": "f941969fa20fcce3"
+   },
+   "funding": {
+    "first": 1599235200,
+    "last": 1721347200,
+    "rows": 4241,
+    "sha": "6e69ba7dbad22911"
+   }
+  },
+  "SSV": {
+   "daily": {
+    "first": 1677196800,
+    "last": 1790899200,
+    "rows": 1317,
+    "sha": "f4d044a04848c17e"
+   },
+   "funding": {
+    "first": 1677139200,
+    "last": 1790784000,
+    "rows": 3947,
+    "sha": "108aa1f8bd8c7e50"
+   }
+  },
+  "STEEM": {
+   "daily": {
+    "first": 1650585600,
+    "last": 1790899200,
+    "rows": 1625,
+    "sha": "3416dd27850f3b8f"
+   },
+   "funding": {
+    "first": 1699459200,
+    "last": 1790798400,
+    "rows": 6509,
+    "sha": "e9d4827c4cd72713"
+   }
+  },
+  "STG": {
+   "daily": {
+    "first": 1660867200,
+    "last": 1790899200,
+    "rows": 1506,
+    "sha": "9ed48ad85ce771d9"
+   },
+   "funding": {
+    "first": 1661443200,
+    "last": 1790236800,
+    "rows": 4864,
+    "sha": "fae7b2cb37fb419d"
+   }
+  },
+  "STMX": {
+   "daily": {
+    "first": 1591833600,
+    "last": 1740355200,
+    "rows": 1720,
+    "sha": "2f168725fa1c022a"
+   },
+   "funding": {
+    "first": 1616400000,
+    "last": 1750320000,
+    "rows": 6519,
+    "sha": "e766e25af644732a"
+   }
+  },
+  "STO": {
+   "daily": {
+    "first": 1746144000,
+    "last": 1790899200,
+    "rows": 519,
+    "sha": "fd879b17097b5917"
+   },
+   "funding": {
+    "first": 1744473600,
+    "last": 1790798400,
+    "rows": 3339,
+    "sha": "ccf69158ac0ce02b"
+   }
+  },
+  "STORJ": {
+   "daily": {
+    "first": 1596067200,
+    "last": 1788393600,
+    "rows": 2227,
+    "sha": "01dff094bac20b1d"
+   },
+   "funding": {
+    "first": 1600185600,
+    "last": 1787731200,
+    "rows": 7368,
+    "sha": "95164b1e5155d8d3"
+   }
+  },
+  "STORM": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1591574400,
+    "rows": 287,
+    "sha": "bb729b43e39fdcef"
+   }
+  },
+  "STPT": {
+   "daily": {
+    "first": 1585094400,
+    "last": 1747612800,
+    "rows": 1882,
+    "sha": "8bde88158e178214"
+   },
+   "funding": {
+    "first": 1697616000,
+    "last": 1750320000,
+    "rows": 3660,
+    "sha": "56bac14e8c24d189"
+   }
+  },
+  "STRAT": {
+   "daily": {
+    "first": 1582070400,
+    "last": 1605139200,
+    "rows": 268,
+    "sha": "8f7a72145cd45c0e"
+   }
+  },
+  "STRAX": {
+   "daily": {
+    "first": 1605657600,
+    "last": 1790899200,
+    "rows": 2138,
+    "sha": "2f9fcaae4b600154"
+   },
+   "funding": {
+    "first": 1696953600,
+    "last": 1750320000,
+    "rows": 3706,
+    "sha": "2e05f5263d616005"
+   }
+  },
+  "STRK": {
+   "daily": {
+    "first": 1708387200,
+    "last": 1790899200,
+    "rows": 956,
+    "sha": "92021e1de060ea5c"
+   },
+   "funding": {
+    "first": 1708444800,
+    "last": 1790798400,
+    "rows": 5719,
+    "sha": "24759150752f4553"
+   }
+  },
+  "STX": {
+   "daily": {
+    "first": 1571961600,
+    "last": 1790899200,
+    "rows": 2535,
+    "sha": "bb42aee3125d2f3d"
+   },
+   "funding": {
+    "first": 1676966400,
+    "last": 1790784000,
+    "rows": 3953,
+    "sha": "b12ba79b057dfe1f"
+   }
+  },
+  "SUI": {
+   "daily": {
+    "first": 1683072000,
+    "last": 1790899200,
+    "rows": 1249,
+    "sha": "31f9a3a2ea2a5e0c"
+   },
+   "funding": {
+    "first": 1683129600,
+    "last": 1790784000,
+    "rows": 3739,
+    "sha": "e8baf5b52da46d20"
+   }
+  },
+  "SUN": {
+   "daily": {
+    "first": 1600646400,
+    "last": 1790899200,
+    "rows": 2200,
+    "sha": "193b3819e382ec7f"
+   },
+   "funding": {
+    "first": 1724342400,
+    "last": 1790798400,
+    "rows": 4615,
+    "sha": "240c52edad16bd1f"
+   }
+  },
+  "SUPER": {
+   "daily": {
+    "first": 1616630400,
+    "last": 1790899200,
+    "rows": 2018,
+    "sha": "8499277e277ed45b"
+   },
+   "funding": {
+    "first": 1701014400,
+    "last": 1790798400,
+    "rows": 7561,
+    "sha": "5eaaa434cecbbc43"
+   }
+  },
+  "SUSHI": {
+   "daily": {
+    "first": 1598918400,
+    "last": 1790899200,
+    "rows": 2223,
+    "sha": "e13fa8aab6ab78a6"
+   },
+   "funding": {
+    "first": 1599206400,
+    "last": 1790784000,
+    "rows": 6653,
+    "sha": "03eac8583bf80caf"
+   }
+  },
+  "SXP": {
+   "daily": {
+    "first": 1595203200,
+    "last": 1775001600,
+    "rows": 2082,
+    "sha": "362c997282698535"
+   },
+   "funding": {
+    "first": 1595318400,
+    "last": 1764921600,
+    "rows": 5890,
+    "sha": "b3b318264c6d11e0"
+   }
+  },
+  "SXT": {
+   "daily": {
+    "first": 1746662400,
+    "last": 1790899200,
+    "rows": 513,
+    "sha": "214f94d4b63f0740"
+   },
+   "funding": {
+    "first": 1746172800,
+    "last": 1790798400,
+    "rows": 3099,
+    "sha": "2abac53efc63591a"
+   }
+  },
+  "SYN": {
+   "daily": {
+    "first": 1677024000,
+    "last": 1790899200,
+    "rows": 1319,
+    "sha": "c6d4b9493db93d71"
+   },
+   "funding": {
+    "first": 1723824000,
+    "last": 1790798400,
+    "rows": 4651,
+    "sha": "5dadaf0dd48339ab"
+   }
+  },
+  "SYRUP": {
+   "daily": {
+    "first": 1746489600,
+    "last": 1790899200,
+    "rows": 515,
+    "sha": "3962648755434ad4"
+   },
+   "funding": {
+    "first": 1746547200,
+    "last": 1790798400,
+    "rows": 3071,
+    "sha": "c3cd5948b54519ce"
+   }
+  },
+  "SYS": {
+   "daily": {
+    "first": 1632441600,
+    "last": 1779840000,
+    "rows": 1707,
+    "sha": "320b95f77172a55f"
+   },
+   "funding": {
+    "first": 1724054400,
+    "last": 1779177600,
+    "rows": 3828,
+    "sha": "f4170a89885452c4"
+   }
+  },
+  "T": {
+   "daily": {
+    "first": 1645747200,
+    "last": 1790899200,
+    "rows": 1681,
+    "sha": "b0456965d42746fc"
+   },
+   "funding": {
+    "first": 1675209600,
+    "last": 1790798400,
+    "rows": 6050,
+    "sha": "8a5cffafc1dd7a1d"
+   }
+  },
+  "TAO": {
+   "daily": {
+    "first": 1712793600,
+    "last": 1790899200,
+    "rows": 905,
+    "sha": "29020f887eee87fa"
+   },
+   "funding": {
+    "first": 1712851200,
+    "last": 1790798400,
+    "rows": 5413,
+    "sha": "3027ddfa6bae2b08"
+   }
+  },
+  "TCT": {
+   "daily": {
+    "first": 1579564800,
+    "last": 1666569600,
+    "rows": 1008,
+    "sha": "98106d0b8a51ae74"
+   }
+  },
+  "TFUEL": {
+   "daily": {
+    "first": 1558656000,
+    "last": 1790899200,
+    "rows": 2689,
+    "sha": "a4e4bf905b29b36e"
+   }
+  },
+  "THE": {
+   "daily": {
+    "first": 1732665600,
+    "last": 1790899200,
+    "rows": 675,
+    "sha": "d68e1c0cb5e12061"
+   },
+   "funding": {
+    "first": 1732723200,
+    "last": 1790798400,
+    "rows": 4033,
+    "sha": "dd2b5106542154fa"
+   }
+  },
+  "THETA": {
+   "daily": {
+    "first": 1554854400,
+    "last": 1790899200,
+    "rows": 2733,
+    "sha": "fdcdfe3081939e46"
+   },
+   "funding": {
+    "first": 1590508800,
+    "last": 1790784000,
+    "rows": 6955,
+    "sha": "3deeaeaf310ed31c"
+   }
+  },
+  "TIA": {
+   "daily": {
+    "first": 1698710400,
+    "last": 1790899200,
+    "rows": 1068,
+    "sha": "1c0b29cad1daaec2"
+   },
+   "funding": {
+    "first": 1698782400,
+    "last": 1790798400,
+    "rows": 6390,
+    "sha": "18ec40c0bbcf6045"
+   }
+  },
+  "TKO": {
+   "daily": {
+    "first": 1617753600,
+    "last": 1790899200,
+    "rows": 2005,
+    "sha": "acee295920988100"
+   }
+  },
+  "TLM": {
+   "daily": {
+    "first": 1618272000,
+    "last": 1790899200,
+    "rows": 1999,
+    "sha": "37d8eb9f40f2ee03"
+   },
+   "funding": {
+    "first": 1677628800,
+    "last": 1790798400,
+    "rows": 4589,
+    "sha": "9131ab1cd0d2ad3b"
+   }
+  },
+  "TNSR": {
+   "daily": {
+    "first": 1712534400,
+    "last": 1790899200,
+    "rows": 908,
+    "sha": "f03a16070fbde6c8"
+   },
+   "funding": {
+    "first": 1712606400,
+    "last": 1790798400,
+    "rows": 6219,
+    "sha": "f7ade9ec4d8a015f"
+   }
+  },
+  "TOMO": {
+   "daily": {
+    "first": 1566604800,
+    "last": 1700438400,
+    "rows": 1550,
+    "sha": "c5878d3db5ee4385"
+   },
+   "funding": {
+    "first": 1602489600,
+    "last": 1723708800,
+    "rows": 4210,
+    "sha": "c118df253a348720"
+   }
+  },
+  "TON": {
+   "daily": {
+    "first": 1723075200,
+    "last": 1782777600,
+    "rows": 692,
+    "sha": "7c307c0d88442717"
+   },
+   "funding": {
+    "first": 1709280000,
+    "last": 1782201600,
+    "rows": 5064,
+    "sha": "3b018923da36e4d6"
+   }
+  },
+  "TORN": {
+   "daily": {
+    "first": 1623369600,
+    "last": 1672099200,
+    "rows": 565,
+    "sha": "92295408e97de5ef"
+   }
+  },
+  "TOWNS": {
+   "daily": {
+    "first": 1754352000,
+    "last": 1790899200,
+    "rows": 424,
+    "sha": "815ff02eaf8f4ab3"
+   },
+   "funding": {
+    "first": 1754409600,
+    "last": 1790798400,
+    "rows": 2527,
+    "sha": "51a2f52496388c59"
+   }
+  },
+  "TQQQB": {
+   "daily": {
+    "first": 1784678400,
+    "last": 1790899200,
+    "rows": 73,
+    "sha": "862b456c63f74f0e"
+   }
+  },
+  "TRB": {
+   "daily": {
+    "first": 1598659200,
+    "last": 1790899200,
+    "rows": 2226,
+    "sha": "60a78c44e2ced780"
+   },
+   "funding": {
+    "first": 1599120000,
+    "last": 1790798400,
+    "rows": 9909,
+    "sha": "32023cb690b69767"
+   }
+  },
+  "TREE": {
+   "daily": {
+    "first": 1753747200,
+    "last": 1790899200,
+    "rows": 431,
+    "sha": "c21bbe48e24cfefc"
+   },
+   "funding": {
+    "first": 1753790400,
+    "last": 1790798400,
+    "rows": 2629,
+    "sha": "23afeadb30c8fcf8"
+   }
+  },
+  "TRIBE": {
+   "daily": {
+    "first": 1629763200,
+    "last": 1669593600,
+    "rows": 462,
+    "sha": "46d20fe39a9113ac"
+   }
+  },
+  "TROY": {
+   "daily": {
+    "first": 1575504000,
+    "last": 1744761600,
+    "rows": 1960,
+    "sha": "8d5fcb7ec3a7f367"
+   },
+   "funding": {
+    "first": 1730390400,
+    "last": 1750320000,
+    "rows": 1805,
+    "sha": "9e20f799bd5df9b9"
+   }
+  },
+  "TRU": {
+   "daily": {
+    "first": 1611014400,
+    "last": 1777334400,
+    "rows": 1926,
+    "sha": "148f24dd6791e2c3"
+   },
+   "funding": {
+    "first": 1678118400,
+    "last": 1776758400,
+    "rows": 3426,
+    "sha": "c2536c4483c145c6"
+   }
+  },
+  "TRUMP": {
+   "daily": {
+    "first": 1737244800,
+    "last": 1790899200,
+    "rows": 622,
+    "sha": "a70b6be14224f430"
+   },
+   "funding": {
+    "first": 1737216000,
+    "last": 1790798400,
+    "rows": 3721,
+    "sha": "42ea1785c16939f8"
+   }
+  },
+  "TRX": {
+   "daily": {
+    "first": 1528675200,
+    "last": 1790899200,
+    "rows": 3036,
+    "sha": "70c68eb8b9392a3e"
+   },
+   "funding": {
+    "first": 1579075200,
+    "last": 1790784000,
+    "rows": 7352,
+    "sha": "21c0393724159c18"
+   }
+  },
+  "TSLAB": {
+   "daily": {
+    "first": 1781136000,
+    "last": 1790899200,
+    "rows": 114,
+    "sha": "5a6cf9c71e43c28e"
+   }
+  },
+  "TSMB": {
+   "daily": {
+    "first": 1784073600,
+    "last": 1790899200,
+    "rows": 80,
+    "sha": "b8bfb5e10f155344"
+   }
+  },
+  "TST": {
+   "daily": {
+    "first": 1739059200,
+    "last": 1790899200,
+    "rows": 601,
+    "sha": "3327e6bb14beb6fa"
+   },
+   "funding": {
+    "first": 1739116800,
+    "last": 1790798400,
+    "rows": 3589,
+    "sha": "888be6d9e55cd82a"
+   }
+  },
+  "TURBO": {
+   "daily": {
+    "first": 1726444800,
+    "last": 1790899200,
+    "rows": 747,
+    "sha": "37f34bb1986feea6"
+   },
+   "funding": {
+    "first": 1717084800,
+    "last": 1790798400,
+    "rows": 5119,
+    "sha": "5c25b8e463855ff5"
+   }
+  },
+  "TURTLE": {
+   "daily": {
+    "first": 1761091200,
+    "last": 1790899200,
+    "rows": 346,
+    "sha": "3b1e960ec88a2f5c"
+   },
+   "funding": {
+    "first": 1761134400,
+    "last": 1790798400,
+    "rows": 2100,
+    "sha": "769178797d6c19f7"
+   }
+  },
+  "TUT": {
+   "daily": {
+    "first": 1743033600,
+    "last": 1790899200,
+    "rows": 555,
+    "sha": "8e0e20804a725c6e"
+   },
+   "funding": {
+    "first": 1742472000,
+    "last": 1790798400,
+    "rows": 3356,
+    "sha": "379890bbbdeca944"
+   }
+  },
+  "TVK": {
+   "daily": {
+    "first": 1628208000,
+    "last": 1701043200,
+    "rows": 844,
+    "sha": "adf2508e524007b5"
+   }
+  },
+  "TWT": {
+   "daily": {
+    "first": 1611705600,
+    "last": 1790899200,
+    "rows": 2075,
+    "sha": "1a075bd903c22cdb"
+   },
+   "funding": {
+    "first": 1698998400,
+    "last": 1790798400,
+    "rows": 6374,
+    "sha": "3430c3128b73b5ad"
+   }
+  },
+  "U": {
+   "daily": {
+    "first": 1768262400,
+    "last": 1790899200,
+    "rows": 263,
+    "sha": "4b09859e0dbfc202"
+   }
+  },
+  "UFT": {
+   "daily": {
+    "first": 1679011200,
+    "last": 1744761600,
+    "rows": 762,
+    "sha": "d8b2ae09452c4277"
+   }
+  },
+  "UMA": {
+   "daily": {
+    "first": 1599609600,
+    "last": 1790899200,
+    "rows": 2215,
+    "sha": "b4127c2856bdfb06"
+   },
+   "funding": {
+    "first": 1683619200,
+    "last": 1790798400,
+    "rows": 6676,
+    "sha": "450988f9f29e9161"
+   }
+  },
+  "UNFI": {
+   "daily": {
+    "first": 1605744000,
+    "last": 1730851200,
+    "rows": 1449,
+    "sha": "6c5c5dfff3fee9d4"
+   },
+   "funding": {
+    "first": 1612137600,
+    "last": 1750320000,
+    "rows": 6647,
+    "sha": "ae45751d86e48955"
+   }
+  },
+  "UNI": {
+   "daily": {
+    "first": 1600300800,
+    "last": 1790899200,
+    "rows": 2207,
+    "sha": "1501b48a3783424a"
+   },
+   "funding": {
+    "first": 1600329600,
+    "last": 1790784000,
+    "rows": 6614,
+    "sha": "f6378fdee67be7e1"
+   }
+  },
+  "USARB": {
+   "daily": {
+    "first": 1785888000,
+    "last": 1790899200,
+    "rows": 59,
+    "sha": "416a6d474ecca89f"
+   }
+  },
+  "USDSOLD": {},
+  "USUAL": {
+   "daily": {
+    "first": 1731974400,
+    "last": 1790899200,
+    "rows": 683,
+    "sha": "04fb3253412fc299"
+   },
+   "funding": {
+    "first": 1734537600,
+    "last": 1790798400,
+    "rows": 3907,
+    "sha": "b189e7cf3258db86"
+   }
+  },
+  "UTK": {
+   "daily": {
+    "first": 1601596800,
+    "last": 1776124800,
+    "rows": 2021,
+    "sha": "ed8cdfe695d5a601"
+   }
+  },
+  "VANA": {
+   "daily": {
+    "first": 1734307200,
+    "last": 1790899200,
+    "rows": 656,
+    "sha": "69d8d8d1dd2463ea"
+   },
+   "funding": {
+    "first": 1734364800,
+    "last": 1790798400,
+    "rows": 3919,
+    "sha": "1edcac6ef09da7f4"
+   }
+  },
+  "VANRY": {
+   "daily": {
+    "first": 1701388800,
+    "last": 1786924800,
+    "rows": 991,
+    "sha": "fefde1d5767ed080"
+   },
+   "funding": {
+    "first": 1710345600,
+    "last": 1786089600,
+    "rows": 5341,
+    "sha": "a517448dd6d61985"
+   }
+  },
+  "VELODROME": {
+   "daily": {
+    "first": 1734048000,
+    "last": 1790899200,
+    "rows": 659,
+    "sha": "08264d622af0fa7b"
+   },
+   "funding": {
+    "first": 1734105600,
+    "last": 1790798400,
+    "rows": 3937,
+    "sha": "48a1d680399b772b"
+   }
+  },
+  "VEN": {
+   "daily": {
+    "first": 1529625600,
+    "last": 1539907200,
+    "rows": 33,
+    "sha": "9e42e27190a03e03"
+   }
+  },
+  "VET": {
+   "daily": {
+    "first": 1532476800,
+    "last": 1790899200,
+    "rows": 2992,
+    "sha": "e3f47652686bd103"
+   },
+   "funding": {
+    "first": 1581667200,
+    "last": 1790784000,
+    "rows": 7262,
+    "sha": "df219bcd68faf9d9"
+   }
+  },
+  "VGX": {
+   "daily": {
+    "first": 1637539200,
+    "last": 1724630400,
+    "rows": 1009,
+    "sha": "b7353ac922ea6fcb"
+   }
+  },
+  "VIB": {
+   "daily": {
+    "first": 1677196800,
+    "last": 1746144000,
+    "rows": 799,
+    "sha": "411fc7887c5226f2"
+   }
+  },
+  "VIC": {
+   "daily": {
+    "first": 1700784000,
+    "last": 1786924800,
+    "rows": 998,
+    "sha": "2961c5b3a42fd055"
+   },
+   "funding": {
+    "first": 1741809600,
+    "last": 1786089600,
+    "rows": 3279,
+    "sha": "9b3a82488d3e9d99"
+   }
+  },
+  "VIDT": {
+   "daily": {
+    "first": 1631145600,
+    "last": 1744761600,
+    "rows": 1308,
+    "sha": "47cc04e39186f6b8"
+   },
+   "funding": {
+    "first": 1724400000,
+    "last": 1750320000,
+    "rows": 2227,
+    "sha": "ababd23fcfe1f162"
+   }
+  },
+  "VIRTUAL": {
+   "daily": {
+    "first": 1744329600,
+    "last": 1790899200,
+    "rows": 540,
+    "sha": "3728150b35cce671"
+   },
+   "funding": {
+    "first": 1733846400,
+    "last": 1790798400,
+    "rows": 3955,
+    "sha": "47eb70a4b0512ccb"
+   }
+  },
+  "VITE": {
+   "daily": {
+    "first": 1576195200,
+    "last": 1740355200,
+    "rows": 1901,
+    "sha": "3743217c665c99b8"
+   }
+  },
+  "VOXEL": {
+   "daily": {
+    "first": 1639440000,
+    "last": 1765929600,
+    "rows": 1465,
+    "sha": "a9d964e3942c77f0"
+   },
+   "funding": {
+    "first": 1724155200,
+    "last": 1765353600,
+    "rows": 4475,
+    "sha": "fcc9481ea7b37a9d"
+   }
+  },
+  "VTHO": {
+   "daily": {
+    "first": 1594944000,
+    "last": 1790899200,
+    "rows": 2269,
+    "sha": "d65c0c13a55dabea"
+   },
+   "funding": {
+    "first": 1737547200,
+    "last": 1790798400,
+    "rows": 3698,
+    "sha": "981bfac30fd806af"
+   }
+  },
+  "W": {
+   "daily": {
+    "first": 1712102400,
+    "last": 1790899200,
+    "rows": 913,
+    "sha": "d5f9ab452ef62c6d"
+   },
+   "funding": {
+    "first": 1712160000,
+    "last": 1790798400,
+    "rows": 5461,
+    "sha": "3650761d7cddb48d"
+   }
+  },
+  "WAL": {
+   "daily": {
+    "first": 1760054400,
+    "last": 1790899200,
+    "rows": 358,
+    "sha": "888ae7a04c5dcea8"
+   },
+   "funding": {
+    "first": 1743091200,
+    "last": 1790798400,
+    "rows": 3313,
+    "sha": "7866936c0d1f2617"
+   }
+  },
+  "WAN": {
+   "daily": {
+    "first": 1566864000,
+    "last": 1776902400,
+    "rows": 2432,
+    "sha": "1a58be214a152b35"
+   }
+  },
+  "WAVES": {
+   "daily": {
+    "first": 1547769600,
+    "last": 1718582400,
+    "rows": 1978,
+    "sha": "7ec1502fd77421f2"
+   },
+   "funding": {
+    "first": 1597219200,
+    "last": 1750320000,
+    "rows": 5317,
+    "sha": "ec55fe74664e8211"
+   }
+  },
+  "WAXP": {
+   "daily": {
+    "first": 1629676800,
+    "last": 1790899200,
+    "rows": 1867,
+    "sha": "38541574458b12d8"
+   },
+   "funding": {
+    "first": 1697616000,
+    "last": 1790798400,
+    "rows": 6512,
+    "sha": "90044033c7b2d67c"
+   }
+  },
+  "WCT": {
+   "daily": {
+    "first": 1744675200,
+    "last": 1790899200,
+    "rows": 536,
+    "sha": "0ecfc8f39a0b3773"
+   },
+   "funding": {
+    "first": 1744718400,
+    "last": 1790798400,
+    "rows": 4067,
+    "sha": "0a22aaeb2ba7a94e"
+   }
+  },
+  "WDCB": {
+   "daily": {
+    "first": 1783382400,
+    "last": 1790899200,
+    "rows": 88,
+    "sha": "1c10bc346acd3f8e"
+   }
+  },
+  "WIF": {
+   "daily": {
+    "first": 1709596800,
+    "last": 1790899200,
+    "rows": 942,
+    "sha": "aee9c833b99b6151"
+   },
+   "funding": {
+    "first": 1705593600,
+    "last": 1790798400,
+    "rows": 5917,
+    "sha": "aa148248e1378d4e"
+   }
+  },
+  "WIN": {
+   "daily": {
+    "first": 1564617600,
+    "last": 1790899200,
+    "rows": 2620,
+    "sha": "9e83c19fa758b817"
+   }
+  },
+  "WING": {
+   "daily": {
+    "first": 1600214400,
+    "last": 1746144000,
+    "rows": 1690,
+    "sha": "237a8578ed2d2c00"
+   }
+  },
+  "WLD": {
+   "daily": {
+    "first": 1690156800,
+    "last": 1790899200,
+    "rows": 1167,
+    "sha": "3192fd2474e97d45"
+   },
+   "funding": {
+    "first": 1690214400,
+    "last": 1790784000,
+    "rows": 3493,
+    "sha": "9bc128e7e2db8b4b"
+   }
+  },
+  "WLFI": {
+   "daily": {
+    "first": 1756684800,
+    "last": 1790899200,
+    "rows": 397,
+    "sha": "41078f6569420d8d"
+   },
+   "funding": {
+    "first": 1755950400,
+    "last": 1790798400,
+    "rows": 2420,
+    "sha": "d4062570dfa6ad7b"
+   }
+  },
+  "WNXM": {
+   "daily": {
+    "first": 1598572800,
+    "last": 1718582400,
+    "rows": 1390,
+    "sha": "50ddd7ffec0645e6"
+   }
+  },
+  "WOO": {
+   "daily": {
+    "first": 1644278400,
+    "last": 1790899200,
+    "rows": 1698,
+    "sha": "37072d684a128343"
+   },
+   "funding": {
+    "first": 1649347200,
+    "last": 1790784000,
+    "rows": 4912,
+    "sha": "fb94f023f01cf750"
+   }
+  },
+  "WRX": {
+   "daily": {
+    "first": 1580860800,
+    "last": 1735084800,
+    "rows": 1786,
+    "sha": "720501bddc7d747c"
+   }
+  },
+  "WTC": {
+   "daily": {
+    "first": 1586217600,
+    "last": 1701907200,
+    "rows": 1340,
+    "sha": "6e751cf2e410e2ee"
+   }
+  },
+  "XAI": {
+   "daily": {
+    "first": 1704758400,
+    "last": 1790899200,
+    "rows": 998,
+    "sha": "5ee22badb9476599"
+   },
+   "funding": {
+    "first": 1704816000,
+    "last": 1790798400,
+    "rows": 5971,
+    "sha": "c9825eb283478d4a"
+   }
+  },
+  "XAUT": {
+   "daily": {
+    "first": 1774483200,
+    "last": 1790899200,
+    "rows": 191,
+    "sha": "b324b913ed05d81f"
+   },
+   "funding": {
+    "first": 1774540800,
+    "last": 1790798400,
+    "rows": 1129,
+    "sha": "5592782df2761682"
+   }
+  },
+  "XEC": {
+   "daily": {
+    "first": 1630627200,
+    "last": 1790899200,
+    "rows": 1856,
+    "sha": "0095edf04b730ee8"
+   }
+  },
+  "XEM": {
+   "daily": {
+    "first": 1606176000,
+    "last": 1718582400,
+    "rows": 1302,
+    "sha": "d0024b000bfbe9ea"
+   },
+   "funding": {
+    "first": 1614758400,
+    "last": 1750320000,
+    "rows": 4708,
+    "sha": "180941711b76a996"
+   }
+  },
+  "XLM": {
+   "daily": {
+    "first": 1527724800,
+    "last": 1790899200,
+    "rows": 3047,
+    "sha": "26cd2f01c617c1f8"
+   },
+   "funding": {
+    "first": 1579449600,
+    "last": 1790784000,
+    "rows": 7339,
+    "sha": "50a4d8ca35a75c4b"
+   }
+  },
+  "XMR": {
+   "daily": {
+    "first": 1552608000,
+    "last": 1708387200,
+    "rows": 1804,
+    "sha": "377f82d64ae02a66"
+   },
+   "funding": {
+    "first": 1580515200,
+    "last": 1790784000,
+    "rows": 7302,
+    "sha": "711c5c21ab87f8bd"
+   }
+  },
+  "XNO": {
+   "daily": {
+    "first": 1643328000,
+    "last": 1790899200,
+    "rows": 1709,
+    "sha": "927b4e429e705af3"
+   }
+  },
+  "XPL": {
+   "daily": {
+    "first": 1758758400,
+    "last": 1790899200,
+    "rows": 373,
+    "sha": "d4cde28ef8a60fbf"
+   },
+   "funding": {
+    "first": 1755864000,
+    "last": 1790798400,
+    "rows": 2426,
+    "sha": "d96fcbc29d8c074e"
+   }
+  },
+  "XRP": {
+   "daily": {
+    "first": 1525392000,
+    "last": 1790899200,
+    "rows": 3074,
+    "sha": "9aa1e7c57fc76fe8"
+   },
+   "funding": {
+    "first": 1578297600,
+    "last": 1790784000,
+    "rows": 7379,
+    "sha": "28a52d358de7625b"
+   },
+   "weekly": {
+    "first": 1525046400,
+    "last": 1790553600,
+    "rows": 432,
+    "sha": "d43d626bc4cb44ec"
+   }
+  },
+  "XTZ": {
+   "daily": {
+    "first": 1569283200,
+    "last": 1790899200,
+    "rows": 2566,
+    "sha": "9b06c16fc81b08da"
+   },
+   "funding": {
+    "first": 1580803200,
+    "last": 1790798400,
+    "rows": 8643,
+    "sha": "af8452ecec8b6f92"
+   }
+  },
+  "XVG": {
+   "daily": {
+    "first": 1622937600,
+    "last": 1790899200,
+    "rows": 1945,
+    "sha": "db963ddc2dc1f270"
+   },
+   "funding": {
+    "first": 1688486400,
+    "last": 1790784000,
+    "rows": 3567,
+    "sha": "36e98654e9abefe6"
+   }
+  },
+  "XVS": {
+   "daily": {
+    "first": 1601942400,
+    "last": 1790899200,
+    "rows": 2188,
+    "sha": "2702013225f186f4"
+   },
+   "funding": {
+    "first": 1681286400,
+    "last": 1790784000,
+    "rows": 3803,
+    "sha": "aca80470474337a1"
+   }
+  },
+  "XZC": {
+   "daily": {
+    "first": 1586217600,
+    "last": 1611532800,
+    "rows": 294,
+    "sha": "7962e741657f6be9"
+   }
+  },
+  "YB": {
+   "daily": {
+    "first": 1760486400,
+    "last": 1790899200,
+    "rows": 353,
+    "sha": "28624db719c0b1b5"
+   },
+   "funding": {
+    "first": 1760112000,
+    "last": 1790798400,
+    "rows": 2131,
+    "sha": "cda05c95f1c536bd"
+   }
+  },
+  "YFI": {
+   "daily": {
+    "first": 1597017600,
+    "last": 1790899200,
+    "rows": 2245,
+    "sha": "41b738cdc4d166fc"
+   },
+   "funding": {
+    "first": 1598860800,
+    "last": 1790784000,
+    "rows": 6665,
+    "sha": "d6a357ad887133ca"
+   }
+  },
+  "YFII": {
+   "daily": {
+    "first": 1598918400,
+    "last": 1692662400,
+    "rows": 1086,
+    "sha": "2836c1f4a2d97738"
+   },
+   "funding": {
+    "first": 1599120000,
+    "last": 1649923200,
+    "rows": 1765,
+    "sha": "a17e871aa41c15df"
+   }
+  },
+  "YGG": {
+   "daily": {
+    "first": 1632441600,
+    "last": 1790899200,
+    "rows": 1835,
+    "sha": "8d23f0f00da7824e"
+   },
+   "funding": {
+    "first": 1691164800,
+    "last": 1790798400,
+    "rows": 6722,
+    "sha": "e248a82ed5c689dd"
+   }
+  },
+  "ZAMA": {
+   "daily": {
+    "first": 1769990400,
+    "last": 1790899200,
+    "rows": 243,
+    "sha": "bf85e841c338f946"
+   },
+   "funding": {
+    "first": 1767960000,
+    "last": 1790798400,
+    "rows": 1586,
+    "sha": "89abaa04020adb27"
+   }
+  },
+  "ZBT": {
+   "daily": {
+    "first": 1760659200,
+    "last": 1790899200,
+    "rows": 351,
+    "sha": "766b92ad3eb8c2b7"
+   },
+   "funding": {
+    "first": 1760702400,
+    "last": 1790798400,
+    "rows": 2474,
+    "sha": "97f79e31e50afa9b"
+   }
+  },
+  "ZEC": {
+   "daily": {
+    "first": 1553126400,
+    "last": 1790899200,
+    "rows": 2753,
+    "sha": "08e7699e2f6fe068"
+   },
+   "funding": {
+    "first": 1580803200,
+    "last": 1790784000,
+    "rows": 7292,
+    "sha": "9d3a0ea32796593c"
+   }
+  },
+  "ZEN": {
+   "daily": {
+    "first": 1593993600,
+    "last": 1790899200,
+    "rows": 2280,
+    "sha": "f827d8db256bed35"
+   },
+   "funding": {
+    "first": 1606204800,
+    "last": 1790784000,
+    "rows": 6410,
+    "sha": "c0f93c58378e6629"
+   }
+  },
+  "ZIL": {
+   "daily": {
+    "first": 1550534400,
+    "last": 1790899200,
+    "rows": 2783,
+    "sha": "7f3fbdc17bf150ac"
+   },
+   "funding": {
+    "first": 1592380800,
+    "last": 1790798400,
+    "rows": 7778,
+    "sha": "ff4a9e82067dc219"
+   }
+  },
+  "ZK": {
+   "daily": {
+    "first": 1718582400,
+    "last": 1790899200,
+    "rows": 838,
+    "sha": "511ef44c9528e50a"
+   },
+   "funding": {
+    "first": 1718625600,
+    "last": 1790798400,
+    "rows": 5057,
+    "sha": "2528a8a2a3473a29"
+   }
+  },
+  "ZKC": {
+   "daily": {
+    "first": 1757894400,
+    "last": 1790899200,
+    "rows": 383,
+    "sha": "0fc6911930d06bb9"
+   },
+   "funding": {
+    "first": 1757923200,
+    "last": 1790798400,
+    "rows": 2341,
+    "sha": "432e857e1f306053"
+   }
+  },
+  "ZKP": {
+   "daily": {
+    "first": 1767744000,
+    "last": 1790899200,
+    "rows": 269,
+    "sha": "a6fac9b83b1b59a2"
+   },
+   "funding": {
+    "first": 1766318400,
+    "last": 1790798400,
+    "rows": 2082,
+    "sha": "50c16b79df9db7c1"
+   }
+  },
+  "ZRO": {
+   "daily": {
+    "first": 1718841600,
+    "last": 1790899200,
+    "rows": 835,
+    "sha": "2dbf62bbdc1ba2f1"
+   },
+   "funding": {
+    "first": 1718899200,
+    "last": 1790798400,
+    "rows": 4993,
+    "sha": "8b5d9cc800360ef6"
+   }
+  },
+  "ZRX": {
+   "daily": {
+    "first": 1551312000,
+    "last": 1790899200,
+    "rows": 2774,
+    "sha": "b2e899e84e2a1265"
+   },
+   "funding": {
+    "first": 1592985600,
+    "last": 1790798400,
+    "rows": 7824,
+    "sha": "9e784a8fa2981eea"
+   }
+  },
+  "\u5e01\u5b89\u4eba\u751f": {
+   "daily": {
+    "first": 1767744000,
+    "last": 1790899200,
+    "rows": 269,
+    "sha": "75c6c2ad2705e1ab"
+   },
+   "funding": {
+    "first": 1760961600,
+    "last": 1790798400,
+    "rows": 2072,
+    "sha": "6dc4468d670fa19b"
+   }
+  }
+ }
+}
