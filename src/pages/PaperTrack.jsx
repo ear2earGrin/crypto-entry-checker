@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { fetchKlinesRange, fetchFundingHistory, dropUnclosedCandle } from "../data/binance.js";
 import { backtestPortfolio } from "../backtest/portfolio.js";
+import { markOpenPosition } from "../backtest/markToMarket.js";
 import { PRODUCTION_PRESET, PAPER_EPOCH } from "../strategy/presets.js";
-import { T, ui } from "../ui/theme.js";
+import { T, ui, signColor } from "../ui/theme.js";
 import { Page, PageHeader, Tile } from "../ui/Page.jsx";
 
 /**
@@ -55,7 +56,11 @@ async function loadAssetData(asset, epochMs) {
     : closed;
   let funding = null;
   try { funding = await fetchFundingHistory({ asset, startTime: dailyStart }); } catch { /* best-effort */ }
-  return { daily, weekly, funding };
+  // Mark price for open positions: the forming candle's close is Binance's
+  // latest trade. Display only — the engine above never sees it.
+  const lastRaw = dailyRaw[dailyRaw.length - 1];
+  const mark = lastRaw && Number.isFinite(lastRaw.close) ? lastRaw.close : null;
+  return { daily, weekly, funding, mark };
 }
 
 export default function PaperTrack() {
@@ -71,13 +76,14 @@ export default function PaperTrack() {
       const epochSec = Math.floor(epochMs / 1000);
 
       const settled = await Promise.allSettled(UNIVERSE.map((a) => loadAssetData(a, epochMs)));
-      const dailyByAsset = {}, weeklyByAsset = {}, fundingByAsset = {};
+      const dailyByAsset = {}, weeklyByAsset = {}, fundingByAsset = {}, markByAsset = {};
       const failed = [];
       settled.forEach((r, i) => {
         if (r.status === "fulfilled") {
           dailyByAsset[UNIVERSE[i]] = r.value.daily;
           weeklyByAsset[UNIVERSE[i]] = r.value.weekly;
           fundingByAsset[UNIVERSE[i]] = r.value.funding;
+          markByAsset[UNIVERSE[i]] = r.value.mark;
         } else failed.push(UNIVERSE[i]);
       });
       if (Object.keys(dailyByAsset).length === 0) throw new Error("No asset data loaded — check network.");
@@ -92,7 +98,19 @@ export default function PaperTrack() {
       });
 
       const realized = res.trades.filter((t) => t.exitReason !== "end of data" && t.entryTime >= epochSec);
-      const open = res.openPositions.filter((p) => p.entryTime >= epochSec);
+      // Unrealized PnL: what each open position would net if closed at the
+      // latest price (after slippage, fees and funding, as the engine settles
+      // trades), and what it nets if its current trailing stop is hit.
+      const costs = { feePct: CFG.feePct, slippagePct: CFG.slippagePct };
+      const open = res.openPositions
+        .filter((p) => p.entryTime >= epochSec)
+        .map((p) => ({
+          ...p,
+          now: markOpenPosition({ pos: p, price: markByAsset[p.asset], ...costs }),
+          atStop: markOpenPosition({ pos: p, price: p.stop, ...costs }),
+        }));
+      const unrealized = open.reduce((s, p) => s + (p.now ? p.now.net : 0), 0);
+      const unmarked = open.filter((p) => !p.now).map((p) => p.asset);
 
       const events = [];
       const riskOf = (t) => t.qty * Math.abs(t.entry - t.initialStop);
@@ -121,7 +139,10 @@ export default function PaperTrack() {
       const pnl = realized.reduce((s, t) => s + t.pnl, 0);
       const wins = realized.filter((t) => t.pnl > 0).length;
 
-      setResult({ events, freshKeys: new Set(fresh.map((e) => e.key)), open, realized, pnl, wins, failed });
+      setResult({
+        events, freshKeys: new Set(fresh.map((e) => e.key)), open, realized, pnl, wins, failed,
+        unrealized, unmarked, markedAt: new Date(),
+      });
       setStatus({
         state: "ok",
         message: fresh.length
@@ -171,6 +192,18 @@ export default function PaperTrack() {
             <Tile label="Open positions" value={String(result.open.length)} />
             <Tile label="Closed trades" value={`${result.realized.length} (${result.wins} wins)`} />
             <Tile label="Realized PnL" value={`${fmt(result.pnl, 0)} USDT`} good={result.pnl > 0} bad={result.pnl < 0} />
+            <Tile
+              label="Unrealized PnL"
+              value={`${fmt(result.unrealized, 0)} USDT`}
+              sub={result.open.length ? `${result.open.length} open, at live price` : "no open positions"}
+              good={result.unrealized > 0} bad={result.unrealized < 0}
+            />
+            <Tile
+              label="Total PnL"
+              value={`${fmt(result.pnl + result.unrealized, 0)} USDT`}
+              sub={`${fmt(((result.pnl + result.unrealized) / CFG.equity) * 100, 2)}% of ${fmt(CFG.equity, 0)}`}
+              good={result.pnl + result.unrealized > 0} bad={result.pnl + result.unrealized < 0}
+            />
           </div>
 
           <h2 style={ui.h2}>Open paper positions</h2>
@@ -181,7 +214,9 @@ export default function PaperTrack() {
               <table style={ui.table}>
                 <thead><tr>
                   <th style={styles.th}>Asset</th><th style={styles.th}>Since</th><th style={styles.th}>Entry</th>
-                  <th style={styles.th}>Current stop</th><th style={styles.th}>Qty</th>
+                  <th style={styles.th}>Now</th><th style={styles.th}>Move</th>
+                  <th style={styles.th}>Unrealized PnL</th><th style={styles.th}>R</th>
+                  <th style={styles.th}>Current stop</th><th style={styles.th}>At stop</th><th style={styles.th}>Qty</th>
                 </tr></thead>
                 <tbody>
                   {result.open.map((p) => (
@@ -189,7 +224,14 @@ export default function PaperTrack() {
                       <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600 }}>{p.asset}</td>
                       <td style={styles.td}>{ymd(p.entryTime)}</td>
                       <td style={styles.td}>{fmt(p.entry, 4)}</td>
+                      <td style={styles.td}>{p.now ? fmt(p.now.price, 4) : "-"}</td>
+                      <td style={{ ...styles.td, color: signColor(p.now?.movePct) }}>{p.now ? `${p.now.movePct >= 0 ? "+" : ""}${fmt(p.now.movePct, 2)}%` : "-"}</td>
+                      <td style={{ ...styles.td, color: signColor(p.now?.net), fontWeight: 500 }}>{p.now ? `${fmt(p.now.net, 0)} USDT` : "-"}</td>
+                      <td style={{ ...styles.td, color: signColor(p.now?.r) }}>{p.now ? `${fmt(p.now.r, 2)}R` : "-"}</td>
                       <td style={styles.td}>{fmt(p.stop, 4)}</td>
+                      <td style={{ ...styles.td, color: signColor(p.atStop?.net) }} title="What the position nets if the current trailing stop is hit">
+                        {p.atStop ? `${fmt(p.atStop.net, 0)} USDT` : "-"}
+                      </td>
                       <td style={styles.td}>{fmt(p.qty, 6)}</td>
                     </tr>
                   ))}
@@ -197,6 +239,14 @@ export default function PaperTrack() {
               </table>
             </div>
           )}
+          {result.open.length ? (
+            <p style={ui.foot}>
+              Unrealized = what closing at Binance&apos;s latest price ({result.markedAt.toLocaleTimeString()}) would net
+              after slippage, fees and funding — the same costs the engine charges on a real exit. At stop = what each
+              position nets if its current trailing stop is hit; positive means profit is already locked in.
+              {result.unmarked.length ? ` No live price for: ${result.unmarked.join(", ")}.` : ""}
+            </p>
+          ) : null}
 
           <div style={styles.journalHead}>
             <h2 style={ui.h2}>Event journal</h2>

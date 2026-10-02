@@ -31,7 +31,7 @@ import { buildDailyFundingMap, accrueFunding, dayKey } from "./funding.js";
  * @param {object} [opts.signalParams=SIGNAL_PARAMS]
  * @returns {{ trades, equityCurve, finalEquity, startEquity, perAsset }}
  */
-function slip(price, side, slippagePct) {
+export function slip(price, side, slippagePct) {
   const s = (slippagePct || 0) / 100;
   return side === "buy" ? price * (1 + s) : price * (1 - s);
 }
