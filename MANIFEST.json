@@ -1,0 +1,768 @@
+{
+ "fetchedAt": "2026-10-02T12:57:32.633317+00:00",
+ "pairs": {
+  "AAVE:USD": {
+   "first": 1612483200,
+   "last": 1790899200,
+   "rows": 2066,
+   "sha": "033f3731d23125bc"
+  },
+  "ADAUSD": {
+   "first": 1596672000,
+   "last": 1790899200,
+   "rows": 2249,
+   "sha": "b2324d129efe9bc3"
+  },
+  "AIDUSD": {
+   "first": 1516752000,
+   "last": 1606089600,
+   "rows": 812,
+   "sha": "7b630589e17faa72"
+  },
+  "ALGUSD": {
+   "first": 1561075200,
+   "last": 1790899200,
+   "rows": 2605,
+   "sha": "d98ab73c1f486204"
+  },
+  "ALT2612:USD": {
+   "first": 1709510400,
+   "last": 1788998400,
+   "rows": 30,
+   "sha": "de73836f0a43e734"
+  },
+  "APTUSD": {
+   "first": 1666137600,
+   "last": 1790899200,
+   "rows": 1445,
+   "sha": "8812b2c0ac0a1cea"
+  },
+  "ARBUSD": {
+   "first": 1679529600,
+   "last": 1790899200,
+   "rows": 1289,
+   "sha": "7e63694a76f9c633"
+  },
+  "ATMUSD": {
+   "first": 1531353600,
+   "last": 1606089600,
+   "rows": 480,
+   "sha": "45d0b8a4087608f4"
+  },
+  "AVAX:USD": {
+   "first": 1600819200,
+   "last": 1790899200,
+   "rows": 2201,
+   "sha": "17a26781bd83593e"
+  },
+  "AVTUSD": {
+   "first": 1507593600,
+   "last": 1616803200,
+   "rows": 1131,
+   "sha": "30045457a465f2a5"
+  },
+  "BABUSD": {
+   "first": 1542067200,
+   "last": 1605398400,
+   "rows": 734,
+   "sha": "5518116e83804371"
+  },
+  "BATUSD": {
+   "first": 1515369600,
+   "last": 1730764800,
+   "rows": 2494,
+   "sha": "55938cfea5543628"
+  },
+  "BCHN:USD": {
+   "first": 1605398400,
+   "last": 1790899200,
+   "rows": 2148,
+   "sha": "ce1087625375adf4"
+  },
+  "BCHUSD": {
+   "first": 1501632000,
+   "last": 1542240000,
+   "rows": 471,
+   "sha": "6c13a38ef26638a3"
+  },
+  "BMN2:USD": {
+   "first": 1756944000,
+   "last": 1788912000,
+   "rows": 32,
+   "sha": "6251bd432c3b0779"
+  },
+  "BNTUSD": {
+   "first": 1532563200,
+   "last": 1707436800,
+   "rows": 1567,
+   "sha": "35c7100eee845440"
+  },
+  "BSVUSD": {
+   "first": 1542067200,
+   "last": 1672272000,
+   "rows": 1508,
+   "sha": "338aaa4bda530c52"
+  },
+  "BTCUSD": {
+   "first": 1364688000,
+   "last": 1790899200,
+   "rows": 4927,
+   "sha": "5015ee3ae144fc4b"
+  },
+  "BTGUSD": {
+   "first": 1508803200,
+   "last": 1689033600,
+   "rows": 2083,
+   "sha": "c5c1c51a3cdffaa2"
+  },
+  "CALCPB:USD": {
+   "first": 1787875200,
+   "last": 1787875200,
+   "rows": 1,
+   "sha": "3de3c15febc8a29e"
+  },
+  "CELO:USD": {
+   "first": 1707955200,
+   "last": 1790899200,
+   "rows": 810,
+   "sha": "1f100c6d79e6544a"
+  },
+  "CHZUSD": {
+   "first": 1573776000,
+   "last": 1790899200,
+   "rows": 2316,
+   "sha": "30e926a1263235a1"
+  },
+  "CMSTR:USD": {
+   "first": 1787875200,
+   "last": 1788912000,
+   "rows": 2,
+   "sha": "b08bf781cb8f61d3"
+  },
+  "CMTPL:USD": {
+   "first": 1787875200,
+   "last": 1788912000,
+   "rows": 2,
+   "sha": "f65a3c3565ecbcda"
+  },
+  "CRVUSD": {
+   "first": 1638316800,
+   "last": 1790899200,
+   "rows": 1760,
+   "sha": "55d3f001a74b48e1"
+  },
+  "DATUSD": {
+   "first": 1509667200,
+   "last": 1660867200,
+   "rows": 1733,
+   "sha": "9f2dd7d6260d6462"
+  },
+  "DGBUSD": {
+   "first": 1541116800,
+   "last": 1699488000,
+   "rows": 1745,
+   "sha": "c15fe36708a2329e"
+  },
+  "DOGE:USD": {
+   "first": 1618963200,
+   "last": 1790899200,
+   "rows": 1991,
+   "sha": "139dc1b6a3e41e35"
+  },
+  "DOTUSD": {
+   "first": 1598054400,
+   "last": 1790899200,
+   "rows": 2233,
+   "sha": "e614cf965e835213"
+  },
+  "DSHUSD": {
+   "first": 1488499200,
+   "last": 1790899200,
+   "rows": 3501,
+   "sha": "82d97d9d8553090d"
+  },
+  "EDOUSD": {
+   "first": 1508457600,
+   "last": 1685404800,
+   "rows": 2043,
+   "sha": "c5bb473f5e980eef"
+  },
+  "ELFUSD": {
+   "first": 1516752000,
+   "last": 1607990400,
+   "rows": 927,
+   "sha": "9e91f75f0a3e47e8"
+  },
+  "ENAUSD": {
+   "first": 1712016000,
+   "last": 1790899200,
+   "rows": 911,
+   "sha": "7b4e4ef67b7d5f88"
+  },
+  "EOSUSD": {
+   "first": 1498867200,
+   "last": 1783036800,
+   "rows": 3284,
+   "sha": "1e347667ff941a7d"
+  },
+  "ESSUSD": {
+   "first": 1530835200,
+   "last": 1655078400,
+   "rows": 1066,
+   "sha": "6e13636dfbb0924b"
+  },
+  "ETCUSD": {
+   "first": 1469491200,
+   "last": 1790899200,
+   "rows": 3714,
+   "sha": "d9a7d442588aa588"
+  },
+  "ETH2X:USD": {
+   "first": 1611187200,
+   "last": 1787443200,
+   "rows": 1660,
+   "sha": "77fe8a8b58d15eaf"
+  },
+  "ETHUSD": {
+   "first": 1457481600,
+   "last": 1790899200,
+   "rows": 3853,
+   "sha": "7c3bda09c8313054"
+  },
+  "ETPUSD": {
+   "first": 1505865600,
+   "last": 1685404800,
+   "rows": 2079,
+   "sha": "6a2acde1e29f2f15"
+  },
+  "EURQ:USD": {
+   "first": 1732147200,
+   "last": 1790899200,
+   "rows": 372,
+   "sha": "1d4c13ae651acb1a"
+  },
+  "EURR:USD": {
+   "first": 1736985600,
+   "last": 1780185600,
+   "rows": 288,
+   "sha": "368ad0b8b300c338"
+  },
+  "FILUSD": {
+   "first": 1602720000,
+   "last": 1790899200,
+   "rows": 2179,
+   "sha": "1b36e45a334eb223"
+  },
+  "FUNUSD": {
+   "first": 1515369600,
+   "last": 1730764800,
+   "rows": 2319,
+   "sha": "4835524534519e09"
+  },
+  "GNTUSD": {
+   "first": 1514332800,
+   "last": 1685404800,
+   "rows": 1961,
+   "sha": "74533eb2a951f5bf"
+  },
+  "GOMINING:USD": {
+   "first": 1702512000,
+   "last": 1790899200,
+   "rows": 803,
+   "sha": "322cabe52263a8a0"
+  },
+  "GUNUSD": {
+   "first": 1743379200,
+   "last": 1790899200,
+   "rows": 535,
+   "sha": "9ae97adcdeb85211"
+  },
+  "HYPE:USD": {
+   "first": 1757289600,
+   "last": 1790899200,
+   "rows": 383,
+   "sha": "0a13aec2b862537b"
+  },
+  "IOSUSD": {
+   "first": 1523059200,
+   "last": 1616803200,
+   "rows": 856,
+   "sha": "9ae2962e05da1f9a"
+  },
+  "IOTUSD": {
+   "first": 1497225600,
+   "last": 1790899200,
+   "rows": 3400,
+   "sha": "1205abdb0f3fc7d4"
+  },
+  "KAIA:USD": {
+   "first": 1741737600,
+   "last": 1790899200,
+   "rows": 447,
+   "sha": "425fbf5f71276c6d"
+  },
+  "LEOUSD": {
+   "first": 1558310400,
+   "last": 1790899200,
+   "rows": 2693,
+   "sha": "d188dace1ca7ffae"
+  },
+  "LIFIII:USD": {
+   "first": 1706140800,
+   "last": 1790899200,
+   "rows": 981,
+   "sha": "96839c80a5879b47"
+  },
+  "LINK:USD": {
+   "first": 1597968000,
+   "last": 1790899200,
+   "rows": 2234,
+   "sha": "6a0fc8a209997feb"
+  },
+  "LRCUSD": {
+   "first": 1523059200,
+   "last": 1724371200,
+   "rows": 1953,
+   "sha": "114053bcc466f3ac"
+  },
+  "LTCUSD": {
+   "first": 1368921600,
+   "last": 1790899200,
+   "rows": 4874,
+   "sha": "1fc2c2d8e2cc4711"
+  },
+  "MNAUSD": {
+   "first": 1515369600,
+   "last": 1752624000,
+   "rows": 2658,
+   "sha": "a466d48dff1ce265"
+  },
+  "MNTUSD": {
+   "first": 1756339200,
+   "last": 1790899200,
+   "rows": 367,
+   "sha": "31b1e15c390de6ea"
+  },
+  "MXNT:USD": {
+   "first": 1655424000,
+   "last": 1787788800,
+   "rows": 973,
+   "sha": "695e80f717318095"
+  },
+  "NEAR:USD": {
+   "first": 1618185600,
+   "last": 1790899200,
+   "rows": 2000,
+   "sha": "eab52c30f3d4042e"
+  },
+  "NEOUSD": {
+   "first": 1504742400,
+   "last": 1783036800,
+   "rows": 3222,
+   "sha": "c732e9c1cd008357"
+  },
+  "NYMUSD": {
+   "first": 1728518400,
+   "last": 1790899200,
+   "rows": 705,
+   "sha": "ebf599db5af86249"
+  },
+  "ODEUSD": {
+   "first": 1523059200,
+   "last": 1651795200,
+   "rows": 1387,
+   "sha": "3788779431c5e6e9"
+  },
+  "OMGUSD": {
+   "first": 1499990400,
+   "last": 1752624000,
+   "rows": 2925,
+   "sha": "5ad60d55eae86aa0"
+  },
+  "OPXUSD": {
+   "first": 1690416000,
+   "last": 1790899200,
+   "rows": 1142,
+   "sha": "ee9ee9ee259d4cae"
+  },
+  "PEPE:USD": {
+   "first": 1684886400,
+   "last": 1790899200,
+   "rows": 1223,
+   "sha": "9e578bb563e522bb"
+  },
+  "PNKUSD": {
+   "first": 1541030400,
+   "last": 1790899200,
+   "rows": 2538,
+   "sha": "f8fdf1974d1aca82"
+  },
+  "POLUSD": {
+   "first": 1725408000,
+   "last": 1790899200,
+   "rows": 758,
+   "sha": "0ac167ac6c013bdf"
+  },
+  "QSHUSD": {
+   "first": 1512000000,
+   "last": 1647216000,
+   "rows": 1526,
+   "sha": "7081299ef86dcb63"
+  },
+  "QTMUSD": {
+   "first": 1507593600,
+   "last": 1733356800,
+   "rows": 2575,
+   "sha": "3ed1251f4042a43c"
+  },
+  "RCNUSD": {
+   "first": 1516752000,
+   "last": 1616803200,
+   "rows": 891,
+   "sha": "426e3e39eebb1971"
+  },
+  "REPUSD": {
+   "first": 1516752000,
+   "last": 1689033600,
+   "rows": 1811,
+   "sha": "022a7f8b287dfa9b"
+  },
+  "RLSUSD": {
+   "first": 1768435200,
+   "last": 1790899200,
+   "rows": 243,
+   "sha": "68b520240fb66180"
+  },
+  "RRTUSD": {
+   "first": 1476057600,
+   "last": 1790553600,
+   "rows": 2605,
+   "sha": "fbfb7796f136e5a4"
+  },
+  "SANUSD": {
+   "first": 1499817600,
+   "last": 1660867200,
+   "rows": 1863,
+   "sha": "522caf7039331263"
+  },
+  "SEIUSD": {
+   "first": 1692057600,
+   "last": 1790899200,
+   "rows": 1143,
+   "sha": "220bbf60a13c6b9e"
+  },
+  "SHIB:USD": {
+   "first": 1635379200,
+   "last": 1790899200,
+   "rows": 1801,
+   "sha": "f320cc1fe47be3ea"
+  },
+  "SKYUSD": {
+   "first": 1757289600,
+   "last": 1790899200,
+   "rows": 383,
+   "sha": "8216b939f5cc2d38"
+  },
+  "SNGUSD": {
+   "first": 1516752000,
+   "last": 1633392000,
+   "rows": 1088,
+   "sha": "18de9d332802dd82"
+  },
+  "SNTUSD": {
+   "first": 1514332800,
+   "last": 1689033600,
+   "rows": 1998,
+   "sha": "a2cbf3eaadef571a"
+  },
+  "SOLUSD": {
+   "first": 1614211200,
+   "last": 1790899200,
+   "rows": 2046,
+   "sha": "79b46f7723fd3c01"
+  },
+  "SPKUSD": {
+   "first": 1515369600,
+   "last": 1606089600,
+   "rows": 896,
+   "sha": "51d69b9b14ec63da"
+  },
+  "STABLE:USD": {
+   "first": 1765152000,
+   "last": 1790899200,
+   "rows": 297,
+   "sha": "e9cb7236d32c5d1d"
+  },
+  "STGUSD": {
+   "first": 1650931200,
+   "last": 1790899200,
+   "rows": 1610,
+   "sha": "ac8cf7b6039023ad"
+  },
+  "STRCST:USD": {
+   "first": 1787875200,
+   "last": 1790726400,
+   "rows": 16,
+   "sha": "6124e6be76f29591"
+  },
+  "STXUSD": {
+   "first": 1744243200,
+   "last": 1790899200,
+   "rows": 392,
+   "sha": "f2e46c2009152b06"
+  },
+  "SUIUSD": {
+   "first": 1683072000,
+   "last": 1790899200,
+   "rows": 1249,
+   "sha": "854e99ae440b542c"
+  },
+  "SUNUSD": {
+   "first": 1607558400,
+   "last": 1790726400,
+   "rows": 1843,
+   "sha": "f41d493b98eae93d"
+  },
+  "TESTADA:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1119,
+   "sha": "d70741ce5fc847b9"
+  },
+  "TESTALGO:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1105,
+   "sha": "d949d8aa77d66373"
+  },
+  "TESTAPT:TESTUSD": {
+   "first": 1680652800,
+   "last": 1749081600,
+   "rows": 544,
+   "sha": "b2c1e4aafb6c080e"
+  },
+  "TESTAVAX:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1079,
+   "sha": "c92056c739afaae1"
+  },
+  "TESTBTC:TESTUSD": {
+   "first": 1592956800,
+   "last": 1790899200,
+   "rows": 2292,
+   "sha": "cfce595ab615d02d"
+  },
+  "TESTDOGE:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1159,
+   "sha": "8beda0546e377c9f"
+  },
+  "TESTDOT:TESTUSD": {
+   "first": 1677628800,
+   "last": 1790899200,
+   "rows": 1144,
+   "sha": "7d980ee5471cef21"
+  },
+  "TESTETH:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1167,
+   "sha": "80ed44e7ba5b90ca"
+  },
+  "TESTFIL:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1033,
+   "sha": "36e77c550c508e42"
+  },
+  "TESTLTC:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1082,
+   "sha": "aa56ddd4b3542fd8"
+  },
+  "TESTNEAR:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1031,
+   "sha": "49a640c4ffde3d01"
+  },
+  "TESTSOL:TESTUSD": {
+   "first": 1677628800,
+   "last": 1790899200,
+   "rows": 1134,
+   "sha": "d434eb4543660edf"
+  },
+  "TESTXAUT:TESTUSD": {
+   "first": 1680652800,
+   "last": 1790899200,
+   "rows": 1098,
+   "sha": "ada36a493c0068b7"
+  },
+  "TITAN1:USD": {
+   "first": 1749427200,
+   "last": 1788912000,
+   "rows": 11,
+   "sha": "d3d157653e9bca4e"
+  },
+  "TITAN2:USD": {
+   "first": 1749427200,
+   "last": 1785196800,
+   "rows": 9,
+   "sha": "3459e624a9387ef2"
+  },
+  "TITAN4:USD": {
+   "first": 1781568000,
+   "last": 1788307200,
+   "rows": 2,
+   "sha": "17dd8310cad54b5a"
+  },
+  "TNBUSD": {
+   "first": 1515369600,
+   "last": 1610582400,
+   "rows": 1038,
+   "sha": "aa28f2f917aae2b8"
+  },
+  "TONUSD": {
+   "first": 1680825600,
+   "last": 1790899200,
+   "rows": 1265,
+   "sha": "000c21fabc0e44bb"
+  },
+  "TRXUSD": {
+   "first": 1516752000,
+   "last": 1790899200,
+   "rows": 3174,
+   "sha": "01e84ab21d970a5e"
+  },
+  "UNIUSD": {
+   "first": 1600473600,
+   "last": 1790899200,
+   "rows": 2205,
+   "sha": "660a07c711f643b4"
+  },
+  "USAT:USD": {
+   "first": 1769472000,
+   "last": 1790899200,
+   "rows": 225,
+   "sha": "26e8be5751664723"
+  },
+  "USDF:USD": {
+   "first": 1747094400,
+   "last": 1789084800,
+   "rows": 240,
+   "sha": "bca123c465c635e2"
+  },
+  "USDQ:USD": {
+   "first": 1732147200,
+   "last": 1790726400,
+   "rows": 346,
+   "sha": "07052609b0858703"
+  },
+  "USDR:USD": {
+   "first": 1736985600,
+   "last": 1780358400,
+   "rows": 241,
+   "sha": "ecdc73a68f294eac"
+  },
+  "USTBL:USD": {
+   "first": 1733356800,
+   "last": 1788739200,
+   "rows": 13,
+   "sha": "758a2f62847777cf"
+  },
+  "UTKUSD": {
+   "first": 1527724800,
+   "last": 1707436800,
+   "rows": 1680,
+   "sha": "0707cefb1e19cf54"
+  },
+  "VETUSD": {
+   "first": 1535414400,
+   "last": 1733356800,
+   "rows": 2284,
+   "sha": "031e88ba1862d37c"
+  },
+  "WAXUSD": {
+   "first": 1523059200,
+   "last": 1689033600,
+   "rows": 1691,
+   "sha": "374dfa3278337467"
+  },
+  "WBTUSD": {
+   "first": 1556841600,
+   "last": 1790899200,
+   "rows": 2000,
+   "sha": "ca15e237b048e294"
+  },
+  "WHBT:USD": {
+   "first": 1685577600,
+   "last": 1790899200,
+   "rows": 1006,
+   "sha": "54810f1275ae7675"
+  },
+  "XDCUSD": {
+   "first": 1605744000,
+   "last": 1790899200,
+   "rows": 2144,
+   "sha": "bb8a97d584e45e34"
+  },
+  "XLMUSD": {
+   "first": 1525132800,
+   "last": 1790899200,
+   "rows": 3077,
+   "sha": "3380e1d3074a8c39"
+  },
+  "XMRUSD": {
+   "first": 1480464000,
+   "last": 1790899200,
+   "rows": 3594,
+   "sha": "54f7939bcf5e0a8c"
+  },
+  "XPLUSD": {
+   "first": 1758758400,
+   "last": 1790899200,
+   "rows": 348,
+   "sha": "7259a892b7413e75"
+  },
+  "XRPUSD": {
+   "first": 1495152000,
+   "last": 1790899200,
+   "rows": 3424,
+   "sha": "e4cfa3e9595aec21"
+  },
+  "XTZUSD": {
+   "first": 1537142400,
+   "last": 1772582400,
+   "rows": 2725,
+   "sha": "b75bc75f97b01d1e"
+  },
+  "YYWUSD": {
+   "first": 1512086400,
+   "last": 1623974400,
+   "rows": 1278,
+   "sha": "77de1228c828674d"
+  },
+  "ZECUSD": {
+   "first": 1477699200,
+   "last": 1790899200,
+   "rows": 3626,
+   "sha": "f733c7cf18ca82a9"
+  },
+  "ZROUSD": {
+   "first": 1718841600,
+   "last": 1790899200,
+   "rows": 834,
+   "sha": "07012853fa69c8f8"
+  },
+  "ZRXUSD": {
+   "first": 1515369600,
+   "last": 1764288000,
+   "rows": 2882,
+   "sha": "1a6b7f0799808846"
+  }
+ },
+ "source": "api-pub.bitfinex.com v2 candles 1D"
+}
