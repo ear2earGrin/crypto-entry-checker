@@ -1,4 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
+import { useLang, translator } from "../i18n.js";
+import { SCOUT_STRINGS, SCOUT_GUIDE, translateReason, translateReasons } from "./scout.i18n.js";
 
 /**
  * SCOUT — narrative discovery dashboard. Reads the snapshot the Mac mini's
@@ -9,6 +11,10 @@ import { useEffect, useState, Fragment } from "react";
  *
  * Visual language follows the Narrative Scout concept page: slate panels,
  * amber accent, IBM Plex type, heatmap cells for relative strength.
+ *
+ * Bilingual: every label comes from scout.i18n.js via `t`, following whatever
+ * language the host page is set to (src/i18n.js). Coin names, tickers and shell
+ * commands stay as they are in every language.
  */
 
 // On the Mac's dashboard the dev server serves the local snapshot. The static
@@ -26,12 +32,13 @@ const usd = (x) => {
   return `$${x.toFixed(2)}`;
 };
 const px = (x) => (x === null || x === undefined || !Number.isFinite(x) ? "–" : x >= 100 ? x.toFixed(2) : x >= 1 ? x.toFixed(4) : x.toPrecision(4));
-const ago = (iso) => {
-  if (!iso) return "–";
+// "3h ago" is a phrase, so it needs the page's `t` passed in.
+const agoWith = (t) => (iso) => {
+  if (!iso) return t("none");
   const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
-  if (m < 60) return `${m}m ago`;
-  if (m < 48 * 60) return `${Math.round(m / 60)}h ago`;
-  return `${Math.round(m / 1440)}d ago`;
+  if (m < 60) return t("minsAgo", m);
+  if (m < 48 * 60) return t("hoursAgo", Math.round(m / 60));
+  return t("daysAgo", Math.round(m / 1440));
 };
 const ymd = (unix) => (unix ? new Date(unix * 1000).toISOString().slice(0, 10) : "–");
 
@@ -39,7 +46,6 @@ const ymd = (unix) => (unix ? new Date(unix * 1000).toISOString().slice(0, 10) :
 const heat = (x) => (x === null || x === undefined || !Number.isFinite(x) ? "z" : x >= 10 ? "p2" : x > 1 ? "p1" : x >= -1 ? "z" : x > -10 ? "n1" : "n2");
 const signClass = (x) => (x === null || x === undefined || !Number.isFinite(x) ? "" : x > 0 ? "up" : x < 0 ? "down" : "");
 const STAGE_CLASS = { ACCELERATING: "s-acc", EMERGING: "s-em", MAINSTREAM: "s-main", EXHAUSTING: "s-exh", COLD: "s-cold", UNKNOWN: "s-cold" };
-const STAGE_LABEL = { ACCELERATING: "Accelerating", EMERGING: "Emerging", MAINSTREAM: "Mainstream", EXHAUSTING: "Exhausting", COLD: "Cold", UNKNOWN: "Unknown" };
 
 function Bar({ value, invert = false }) {
   const v = Math.max(0, Math.min(100, value ?? 0));
@@ -54,12 +60,17 @@ function Bar({ value, invert = false }) {
 }
 
 export default function Scout() {
+  const lang = useLang();
+  const t = translator(SCOUT_STRINGS, lang);
+  const ago = agoWith(t);
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(null);
   const [grades, setGrades] = useState({ A: true, B: true, C: false });
   const [showRejects, setShowRejects] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [check, setCheck] = useState(null);
 
   // manual = the Reload button: report whether a newer snapshot arrived, since
@@ -88,17 +99,17 @@ export default function Scout() {
       <div className="ns">
         <style>{CSS}</style>
         <div className="wrap">
-          <Header onRefresh={() => load(true)} loading={loading} check={check} />
+          <Header onRefresh={() => load(true)} loading={loading} check={check} t={t} ago={ago} />
           <section className="panel">
-            {loading ? <p className="muted">Loading the latest scan…</p> : (
+            {loading ? <p className="muted">{t("loadingScan")}</p> : (
               <>
-                <h3>No Scout data yet{error && error !== "no-data" ? ` (${error})` : ""}</h3>
+                <h3>{t("noDataYet")}{error && error !== "no-data" ? ` (${error})` : ""}</h3>
                 {import.meta.env.PROD ? (
-                  <p className="muted">This page shows the snapshot the Mac mini publishes every hour. Nothing has been published yet. On the Mac, in the project folder: <span className="mono ink">echo on &gt; data/scout/publish.txt &amp;&amp; node scripts/scout.mjs --publish-now</span></p>
+                  <p className="muted">{t("noDataProd")} <span className="mono ink">echo on &gt; data/scout/publish.txt &amp;&amp; node scripts/scout.mjs --publish-now</span></p>
                 ) : (
                   <>
-                    <p className="muted">The Scout runs on the Mac mini and this page reads what it writes. In Terminal, in the project folder:</p>
-                    <pre className="pre">{`git pull\nnpm install\nnode scripts/scout.mjs        # first scan now (takes ~1–2 minutes)\nnode scripts/scout-install.mjs # then run it every hour automatically`}</pre>
+                    <p className="muted">{t("noDataDev")}</p>
+                    <pre className="pre">{`git pull\nnpm install\nnode scripts/scout.mjs        ${t("cmdFirstScan")}\nnode scripts/scout-install.mjs ${t("cmdInstall")}`}</pre>
                   </>
                 )}
               </>
@@ -118,47 +129,49 @@ export default function Scout() {
     <div className="ns">
       <style>{CSS}</style>
       <div className="wrap">
-        <Header onRefresh={() => load(true)} loading={loading} data={data} check={check} />
+        <Header onRefresh={() => load(true)} loading={loading} data={data} check={check} t={t} ago={ago} />
 
-        {data.selftest && <div className="banner warn"><b>Selftest data.</b> Synthetic coins and prices. Run node scripts/scout.mjs on the Mac for the real scan.</div>}
+        <Guide lang={lang} t={t} open={showGuide} onToggle={() => setShowGuide(!showGuide)} />
+
+        {data.selftest && <div className="banner warn"><b>{t("selftestTitle")}</b> {t("selftestBody")}</div>}
         {data.scanError && (
           <div className="banner bad">
-            <b>Market scan failed {ago(data.scanError.at)}.</b> CoinGecko: {data.scanError.coingecko?.ok ? "ok" : data.scanError.coingecko?.error || "not reached"} · Binance: {data.scanError.binance?.ok ? "ok" : data.scanError.binance?.error || "not reached"}.
-            {data.scanDay ? ` Showing the last good scan (${data.scanDay}).` : " No scan has succeeded yet; news still updates."} It retries every hour.
+            <b>{t("scanFailedTitle", ago(data.scanError.at))}</b> CoinGecko: {data.scanError.coingecko?.ok ? t("sourceOk") : data.scanError.coingecko?.error || t("sourceUnreached")} · Binance: {data.scanError.binance?.ok ? t("sourceOk") : data.scanError.binance?.error || t("sourceUnreached")}.
+            {data.scanDay ? t("lastGoodScan", data.scanDay) : t("neverScanned")}{t("retriesHourly")}
           </div>
         )}
         {!bull && !data.scanError && (
-          <div className="banner bad"><b>BTC regime is {btcRegime?.state ?? "unknown"}.</b> The Scout keeps watching but opens no new test positions until BTC's weekly regime is bullish.</div>
+          <div className="banner bad"><b>{t("regimeBannerTitle", btcRegime?.state ?? t("unknown"))}</b> {t("regimeBannerBody")}</div>
         )}
 
-        <section className="rule" aria-label="The operating rule">
-          <div><span className="eyebrow">Narrative decides</span><b>what to watch</b><span className="muted">The Scout builds the watchlist</span></div>
-          <div><span className="eyebrow">Price decides</span><b>when</b><span className="muted">The pick rule fires, or nothing happens</span></div>
-          <div><span className="eyebrow">Risk decides</span><b>how much</b><span className="muted">{usd(cfg.testAmount)} test per pick, stop set at entry</span></div>
+        <section className="rule" aria-label={t("ruleAria")}>
+          <div><span className="eyebrow">{t("narrativeDecides")}</span><b>{t("whatToWatch")}</b><span className="muted">{t("scoutBuilds")}</span></div>
+          <div><span className="eyebrow">{t("priceDecides")}</span><b>{t("when")}</b><span className="muted">{t("pickRuleFires")}</span></div>
+          <div><span className="eyebrow">{t("riskDecides")}</span><b>{t("howMuch")}</b><span className="muted">{t("testPerPick", usd(cfg.testAmount))}</span></div>
         </section>
 
         <div className="grid2">
           <section className="panel">
-            <div className="panel-head"><h2>Narrative rotation board</h2><span className="chip live">live</span></div>
-            <p className="muted small">Each row is an equal-weight basket. Cells show performance relative to BTC. Breadth is the share of the basket beating BTC over 30 days.</p>
+            <div className="panel-head"><h2>{t("rotationBoard")}</h2><span className="chip live">{t("live")}</span></div>
+            <p className="muted small">{t("rotationHelp")}</p>
             <div className="scroll">
               <table>
-                <thead><tr><th>Narrative</th><th>7d vs BTC</th><th>30d</th><th>200d</th><th>Breadth</th><th>Heat</th><th>Stage</th></tr></thead>
+                <thead><tr><th>{t("thNarrative")}</th><th>{t("th7dVsBtc")}</th><th>{t("th30d")}</th><th>{t("th200d")}</th><th>{t("thBreadth")}</th><th>{t("thHeat")}</th><th>{t("thStage")}</th></tr></thead>
                 <tbody>
                   {(data.narratives || []).map((b) => (
                     <tr key={b.key}>
                       <td>
                         {b.name}
-                        {b.leader && <div className="tiny muted">Leader {b.leader.symbol} <span className={signClass(b.leader.rs7)}>{pct(b.leader.rs7, 0)}</span> 7d</div>}
-                        {b.singleCoinEvent && <div className="tiny warn-text">one coin carrying it</div>}
-                        {b.missing?.length > 0 && <div className="tiny muted">{b.missing.length} coin{b.missing.length > 1 ? "s" : ""} outside top 1,000</div>}
+                        {b.leader && <div className="tiny muted">{t("leader", b.leader.symbol)} <span className={signClass(b.leader.rs7)}>{pct(b.leader.rs7, 0)}</span> {t("sevenD")}</div>}
+                        {b.singleCoinEvent && <div className="tiny warn-text">{t("oneCoinCarrying")}</div>}
+                        {b.missing?.length > 0 && <div className="tiny muted">{t("coinsOutsideTop", b.missing.length)}</div>}
                       </td>
                       <td className={`heat ${heat(b.rs7)}`}>{pct(b.rs7, 0)}</td>
                       <td className={`heat ${heat(b.rs30)}`}>{pct(b.rs30, 0)}</td>
                       <td className={`heat ${heat(b.rs200)}`}>{pct(b.rs200, 0)}</td>
                       <td className="mono">{b.breadth30 === null || b.breadth30 === undefined ? "–" : `${b.breadth30.toFixed(0)}%`}</td>
                       <td><Bar value={b.heat} /></td>
-                      <td><span className={`stage ${STAGE_CLASS[b.stage] || "s-cold"}`}>{STAGE_LABEL[b.stage] || b.stage}</span></td>
+                      <td><span className={`stage ${STAGE_CLASS[b.stage] || "s-cold"}`}>{b.stage ? t(b.stage) : "–"}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -166,7 +179,7 @@ export default function Scout() {
             </div>
             {data.categories?.length > 0 && (
               <div className="cats">
-                <span className="muted">Hottest CoinGecko categories, 24h:</span>
+                <span className="muted">{t("hottestCategories")}</span>
                 {data.categories.slice(0, 8).map((c) => <span key={c.id} className="tag">{c.name} <b className={signClass(c.change24h)}>{pct(c.change24h)}</b></span>)}
               </div>
             )}
@@ -174,54 +187,56 @@ export default function Scout() {
 
           <div className="stack">
             <section className="panel">
-              <div className="panel-head"><h3>BTC regime</h3><span className={`chip ${bull ? "live" : "bad"}`}>{bull ? "bull" : (btcRegime?.state || "unknown").toLowerCase()}</span></div>
+              <div className="panel-head"><h3>{t("btcRegime")}</h3><span className={`chip ${bull ? "live" : "bad"}`}>{bull ? t("bull") : (btcRegime?.state || t("unknown")).toLowerCase()}</span></div>
               <p className="muted small">
-                {btcRegime?.close ? <>Weekly close <b className="ink mono">{Math.round(btcRegime.close).toLocaleString("en-US")}</b> vs 50-week average <b className="ink mono">{Math.round(btcRegime.sma).toLocaleString("en-US")}</b>. </> : null}
-                The master switch: new picks only while BTC is bullish.
+                {btcRegime?.close ? <>{t("weeklyClosePre")}<b className="ink mono">{Math.round(btcRegime.close).toLocaleString("en-US")}</b>{t("weeklyCloseMid")}<b className="ink mono">{Math.round(btcRegime.sma).toLocaleString("en-US")}</b>{". "}</> : null}
+                {t("masterSwitch")}
               </p>
             </section>
             <section className="panel">
-              <div className="panel-head"><h3>Alt-season gauge</h3><span className="chip">{gauge?.label?.toLowerCase() || "–"}</span></div>
-              <div className="gauge" role="img" aria-label={`Gauge reading ${gauge?.score ?? "unknown"} of 100`}>
+              <div className="panel-head"><h3>{t("altSeasonGauge")}</h3><span className="chip">{gauge?.label ? t(gauge.label) : "–"}</span></div>
+              <div className="gauge" role="img" aria-label={t("gaugeAria", gauge?.score ?? t("unknown"))}>
                 <div className="track">{gauge?.score !== null && gauge?.score !== undefined && <span className="needle" style={{ left: `${gauge.score}%` }} />}</div>
-                <div className="ends"><span>BTC leading</span><span className="mono ink">{gauge?.score ?? "–"}</span><span>Alts leading</span></div>
+                <div className="ends"><span>{t("btcLeading")}</span><span className="mono ink">{gauge?.score ?? "–"}</span><span>{t("altsLeading")}</span></div>
               </div>
               <p className="muted small">
-                {gauge?.share30 !== null && gauge?.share30 !== undefined ? `${gauge.share30.toFixed(0)}% of the top ${gauge.sample} beat BTC over 30 days, ${gauge.share200?.toFixed(0)}% over 200 days. ` : ""}
-                Alt season is when 75%+ do.
+                {gauge?.share30 !== null && gauge?.share30 !== undefined
+                  ? t("gaugeShares", gauge.share30.toFixed(0), gauge.sample, gauge.share200?.toFixed(0))
+                  : ""}
+                {t("altSeasonIs")}
               </p>
             </section>
             <section className="panel">
-              <div className="panel-head"><h3>Today's funnel</h3><span className="chip">{data.scanDay || "–"}</span></div>
+              <div className="panel-head"><h3>{t("todaysFunnel")}</h3><span className="chip">{data.scanDay || "–"}</span></div>
               <div className="funnel">
                 {[
-                  [funnel?.universe, "Coins scanned"],
-                  [funnel?.gated, "Liquid and on Binance"],
-                  [funnel?.watchlist, "Passed all vetoes → watchlist"],
-                  [funnel?.eligible, "Met the pick rule"],
-                  [funnel?.picked, "Picked today → test buy"],
-                ].map(([n, label]) => <div key={label}><span className="n mono">{n ?? "–"}</span><span className="f">{label}</span></div>)}
+                  [funnel?.universe, "funnelUniverse"],
+                  [funnel?.gated, "funnelGated"],
+                  [funnel?.watchlist, "funnelWatchlist"],
+                  [funnel?.eligible, "funnelEligible"],
+                  [funnel?.picked, "funnelPicked"],
+                ].map(([n, key]) => <div key={key}><span className="n mono">{n ?? "–"}</span><span className="f">{t(key)}</span></div>)}
               </div>
             </section>
           </div>
         </div>
 
         <section className="panel">
-          <div className="panel-head"><h2>Test book</h2><span className="chip">paper · {usd(cfg.startCash)}</span></div>
+          <div className="panel-head"><h2>{t("testBook")}</h2><span className="chip">{t("paperWith", usd(cfg.startCash))}</span></div>
           <div className="tiles">
-            <div className="tile"><span className="l">Equity</span><span className={`v ${Math.abs(book?.returnPct ?? 0) < 0.05 ? "" : signClass(book?.returnPct)}`}>{usd(book?.equity)}</span><span className="muted small">{pct(book?.returnPct)} since start</span></div>
-            <div className="tile"><span className="l">Cash free</span><span className="v">{usd(book?.cash)}</span><span className="muted small">{book?.open?.length ?? 0} of {cfg.maxOpen ?? 5} slots used</span></div>
-            <div className="tile"><span className="l">Closed trades</span><span className="v">{book?.stats?.trades ?? 0}</span><span className="muted small">win rate {book?.stats?.winRate ?? "–"}% · avg {book?.stats?.avgR ?? "–"}R</span></div>
-            <div className="tile"><span className="l">Beat BTC</span><span className="v">{book?.stats?.beatBtcRate ?? "–"}{book?.stats?.beatBtcRate !== null && book?.stats?.beatBtcRate !== undefined ? "%" : ""}</span><span className="muted small">of closed trades, same days</span></div>
+            <div className="tile"><span className="l">{t("equity")}</span><span className={`v ${Math.abs(book?.returnPct ?? 0) < 0.05 ? "" : signClass(book?.returnPct)}`}>{usd(book?.equity)}</span><span className="muted small">{t("sinceStart", pct(book?.returnPct))}</span></div>
+            <div className="tile"><span className="l">{t("cashFree")}</span><span className="v">{usd(book?.cash)}</span><span className="muted small">{t("slotsUsed", book?.open?.length ?? 0, cfg.maxOpen ?? 5)}</span></div>
+            <div className="tile"><span className="l">{t("closedTrades")}</span><span className="v">{book?.stats?.trades ?? 0}</span><span className="muted small">{t("winRateAvg", book?.stats?.winRate ?? "–", book?.stats?.avgR ?? "–")}</span></div>
+            <div className="tile"><span className="l">{t("beatBtc")}</span><span className="v">{book?.stats?.beatBtcRate ?? "–"}{book?.stats?.beatBtcRate !== null && book?.stats?.beatBtcRate !== undefined ? "%" : ""}</span><span className="muted small">{t("ofClosedSameDays")}</span></div>
           </div>
           {book?.open?.length ? (
             <div className="scroll">
               <table>
-                <thead><tr><th>Coin</th><th>Opened</th><th>Entry</th><th>Stop</th><th>Now</th><th>Result</th><th>BTC same days</th><th>vs BTC</th><th>Why picked</th></tr></thead>
+                <thead><tr><th>{t("thCoin")}</th><th>{t("thOpened")}</th><th>{t("thEntry")}</th><th>{t("thStop")}</th><th>{t("thNow")}</th><th>{t("thResult")}</th><th>{t("thBtcSameDays")}</th><th>{t("thVsBtc")}</th><th>{t("thWhyPicked")}</th></tr></thead>
                 <tbody>
                   {book.open.map((p) => (
                     <tr key={p.id + p.entryTime}>
-                      <td><b>{p.symbol}</b> {data.picksToday?.includes(p.id) && <span className="chip live">new</span>}</td>
+                      <td><b>{p.symbol}</b> {data.picksToday?.includes(p.id) && <span className="chip live">{t("isNew")}</span>}</td>
                       <td className="mono">{p.entryDay}</td>
                       <td className="mono">{px(p.entry)}</td>
                       <td className="mono">{px(p.stop)}</td>
@@ -229,32 +244,32 @@ export default function Scout() {
                       <td className={`mono ${signClass(p.retPct)}`}>{pct(p.retPct)}</td>
                       <td className="mono">{pct(p.btcRetPct)}</td>
                       <td className={`mono ${signClass(p.vsBtcPct)}`}>{pct(p.vsBtcPct)}</td>
-                      <td className="wrap-cell muted">{p.reason}</td>
+                      <td className="wrap-cell muted">{translateReason(p.reason, lang)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ) : (
-            <p className="muted">No open test positions. {bull ? "A pick needs a coin that clears every rule below." : "Waiting for BTC's weekly regime to turn bullish."}</p>
+            <p className="muted">{t("noOpenPositions")}{bull ? t("pickNeedsRules") : t("waitingForRegime")}</p>
           )}
           {book?.closed?.length > 0 && (
             <div className="scroll">
               <table>
-                <thead><tr><th>Closed</th><th>Coin</th><th>Opened</th><th>Entry</th><th>Exit</th><th>Result</th><th>R</th><th>BTC same days</th><th>vs BTC</th><th>Exit reason</th></tr></thead>
+                <thead><tr><th>{t("thClosed")}</th><th>{t("thCoin")}</th><th>{t("thOpened")}</th><th>{t("thEntry")}</th><th>{t("thExit")}</th><th>{t("thResult")}</th><th>{t("thR")}</th><th>{t("thBtcSameDays")}</th><th>{t("thVsBtc")}</th><th>{t("thExitReason")}</th></tr></thead>
                 <tbody>
-                  {[...book.closed].reverse().map((t) => (
-                    <tr key={t.id + t.entryTime}>
-                      <td className="mono">{ymd(t.exitTime)}</td>
-                      <td><b>{t.symbol}</b></td>
-                      <td className="mono">{t.entryDay}</td>
-                      <td className="mono">{px(t.entry)}</td>
-                      <td className="mono">{px(t.exit)}</td>
-                      <td className={`mono ${signClass(t.retPct)}`}>{pct(t.retPct)} ({usd(t.pnl)})</td>
-                      <td className="mono">{t.r ?? "–"}</td>
-                      <td className="mono">{pct(t.btcRetPct)}</td>
-                      <td className={`mono ${signClass(t.vsBtcPct)}`}>{pct(t.vsBtcPct)}</td>
-                      <td>{t.exitReason}</td>
+                  {[...book.closed].reverse().map((trade) => (
+                    <tr key={trade.id + trade.entryTime}>
+                      <td className="mono">{ymd(trade.exitTime)}</td>
+                      <td><b>{trade.symbol}</b></td>
+                      <td className="mono">{trade.entryDay}</td>
+                      <td className="mono">{px(trade.entry)}</td>
+                      <td className="mono">{px(trade.exit)}</td>
+                      <td className={`mono ${signClass(trade.retPct)}`}>{pct(trade.retPct)} ({usd(trade.pnl)})</td>
+                      <td className="mono">{trade.r ?? "–"}</td>
+                      <td className="mono">{pct(trade.btcRetPct)}</td>
+                      <td className={`mono ${signClass(trade.vsBtcPct)}`}>{pct(trade.vsBtcPct)}</td>
+                      <td>{translateReason(trade.exitReason, lang)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -264,15 +279,15 @@ export default function Scout() {
         </section>
 
         <section className="panel">
-          <div className="panel-head"><h2>Watchlist</h2><span className="muted small">Click a coin to open its card</span></div>
+          <div className="panel-head"><h2>{t("watchlist")}</h2><span className="muted small">{t("clickCoin")}</span></div>
           <div className="scroll">
             <table>
-              <thead><tr><th>Coin</th><th>Narrative</th><th>Heat</th><th>Strength</th><th>Quality</th><th>Supply risk</th><th>7d vs BTC</th><th>30d vs BTC</th><th>Status</th></tr></thead>
+              <thead><tr><th>{t("thCoin")}</th><th>{t("thNarrative")}</th><th>{t("thHeat")}</th><th>{t("thStrength")}</th><th>{t("thQuality")}</th><th>{t("thSupplyRisk")}</th><th>{t("th7dVsBtc")}</th><th>{t("th30dVsBtc")}</th><th>{t("thStatus")}</th></tr></thead>
               <tbody>
                 {(data.watchlist || []).map((c) => (
                   <Fragment key={c.id}>
                     <tr className={`clickable ${open === c.id ? "open" : ""}`} onClick={() => setOpen(open === c.id ? null : c.id)}>
-                      <td><b>{c.symbol}</b> <span className="muted">{c.name}</span> {c.trending && <span className="chip info">trending</span>}</td>
+                      <td><b>{c.symbol}</b> <span className="muted">{c.name}</span> {c.trending && <span className="chip info">{t("trending")}</span>}</td>
                       <td className="muted">{c.narratives?.join(", ") || "–"}</td>
                       <td><Bar value={c.scores.heat} /></td>
                       <td><Bar value={c.scores.strength} /></td>
@@ -281,13 +296,13 @@ export default function Scout() {
                       <td className={`heat ${heat(c.rs7)}`}>{pct(c.rs7, 0)}</td>
                       <td className={`heat ${heat(c.rs30)}`}>{pct(c.rs30, 0)}</td>
                       <td className="status">
-                        {data.picksToday?.includes(c.id) ? <span className="tier on">Picked today</span>
-                          : c.eligible ? <span className="up">Eligible{c.bookBlockers?.length ? ` · ${c.bookBlockers.join("; ")}` : ""}</span>
-                          : <span className="muted">{c.pickFails?.join("; ")}</span>}
+                        {data.picksToday?.includes(c.id) ? <span className="tier on">{t("pickedToday")}</span>
+                          : c.eligible ? <span className="up">{t("eligible")}{c.bookBlockers?.length ? ` · ${translateReasons(c.bookBlockers, lang)}` : ""}</span>
+                          : <span className="muted">{translateReasons(c.pickFails, lang)}</span>}
                       </td>
                     </tr>
                     {open === c.id && (
-                      <tr className="card-row"><td colSpan={9}><CoinCard coin={c} explainer={data.explainers?.[c.id]} news={(data.news || []).filter((n) => n.coins?.includes(c.id))} picked={data.picksToday?.includes(c.id)} /></td></tr>
+                      <tr className="card-row"><td colSpan={9}><CoinCard coin={c} explainer={data.explainers?.[c.id]} news={(data.news || []).filter((n) => n.coins?.includes(c.id))} picked={data.picksToday?.includes(c.id)} t={t} lang={lang} /></td></tr>
                     )}
                   </Fragment>
                 ))}
@@ -298,20 +313,20 @@ export default function Scout() {
 
         <section className="panel">
           <div className="panel-head">
-            <h2>Rejected by vetoes</h2>
-            <button className="btn small" onClick={() => setShowRejects(!showRejects)}>{showRejects ? "Hide" : `Show ${data.rejects?.length ?? 0}`}</button>
+            <h2>{t("rejectedByVetoes")}</h2>
+            <button className="btn small" onClick={() => setShowRejects(!showRejects)}>{showRejects ? t("hide") : t("showN", data.rejects?.length ?? 0)}</button>
           </div>
           {showRejects && (
             <div className="scroll">
               <table>
-                <thead><tr><th>Coin</th><th>7d vs BTC</th><th>30d vs BTC</th><th>Why rejected</th></tr></thead>
+                <thead><tr><th>{t("thCoin")}</th><th>{t("th7dVsBtc")}</th><th>{t("th30dVsBtc")}</th><th>{t("thWhyRejected")}</th></tr></thead>
                 <tbody>
                   {(data.rejects || []).map((c) => (
                     <tr key={c.id}>
                       <td><b>{c.symbol}</b> <span className="muted">{c.name}</span></td>
                       <td className={`heat ${heat(c.rs7)}`}>{pct(c.rs7, 0)}</td>
                       <td className={`heat ${heat(c.rs30)}`}>{pct(c.rs30, 0)}</td>
-                      <td className="wrap-cell down">{c.vetoes?.join("; ")}</td>
+                      <td className="wrap-cell down">{translateReasons(c.vetoes, lang)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -322,9 +337,9 @@ export default function Scout() {
 
         <section className="panel">
           <div className="panel-head">
-            <h2>News radar</h2>
+            <h2>{t("newsRadar")}</h2>
             <div className="filters">
-              <span className="muted small">updated {ago(data.newsUpdatedAt)}</span>
+              <span className="muted small">{t("updatedAgo", ago(data.newsUpdatedAt))}</span>
               {["A", "B", "C"].map((g) => (
                 <button key={g} className={`btn small ${grades[g] ? "" : "off"}`} onClick={() => setGrades({ ...grades, [g]: !grades[g] })}>{g}</button>
               ))}
@@ -340,129 +355,173 @@ export default function Scout() {
                     <span className="muted small">{n.source} · {ago(n.published || n.firstSeen)}</span>
                     {(n.coins || []).map((id) => <span key={id} className="tag">{id}</span>)}
                     {(n.narratives || []).map((k) => <span key={k} className="tag">{k}</span>)}
-                    {(n.types || []).map((t) => <span key={t} className="tag">{t}</span>)}
+                    {(n.types || []).map((ty) => <span key={ty} className="tag">{ty}</span>)}
                   </div>
                 </div>
               </div>
             ))}
-            {!news.length && <p className="muted">No news items for the selected grades.</p>}
+            {!news.length && <p className="muted">{t("noNewsForGrades")}</p>}
           </div>
         </section>
 
         <footer className="foot">
           <div className="health">
-            <span className="muted">Sources</span>
-            <Health label="CoinGecko" h={data.health?.coingecko} />
-            <Health label="Binance" h={data.health?.binance} />
-            <Health label="BTC regime" h={data.health?.btcRegime} />
-            <Health label="Candles" h={data.health?.candles} />
-            <span className={(data.newsHealth || []).some((h) => h.ok) ? "up" : "down"}>News {(data.newsHealth || []).filter((h) => h.ok).length}/{(data.newsHealth || []).length} feeds</span>
-            <Health label="Claude explainers" h={data.health?.claude} />
-            <span className="muted">X/Twitter not connected</span>
+            <span className="muted">{t("sources")}</span>
+            <Health label="CoinGecko" h={data.health?.coingecko} t={t} />
+            <Health label="Binance" h={data.health?.binance} t={t} />
+            <Health label={t("btcRegime")} h={data.health?.btcRegime} t={t} />
+            <Health label={t("healthCandles")} h={data.health?.candles} t={t} />
+            <span className={(data.newsHealth || []).some((h) => h.ok) ? "up" : "down"}>{t("healthNews", (data.newsHealth || []).filter((h) => h.ok).length, (data.newsHealth || []).length)}</span>
+            <Health label={t("healthClaude")} h={data.health?.claude} t={t} />
+            <span className="muted">{t("twitterOff")}</span>
           </div>
-          <p className="muted small"><b className="ink">Base rate:</b> most altcoins underperform BTC over a full cycle and many go to zero. The Scout raises the odds and screens out known blow-up patterns. Judge it by the journal after 3–6 months, not by single picks.</p>
+          <p className="muted small"><b className="ink">{t("baseRateLabel")}</b> {t("baseRateBody")}</p>
         </footer>
       </div>
     </div>
   );
 }
 
-function Health({ label, h }) {
+/**
+ * "How to read this page": collapsed by default so it never gets between a
+ * returning reader and the board, and the only place the page explains itself
+ * at length — where the data comes from, how a coin gets ranked, what each
+ * panel means, and what the whole thing cannot tell you.
+ */
+function Guide({ lang, t, open, onToggle }) {
+  const sections = SCOUT_GUIDE[lang] || SCOUT_GUIDE.en;
+  return (
+    <section className="panel guide">
+      <div className="panel-head">
+        <h2>{t("guideTitle")}</h2>
+        <button className="btn small" onClick={onToggle} aria-expanded={open}>{open ? t("guideClose") : t("guideOpen")}</button>
+      </div>
+      {open && (
+        <div className="guide-body">
+          {sections.map((s) => (
+            <div key={s.h} className="sec">
+              <h3>{s.h}</h3>
+              {(s.p || []).map((para) => <p key={para} className="prose">{para}</p>)}
+              {s.dl && (
+                <dl className="guide-dl">
+                  {s.dl.map(([term, def]) => <Fragment key={term}><dt>{term}</dt><dd>{def}</dd></Fragment>)}
+                </dl>
+              )}
+              {s.after && <p className="prose">{s.after}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function Health({ label, h, t }) {
   if (!h) return <span className="muted">{label} –</span>;
-  return <span className={h.ok ? "up" : "down"} title={h.error || h.note || ""}>{label} {h.ok ? "ok" : "off"}</span>;
+  return <span className={h.ok ? "up" : "down"} title={h.error || h.note || ""}>{label} {h.ok ? t("healthOk") : t("healthOff")}</span>;
 }
 
 const hhmm = (ms) => new Date(ms).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-function checkNote(check) {
+function checkNote(check, t) {
   if (!check) return null;
-  if (check.error) return `Checked ${hhmm(check.at)} — couldn't load (${check.error}).`;
-  if (check.changed) return `Updated ${hhmm(check.at)} — new data loaded.`;
+  if (check.error) return t("checkFailed", hhmm(check.at), check.error);
+  if (check.changed) return t("checkUpdated", hhmm(check.at));
   const due = check.newsUpdatedAt ? Date.parse(check.newsUpdatedAt) + 65 * 60000 : null;
-  const when = due && due > Date.now() ? `next update around ${hhmm(due)}` : "the Mac's next hourly run is due now";
-  return `Checked ${hhmm(check.at)} — no new data yet; ${when}.`;
+  const when = due && due > Date.now() ? t("nextAround", hhmm(due)) : t("dueNow");
+  return t("checkSame", hhmm(check.at), when);
 }
 
-function Header({ onRefresh, loading, data, check }) {
+function Header({ onRefresh, loading, data, check, t, ago }) {
   return (
     <header className="top">
       <div className="top-text">
-        <span className="eyebrow">Narrative discovery · companion to Crypto System v2.0</span>
-        <h1>Narrative Scout</h1>
-        <p className="muted">Finds the narratives money is rotating into, explains each coin, measures its supply and liquidity risk, and tests the best pick with paper money.</p>
-        {data && <p className="muted small">Last scan {data.scanDay ?? "–"} ({ago(data.generatedAt)}) · news {ago(data.newsUpdatedAt)} · rescans daily after the UTC close, news hourly</p>}
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="muted">{t("lede")}</p>
+        {data && <p className="muted small">{t("lastScan", data.scanDay ?? "–", ago(data.generatedAt), ago(data.newsUpdatedAt))}</p>}
       </div>
       <div className="reload">
-        <button className="btn" onClick={onRefresh} disabled={loading}>{loading ? "Checking…" : "Reload"}</button>
-        {check && <span className="muted small" role="status">{checkNote(check)}</span>}
+        <button className="btn" onClick={onRefresh} disabled={loading}>{loading ? t("checking") : t("reload")}</button>
+        {check && <span className="muted small" role="status">{checkNote(check, t)}</span>}
       </div>
     </header>
   );
 }
 
-function CoinCard({ coin, explainer, news, picked }) {
-  const t = coin.tech;
-  const tier = picked ? "Picked" : coin.eligible ? "Watchlist · eligible" : coin.vetoes?.length ? "Reject" : "Watchlist";
+function CoinCard({ coin, explainer, news, picked, t, lang }) {
+  const tech = coin.tech;
+  // A tier key, not a label: the chips below compare identity, and comparing
+  // display strings would break the moment a translation changed a word.
+  const tier = picked ? "picked" : coin.eligible ? "eligible" : coin.vetoes?.length ? "reject" : "watchlist";
+  const TIERS = [
+    ["radar", t("tierRadar")],
+    // The middle chip doubles as the current watchlist state: a picked or
+    // eligible coin reads as such, a rejected one falls back to plain Watchlist.
+    ["watchlist", tier === "picked" ? t("tierPicked") : tier === "eligible" ? t("tierEligible") : t("tierWatchlist")],
+    ["reject", t("tierReject")],
+  ];
+  const activeChip = tier === "picked" || tier === "eligible" ? "watchlist" : tier;
   return (
     <div className="card">
       <div className="card-head">
         <div>
-          <span className="eyebrow">Coin deep-dive card</span>
+          <span className="eyebrow">{t("deepDive")}</span>
           <div className="ticker-line"><span className="ticker">{coin.symbol}</span><span className="muted">{coin.name}{coin.narratives?.length ? ` · ${coin.narratives.join(", ")}` : ""}</span></div>
         </div>
         <div className="tiers">
-          {["Radar", "Watchlist", "Reject"].map((x) => <span key={x} className={`tier ${tier.startsWith(x) || (x === "Watchlist" && tier === "Picked") ? "on" : ""}`}>{x === "Watchlist" ? tier.startsWith("Reject") ? "Watchlist" : tier : x}</span>)}
+          {TIERS.map(([key, label]) => <span key={key} className={`tier ${key === activeChip ? "on" : ""}`}>{label}</span>)}
         </div>
       </div>
 
-      {!coin.eligible && coin.pickFails?.length > 0 && <div className="flag"><b>NOT PICKED</b><span>{coin.pickFails.join("; ")}</span></div>}
+      {!coin.eligible && coin.pickFails?.length > 0 && <div className="flag"><b>{t("notPicked")}</b><span>{translateReasons(coin.pickFails, lang)}</span></div>}
 
       <div className="scores">
-        <div className="score"><span className="l">Narrative heat</span><span className="v mono">{coin.scores.heat ?? "–"}</span></div>
-        <div className="score"><span className="l">Relative strength</span><span className="v mono">{coin.scores.strength ?? "–"}</span></div>
-        <div className="score"><span className="l">Quality</span><span className="v mono">{coin.scores.quality ?? "–"}</span></div>
-        <div className="score"><span className="l">Supply risk (lower is better)</span><span className="v mono">{coin.scores.supplyRisk ?? "–"}</span></div>
+        <div className="score"><span className="l">{t("narrativeHeat")}</span><span className="v mono">{coin.scores.heat ?? "–"}</span></div>
+        <div className="score"><span className="l">{t("relativeStrength")}</span><span className="v mono">{coin.scores.strength ?? "–"}</span></div>
+        <div className="score"><span className="l">{t("quality")}</span><span className="v mono">{coin.scores.quality ?? "–"}</span></div>
+        <div className="score"><span className="l">{t("supplyRiskLower")}</span><span className="v mono">{coin.scores.supplyRisk ?? "–"}</span></div>
       </div>
 
       <div className="sections">
         <div className="sec">
-          <div className="panel-head"><h3>What it is</h3><span className={`chip ${explainer?.ai ? "info" : ""}`}>{explainer?.ai ? "Claude" : "project description"}</span></div>
-          <p className="prose">{explainer?.text || "No description fetched yet. Explainers are made for new picks and the top five of the watchlist."}</p>
+          <div className="panel-head"><h3>{t("whatItIs")}</h3><span className={`chip ${explainer?.ai ? "info" : ""}`}>{explainer?.ai ? "Claude" : t("projectDescription")}</span></div>
+          <p className="prose">{explainer?.text || t("noExplainer")}</p>
           <div className="links">
-            {explainer?.homepage && <a href={explainer.homepage} target="_blank" rel="noreferrer">Homepage</a>}
-            {explainer?.whitepaper && <a href={explainer.whitepaper} target="_blank" rel="noreferrer">Whitepaper</a>}
+            {explainer?.homepage && <a href={explainer.homepage} target="_blank" rel="noreferrer">{t("homepage")}</a>}
+            {explainer?.whitepaper && <a href={explainer.whitepaper} target="_blank" rel="noreferrer">{t("whitepaper")}</a>}
             <a href={`https://www.coingecko.com/en/coins/${coin.id}`} target="_blank" rel="noreferrer">CoinGecko</a>
-            {explainer?.categories?.length ? <span className="muted">Categories: {explainer.categories.slice(0, 6).join(", ")}</span> : null}
+            {explainer?.categories?.length ? <span className="muted">{t("categoriesLabel", explainer.categories.slice(0, 6).join(", "))}</span> : null}
           </div>
         </div>
         <div className="sec">
-          <div className="panel-head"><h3>Token economics</h3></div>
+          <div className="panel-head"><h3>{t("tokenEconomics")}</h3></div>
           <dl>
-            <dt>Market cap</dt><dd>{usd(coin.mcap)}</dd>
-            <dt>Fully diluted value</dt><dd>{usd(coin.fdv)}</dd>
-            <dt>FDV ÷ market cap</dt><dd>{coin.fdvToMcap ? `${coin.fdvToMcap.toFixed(2)}×` : "–"}</dd>
-            <dt>Circulating share of supply</dt><dd>{coin.float !== null && coin.float !== undefined ? `${(coin.float * 100).toFixed(0)}%` : "–"}</dd>
-            <dt>Unlock schedule</dt><dd className="muted">not connected yet</dd>
+            <dt>{t("marketCap")}</dt><dd>{usd(coin.mcap)}</dd>
+            <dt>{t("fdv")}</dt><dd>{usd(coin.fdv)}</dd>
+            <dt>{t("fdvOverMcap")}</dt><dd>{coin.fdvToMcap ? `${coin.fdvToMcap.toFixed(2)}×` : "–"}</dd>
+            <dt>{t("circulatingShare")}</dt><dd>{coin.float !== null && coin.float !== undefined ? `${(coin.float * 100).toFixed(0)}%` : "–"}</dd>
+            <dt>{t("unlockSchedule")}</dt><dd className="muted">{t("notConnectedYet")}</dd>
           </dl>
         </div>
         <div className="sec">
-          <div className="panel-head"><h3>Liquidity and trend</h3></div>
+          <div className="panel-head"><h3>{t("liquidityAndTrend")}</h3></div>
           <dl>
-            <dt>Price</dt><dd>{px(coin.price)}</dd>
-            <dt>24h volume (share of market cap)</dt><dd>{usd(coin.vol)} ({coin.turnover ? `${(coin.turnover * 100).toFixed(1)}%` : "–"})</dd>
-            <dt>Bid depth within 2%</dt><dd>{usd(coin.depthUsd)}</dd>
-            <dt>Above 50-day average</dt><dd>{t ? (t.above50 ? "yes" : "no") : "–"}</dd>
-            <dt>7-day move</dt><dd>{pct(t?.ret7)}</dd>
-            <dt>Stretch above 20-day average</dt><dd>{t?.atrAboveSma20 !== null && t?.atrAboveSma20 !== undefined ? `${t.atrAboveSma20.toFixed(1)} ATR` : "–"}</dd>
+            <dt>{t("price")}</dt><dd>{px(coin.price)}</dd>
+            <dt>{t("volumeShare")}</dt><dd>{usd(coin.vol)} ({coin.turnover ? `${(coin.turnover * 100).toFixed(1)}%` : "–"})</dd>
+            <dt>{t("bidDepth")}</dt><dd>{usd(coin.depthUsd)}</dd>
+            <dt>{t("above50d")}</dt><dd>{tech ? (tech.above50 ? t("yes") : t("no")) : "–"}</dd>
+            <dt>{t("sevenDayMove")}</dt><dd>{pct(tech?.ret7)}</dd>
+            <dt>{t("stretchAbove20d")}</dt><dd>{tech?.atrAboveSma20 !== null && tech?.atrAboveSma20 !== undefined ? `${tech.atrAboveSma20.toFixed(1)} ATR` : "–"}</dd>
           </dl>
         </div>
         <div className="sec">
-          <div className="panel-head"><h3>vs BTC and news</h3></div>
+          <div className="panel-head"><h3>{t("vsBtcAndNews")}</h3></div>
           <dl>
-            <dt>7 days</dt><dd className={signClass(coin.rs7)}>{pct(coin.rs7)}</dd>
-            <dt>30 days</dt><dd className={signClass(coin.rs30)}>{pct(coin.rs30)}</dd>
-            <dt>200 days</dt><dd className={signClass(coin.rs200)}>{pct(coin.rs200, 0)}</dd>
-            <dt>News mentions, 7 days</dt><dd>{coin.newsCount ?? 0}</dd>
+            <dt>{t("sevenDays")}</dt><dd className={signClass(coin.rs7)}>{pct(coin.rs7)}</dd>
+            <dt>{t("thirtyDays")}</dt><dd className={signClass(coin.rs30)}>{pct(coin.rs30)}</dd>
+            <dt>{t("twoHundredDays")}</dt><dd className={signClass(coin.rs200)}>{pct(coin.rs200, 0)}</dd>
+            <dt>{t("newsMentions7d")}</dt><dd>{coin.newsCount ?? 0}</dd>
           </dl>
           {news.slice(0, 4).map((n) => (
             <div key={n.link} className="mini-news"><span className={`grade g${n.grade}`}>{n.grade}</span><a href={n.link} target="_blank" rel="noreferrer">{n.title}</a></div>
@@ -539,6 +598,16 @@ const CSS = `
 .ns .headline { color: var(--ink); font-weight: 600; }
 .ns .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; align-items: center; }
 .ns .filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+/* "How to read this page". Two columns on a wide screen so the whole guide is
+   scannable without scrolling past the board; one column on a phone. */
+.ns .guide-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px 24px; margin-top: 4px; }
+.ns .guide-body .sec { border-top: 2px solid var(--accent); padding-top: 10px; }
+.ns .guide-body h3 { margin: 0 0 6px; }
+.ns .guide-body .prose { margin: 0 0 8px; }
+.ns dl.guide-dl { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.ns dl.guide-dl dt { color: var(--ink); font-weight: 600; }
+.ns dl.guide-dl dd { font-family: inherit; text-align: left; color: var(--muted); line-height: 1.5; }
 
 .ns .card { background: #121a22; border-top: 2px solid var(--accent); padding: 16px; display: grid; gap: 14px; position: sticky; left: 0; box-sizing: border-box; width: min(1144px, calc(100vw - 32px)); }
 .ns .card-head { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-end; justify-content: space-between; }
