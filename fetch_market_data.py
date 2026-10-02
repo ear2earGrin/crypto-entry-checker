@@ -59,6 +59,7 @@ S3_NS = "{http://s3.amazonaws.com/doc/2006-03-01/}"
 
 
 def get(url, tries=5):
+    url = urllib.parse.quote(url, safe=":/?&=%")
     for k in range(tries):
         try:
             with urllib.request.urlopen(url, timeout=60) as r:
@@ -181,6 +182,12 @@ def main():
                 "excluded": sorted(set(bases) - set(keep)), "symbols": {}}
 
     def do(base):
+        try:
+            return fetch_one(base)
+        except Exception as e:  # noqa: BLE001 — record and carry on
+            return base, {"error": f"{type(e).__name__}: {e}"[:300]}
+
+    def fetch_one(base):
         sym = f"{base}USDT"
         rec = {}
         d = spot_klines(sym, "1d")
