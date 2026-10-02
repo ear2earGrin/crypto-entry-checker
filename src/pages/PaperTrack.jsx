@@ -2,6 +2,7 @@ import { useState } from "react";
 import { fetchKlinesRange, fetchFundingHistory, dropUnclosedCandle } from "../data/binance.js";
 import { backtestPortfolio } from "../backtest/portfolio.js";
 import { markOpenPosition } from "../backtest/markToMarket.js";
+import { estimateLiquidation, stopToLiqBufferPct } from "../strategy/liquidation.js";
 import { PRODUCTION_PRESET, PAPER_EPOCH } from "../strategy/presets.js";
 import { T, ui, signColor } from "../ui/theme.js";
 import { Page, PageHeader, Tile } from "../ui/Page.jsx";
@@ -20,6 +21,20 @@ const UNIVERSE = ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "AVAX", "LINK", "DOG
 // Must match scripts/papertrade.mjs CFG so browser and robot agree exactly.
 const CFG = { equity: 100000, riskPct: 1, feePct: 0.08, slippagePct: 0.05, warmupDays: 45 };
 const SEEN_KEY = "paperSeen.v1";
+// The robot sizes by risk and never uses leverage, so margin is shown for the
+// leverage you would trade it at. Defaults to the Scanner's setting.
+const LEV_KEY = "paper.leverage.v1";
+const LEVERAGES = [1, 2, 3, 5, 8, 10, 15, 20, 25];
+const MMR_PCT = 0.5; // maintenance margin %, same default as the Scanner
+function loadLeverage() {
+  try {
+    const own = Number(localStorage.getItem(LEV_KEY));
+    if (LEVERAGES.includes(own)) return own;
+    const scanner = Number(JSON.parse(localStorage.getItem("scanner.config.v1") || "{}").leverage);
+    if (LEVERAGES.includes(scanner)) return scanner;
+  } catch { /* empty */ }
+  return 5;
+}
 
 function fmt(n, d = 2) {
   if (n === null || n === undefined || !Number.isFinite(n)) return "-";
@@ -66,6 +81,11 @@ async function loadAssetData(asset, epochMs) {
 export default function PaperTrack() {
   const [status, setStatus] = useState({ state: "idle", message: "" });
   const [result, setResult] = useState(null);
+  const [leverage, setLeverageState] = useState(loadLeverage);
+  const setLeverage = (v) => {
+    setLeverageState(v);
+    try { localStorage.setItem(LEV_KEY, String(v)); } catch { /* empty */ }
+  };
 
   async function check() {
     setStatus({ state: "loading", message: `Replaying paper track since ${PAPER_EPOCH}...` });
@@ -156,6 +176,19 @@ export default function PaperTrack() {
 
   const kindColor = { ENTRY: T.info, OPEN: T.up, WIN: T.up, LOSS: T.down };
 
+  // Margin, ROE and liquidation depend only on the chosen leverage, so they
+  // are derived per render and the selector updates them without a refetch.
+  const rows = (result?.open || []).map((p) => {
+    const notional = p.qty * p.entry;
+    const margin = notional / leverage;
+    const liq = estimateLiquidation({ entry: p.entry, direction: p.direction, leverage, mmrPct: MMR_PCT });
+    const liqBuf = stopToLiqBufferPct({ entry: p.entry, stop: p.stop, direction: p.direction, leverage, mmrPct: MMR_PCT });
+    return { ...p, notional, margin, roe: p.now ? (p.now.net / margin) * 100 : null, liq, liqDanger: liqBuf !== null && liqBuf < 2 };
+  });
+  const totalNotional = rows.reduce((s, r) => s + r.notional, 0);
+  const totalMargin = rows.reduce((s, r) => s + r.margin, 0);
+  const equityNow = CFG.equity + (result ? result.pnl + result.unrealized : 0);
+
   return (
     <Page>
       <PageHeader
@@ -187,7 +220,9 @@ export default function PaperTrack() {
 
       {result ? (
         <>
-          <div style={ui.tiles}>
+          {/* Wider tiles: 4 per row on desktop, so the track stats and the
+              open-position money (unrealized / total / margin) get a row each. */}
+          <div style={{ ...ui.tiles, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
             <Tile label="Since" value={PAPER_EPOCH} />
             <Tile label="Open positions" value={String(result.open.length)} />
             <Tile label="Closed trades" value={`${result.realized.length} (${result.wins} wins)`} />
@@ -204,9 +239,22 @@ export default function PaperTrack() {
               sub={`${fmt(((result.pnl + result.unrealized) / CFG.equity) * 100, 2)}% of ${fmt(CFG.equity, 0)}`}
               good={result.pnl + result.unrealized > 0} bad={result.pnl + result.unrealized < 0}
             />
+            <Tile
+              label={`Margin in use @ ${leverage}x`}
+              value={`${fmt(totalMargin, 0)} USDT`}
+              sub={rows.length ? `${fmt((totalMargin / equityNow) * 100, 1)}% of equity · exposure ${fmt(totalNotional / equityNow, 2)}x` : "no open positions"}
+            />
           </div>
 
-          <h2 style={ui.h2}>Open paper positions</h2>
+          <div className="panel-head">
+            <h2 style={ui.h2}>Open paper positions</h2>
+            <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={ui.label}>Leverage (isolated)</span>
+              <select value={leverage} onChange={(e) => setLeverage(Number(e.target.value))} style={{ ...ui.input, width: "auto", padding: "4px 8px" }}>
+                {LEVERAGES.map((l) => <option key={l} value={l}>{l}x</option>)}
+              </select>
+            </label>
+          </div>
           {result.open.length === 0 ? (
             <div style={ui.empty}>None — the system is in cash. In a bear regime, that IS the position.</div>
           ) : (
@@ -215,11 +263,12 @@ export default function PaperTrack() {
                 <thead><tr>
                   <th style={styles.th}>Asset</th><th style={styles.th}>Since</th><th style={styles.th}>Entry</th>
                   <th style={styles.th}>Now</th><th style={styles.th}>Move</th>
-                  <th style={styles.th}>Unrealized PnL</th><th style={styles.th}>R</th>
+                  <th style={styles.th}>Unrealized PnL</th><th style={styles.th}>ROE</th><th style={styles.th}>R</th>
+                  <th style={styles.th}>Size</th><th style={styles.th}>Leverage</th><th style={styles.th}>Initial margin</th><th style={styles.th}>Liq ≈</th>
                   <th style={styles.th}>Current stop</th><th style={styles.th}>At stop</th><th style={styles.th}>Qty</th>
                 </tr></thead>
                 <tbody>
-                  {result.open.map((p) => (
+                  {rows.map((p) => (
                     <tr key={p.asset + p.entryTime}>
                       <td style={{ ...styles.td, fontFamily: T.body, fontWeight: 600 }}>{p.asset}</td>
                       <td style={styles.td}>{ymd(p.entryTime)}</td>
@@ -227,7 +276,15 @@ export default function PaperTrack() {
                       <td style={styles.td}>{p.now ? fmt(p.now.price, 4) : "-"}</td>
                       <td style={{ ...styles.td, color: signColor(p.now?.movePct) }}>{p.now ? `${p.now.movePct >= 0 ? "+" : ""}${fmt(p.now.movePct, 2)}%` : "-"}</td>
                       <td style={{ ...styles.td, color: signColor(p.now?.net), fontWeight: 500 }}>{p.now ? `${fmt(p.now.net, 0)} USDT` : "-"}</td>
+                      <td style={{ ...styles.td, color: signColor(p.roe) }} title="Unrealized PnL ÷ initial margin, as the exchange shows it">{p.roe !== null ? `${p.roe >= 0 ? "+" : ""}${fmt(p.roe, 1)}%` : "-"}</td>
                       <td style={{ ...styles.td, color: signColor(p.now?.r) }}>{p.now ? `${fmt(p.now.r, 2)}R` : "-"}</td>
+                      <td style={styles.td} title="Position size at entry (qty × entry)">{fmt(p.notional, 0)} USDT</td>
+                      <td style={styles.td}>{leverage}x</td>
+                      <td style={styles.td}>{fmt(p.margin, 0)} USDT</td>
+                      <td style={{ ...styles.td, color: p.liqDanger ? T.down : undefined }}
+                        title="Approximate isolated liquidation price at this leverage. Red = within 2% of (or past) the stop: a wick could liquidate before the stop fires.">
+                        {p.liq !== null ? `${fmt(p.liq, 4)}${p.liqDanger ? " ⚠" : ""}` : "-"}
+                      </td>
                       <td style={styles.td}>{fmt(p.stop, 4)}</td>
                       <td style={{ ...styles.td, color: signColor(p.atStop?.net) }} title="What the position nets if the current trailing stop is hit">
                         {p.atStop ? `${fmt(p.atStop.net, 0)} USDT` : "-"}
@@ -243,7 +300,9 @@ export default function PaperTrack() {
             <p style={ui.foot}>
               Unrealized = what closing at Binance&apos;s latest price ({result.markedAt.toLocaleTimeString()}) would net
               after slippage, fees and funding — the same costs the engine charges on a real exit. At stop = what each
-              position nets if its current trailing stop is hit; positive means profit is already locked in.
+              position nets if its current trailing stop is hit; positive means profit is already locked in. The robot
+              sizes by risk and uses no leverage, so initial margin, ROE and liquidation are for the leverage you pick
+              (position size ÷ leverage; liquidation is an isolated-margin estimate at {MMR_PCT}% maintenance margin).
               {result.unmarked.length ? ` No live price for: ${result.unmarked.join(", ")}.` : ""}
             </p>
           ) : null}
