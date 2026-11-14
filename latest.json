@@ -1,0 +1,4214 @@
+{
+  "generatedAt": "2026-11-14T00:11:12.210Z",
+  "scanDay": "2026-11-14",
+  "selftest": false,
+  "health": {
+    "news": [
+      {
+        "name": "CoinDesk",
+        "ok": true,
+        "items": 25
+      },
+      {
+        "name": "Cointelegraph",
+        "ok": true,
+        "items": 30
+      },
+      {
+        "name": "Decrypt",
+        "ok": true,
+        "items": 40
+      },
+      {
+        "name": "The Block",
+        "ok": true,
+        "items": 20
+      },
+      {
+        "name": "Blockworks",
+        "ok": true,
+        "items": 50
+      },
+      {
+        "name": "CryptoSlate",
+        "ok": true,
+        "items": 10
+      }
+    ],
+    "coingecko": {
+      "ok": true,
+      "coins": 1000
+    },
+    "binance": {
+      "ok": true,
+      "pairs": 776
+    },
+    "btcRegime": {
+      "ok": true
+    },
+    "candles": {
+      "ok": true,
+      "failed": 0
+    },
+    "claude": {
+      "ok": false,
+      "note": "no API key — showing project descriptions"
+    }
+  },
+  "btcRegime": {
+    "state": "SHORT_OK",
+    "close": 74851.44,
+    "sma": 75535.27140000003
+  },
+  "gauge": {
+    "sample": 100,
+    "share30": 46,
+    "share200": 64,
+    "medianRs30": -1.3213958319140462,
+    "score": 55,
+    "label": "ALTS LEADING"
+  },
+  "narratives": [
+    {
+      "key": "perp-defi",
+      "name": "Perp DEX & DeFi",
+      "members": [
+        {
+          "id": "hyperliquid",
+          "symbol": "HYPE",
+          "rs7": 1.4334117511093147,
+          "rs30": 6.084803111303949
+        },
+        {
+          "id": "dydx-chain",
+          "symbol": "DYDX",
+          "rs7": 1.8020160443436462,
+          "rs30": -16.227854727731017
+        },
+        {
+          "id": "gmx",
+          "symbol": "GMX",
+          "rs7": 3.5060191291959697,
+          "rs30": 7.963871967070291
+        },
+        {
+          "id": "jupiter-exchange-solana",
+          "symbol": "JUP",
+          "rs7": 20.539826932672224,
+          "rs30": -1.4988807098438972
+        },
+        {
+          "id": "aave",
+          "symbol": "AAVE",
+          "rs7": -4.85430851412575,
+          "rs30": -13.196030553693062
+        },
+        {
+          "id": "uniswap",
+          "symbol": "UNI",
+          "rs7": -7.477433127269039,
+          "rs30": -3.9406423637878274
+        }
+      ],
+      "missing": [],
+      "rs7": 2.4915887026543944,
+      "rs30": -3.469122212780261,
+      "rs200": 43.95303917517081,
+      "breadth30": 33.33333333333333,
+      "attention": 12,
+      "leader": {
+        "id": "jupiter-exchange-solana",
+        "symbol": "JUP",
+        "rs7": 20.539826932672224
+      },
+      "stage": "EMERGING",
+      "heat": 70,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "privacy",
+      "name": "Privacy coins",
+      "members": [
+        {
+          "id": "monero",
+          "symbol": "XMR",
+          "rs7": -4.668839546562264,
+          "rs30": 14.173691362761165
+        },
+        {
+          "id": "zcash",
+          "symbol": "ZEC",
+          "rs7": -21.49473096998381,
+          "rs30": -2.37124577651725
+        },
+        {
+          "id": "dash",
+          "symbol": "DASH",
+          "rs7": -2.640571364435962,
+          "rs30": 0.23951494637806103
+        }
+      ],
+      "missing": [],
+      "rs7": -9.601380626994013,
+      "rs30": 4.0139868442073245,
+      "rs200": 95.0356764064498,
+      "breadth30": 66.66666666666666,
+      "attention": 10,
+      "leader": {
+        "id": "dash",
+        "symbol": "DASH",
+        "rs7": -2.640571364435962
+      },
+      "stage": "EXHAUSTING",
+      "heat": 57,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "memes",
+      "name": "Memes",
+      "members": [
+        {
+          "id": "dogecoin",
+          "symbol": "DOGE",
+          "rs7": -1.0220240231763822,
+          "rs30": -5.929787699401567
+        },
+        {
+          "id": "shiba-inu",
+          "symbol": "SHIB",
+          "rs7": 4.2186689128896,
+          "rs30": 0.05569559132343471
+        },
+        {
+          "id": "pepe",
+          "symbol": "PEPE",
+          "rs7": -1.3466224978636032,
+          "rs30": 28.85605319048492
+        },
+        {
+          "id": "bonk",
+          "symbol": "BONK",
+          "rs7": 5.507728244067822,
+          "rs30": 3.5551954066674663
+        },
+        {
+          "id": "dogwifcoin",
+          "symbol": "WIF",
+          "rs7": 1.0271358101793693,
+          "rs30": -12.342429881521378
+        },
+        {
+          "id": "floki",
+          "symbol": "FLOKI",
+          "rs7": 1.6116575413860357,
+          "rs30": -4.988460494973646
+        }
+      ],
+      "missing": [],
+      "rs7": 1.6660906645804738,
+      "rs30": 1.534377685429872,
+      "rs200": -17.630031261549956,
+      "breadth30": 50,
+      "attention": 6,
+      "leader": {
+        "id": "bonk",
+        "symbol": "BONK",
+        "rs7": 5.507728244067822
+      },
+      "stage": "ACCELERATING",
+      "heat": 57,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "rwa",
+      "name": "Real-world assets",
+      "members": [
+        {
+          "id": "ondo-finance",
+          "symbol": "ONDO",
+          "rs7": 1.3597353427842185,
+          "rs30": -9.590039811591133
+        },
+        {
+          "id": "chainlink",
+          "symbol": "LINK",
+          "rs7": 0.6384177463464757,
+          "rs30": -5.189131949548864
+        },
+        {
+          "id": "polymesh",
+          "symbol": "POLYX",
+          "rs7": 3.181420654508771,
+          "rs30": -6.159621652437986
+        },
+        {
+          "id": "pendle",
+          "symbol": "PENDLE",
+          "rs7": 1.8619128529216766,
+          "rs30": -10.528259536674822
+        }
+      ],
+      "missing": [
+        "centrifuge",
+        "maple"
+      ],
+      "rs7": 1.7603716491402854,
+      "rs30": -7.866763237563202,
+      "rs200": 16.076711236769537,
+      "breadth30": 0,
+      "attention": 26,
+      "leader": {
+        "id": "polymesh",
+        "symbol": "POLYX",
+        "rs7": 3.181420654508771
+      },
+      "stage": "EMERGING",
+      "heat": 55,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "l1",
+      "name": "Layer-1 platforms",
+      "members": [
+        {
+          "id": "solana",
+          "symbol": "SOL",
+          "rs7": -3.4879056230768257,
+          "rs30": -10.593277566030945
+        },
+        {
+          "id": "avalanche-2",
+          "symbol": "AVAX",
+          "rs7": 9.47780873248798,
+          "rs30": -1.7715022630815924
+        },
+        {
+          "id": "sui",
+          "symbol": "SUI",
+          "rs7": 1.7336736746303316,
+          "rs30": -7.315006376308563
+        },
+        {
+          "id": "aptos",
+          "symbol": "APT",
+          "rs7": -2.097610684079332,
+          "rs30": -21.474355526711776
+        },
+        {
+          "id": "cardano",
+          "symbol": "ADA",
+          "rs7": 1.108479899008885,
+          "rs30": -12.311474606515427
+        },
+        {
+          "id": "sei-network",
+          "symbol": "SEI",
+          "rs7": 1.3598464685886213,
+          "rs30": -18.158316511113416
+        },
+        {
+          "id": "the-open-network",
+          "symbol": "GRAM",
+          "rs7": 10.511056461909973,
+          "rs30": -3.963470385124246
+        }
+      ],
+      "missing": [],
+      "rs7": 2.6579069899242334,
+      "rs30": -10.798200462126564,
+      "rs200": -11.968503378163675,
+      "breadth30": 0,
+      "attention": 41,
+      "leader": {
+        "id": "the-open-network",
+        "symbol": "GRAM",
+        "rs7": 10.511056461909973
+      },
+      "stage": "EMERGING",
+      "heat": 55,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "bank-rails",
+      "name": "Bank rails / ISO 20022",
+      "members": [
+        {
+          "id": "quant-network",
+          "symbol": "QNT",
+          "rs7": -8.42500286148946,
+          "rs30": -6.391965492637064
+        },
+        {
+          "id": "ripple",
+          "symbol": "XRP",
+          "rs7": -4.558825000194466,
+          "rs30": -9.374667589348995
+        },
+        {
+          "id": "stellar",
+          "symbol": "XLM",
+          "rs7": 5.500838444194289,
+          "rs30": -4.969337545163032
+        },
+        {
+          "id": "hedera-hashgraph",
+          "symbol": "HBAR",
+          "rs7": 1.2230506033575672,
+          "rs30": -12.96057923414976
+        },
+        {
+          "id": "algorand",
+          "symbol": "ALGO",
+          "rs7": -0.9700171467116214,
+          "rs30": -11.786430115777502
+        },
+        {
+          "id": "xdce-crowd-sale",
+          "symbol": "XDC",
+          "rs7": 2.342976460220858,
+          "rs30": 0.3549697558596909
+        },
+        {
+          "id": "iota",
+          "symbol": "IOTA",
+          "rs7": 4.930096312734689,
+          "rs30": -12.260201197335697
+        }
+      ],
+      "missing": [],
+      "rs7": 0.006159544587407671,
+      "rs30": -8.198315916936052,
+      "rs200": 11.727242842270742,
+      "breadth30": 14.285714285714285,
+      "attention": 12,
+      "leader": {
+        "id": "stellar",
+        "symbol": "XLM",
+        "rs7": 5.500838444194289
+      },
+      "stage": "EMERGING",
+      "heat": 48,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "ai",
+      "name": "AI & agents",
+      "members": [
+        {
+          "id": "bittensor",
+          "symbol": "TAO",
+          "rs7": 6.563534511785463,
+          "rs30": -5.234907510658049
+        },
+        {
+          "id": "render-token",
+          "symbol": "RENDER",
+          "rs7": 8.064733003586033,
+          "rs30": -5.0037588548221485
+        },
+        {
+          "id": "virtual-protocol",
+          "symbol": "VIRTUAL",
+          "rs7": 0.5436274351831027,
+          "rs30": -9.257061448013658
+        },
+        {
+          "id": "near",
+          "symbol": "NEAR",
+          "rs7": 3.347109228886924,
+          "rs30": -15.684165360927748
+        }
+      ],
+      "missing": [
+        "artificial-superintelligence-alliance"
+      ],
+      "rs7": 4.629751044860381,
+      "rs30": -8.794973293605402,
+      "rs200": 41.01164573655838,
+      "breadth30": 0,
+      "attention": 11,
+      "leader": {
+        "id": "render-token",
+        "symbol": "RENDER",
+        "rs7": 8.064733003586033
+      },
+      "stage": "EMERGING",
+      "heat": 48,
+      "singleCoinEvent": false
+    },
+    {
+      "key": "depin",
+      "name": "DePIN",
+      "members": [
+        {
+          "id": "filecoin",
+          "symbol": "FIL",
+          "rs7": -3.4683474815003223,
+          "rs30": -22.683045473179476
+        },
+        {
+          "id": "helium",
+          "symbol": "HNT",
+          "rs7": -5.854440753833002,
+          "rs30": -33.15286049449557
+        },
+        {
+          "id": "akash-network",
+          "symbol": "AKT",
+          "rs7": -8.803163973903217,
+          "rs30": -3.639097348961551
+        },
+        {
+          "id": "theta-token",
+          "symbol": "THETA",
+          "rs7": 5.402158729876505,
+          "rs30": -14.272533109594821
+        },
+        {
+          "id": "arweave",
+          "symbol": "AR",
+          "rs7": 3.05718200517624,
+          "rs30": -5.836204763765829
+        },
+        {
+          "id": "iotex",
+          "symbol": "IOTX",
+          "rs7": -4.972879747433268,
+          "rs30": -12.235580399454516
+        }
+      ],
+      "missing": [],
+      "rs7": -2.439915203602844,
+      "rs30": -15.30322026490863,
+      "rs200": -6.869787702987427,
+      "breadth30": 0,
+      "attention": 0,
+      "leader": {
+        "id": "theta-token",
+        "symbol": "THETA",
+        "rs7": 5.402158729876505
+      },
+      "stage": "COLD",
+      "heat": 9,
+      "singleCoinEvent": false
+    }
+  ],
+  "categories": [
+    {
+      "id": "binance-wallet-ido",
+      "name": "Binance Wallet IDO",
+      "mcap": 2112719983.084876,
+      "change24h": 13.360142163470343
+    },
+    {
+      "id": "ai-applications",
+      "name": "AI Applications",
+      "mcap": 2492897578.2482853,
+      "change24h": 9.809453229632718
+    },
+    {
+      "id": "ondo-tokenized-assets",
+      "name": "Ondo Tokenized Assets",
+      "mcap": 975252415.9457864,
+      "change24h": 3.92643474644934
+    },
+    {
+      "id": "tokenized-exchange-traded-funds-etfs",
+      "name": "Tokenized Exchange-Traded Funds (ETFs)",
+      "mcap": 726649178.5530272,
+      "change24h": 3.5957861303802408
+    },
+    {
+      "id": "tokenized-exchange-traded-product-etps",
+      "name": "Tokenized Exchange-Traded Product (ETPs)",
+      "mcap": 726713580.5571033,
+      "change24h": 3.5947611982189382
+    },
+    {
+      "id": "tokenized-money-market-fund-mmfs",
+      "name": "Tokenized Money Market Fund (MMFs)",
+      "mcap": 2423757999.6501894,
+      "change24h": 3.532353413256134
+    },
+    {
+      "id": "bittensor-subnets",
+      "name": "Bittensor Subnets",
+      "mcap": 983241348.3867562,
+      "change24h": 3.224918723749437
+    },
+    {
+      "id": "chinese-meme",
+      "name": "Chinese Meme",
+      "mcap": 666280102.2863333,
+      "change24h": 2.1366542659026466
+    },
+    {
+      "id": "vpn",
+      "name": "VPN",
+      "mcap": 609813728.1000153,
+      "change24h": 1.900986249671815
+    },
+    {
+      "id": "binance-launchpad",
+      "name": "Binance Launchpad",
+      "mcap": 2334528199.8511233,
+      "change24h": 1.899392245824651
+    },
+    {
+      "id": "artificial-intelligence",
+      "name": "Artificial Intelligence (AI)",
+      "mcap": 18888399610.425186,
+      "change24h": 1.689038987797333
+    },
+    {
+      "id": "wallets",
+      "name": "Wallets",
+      "mcap": 2426107521.358342,
+      "change24h": 1.0807833656664183
+    }
+  ],
+  "funnel": {
+    "universe": 1000,
+    "excluded": 29,
+    "gated": 133,
+    "gateFails": {
+      "no Binance USDT pair": 621,
+      "volume below $5M/day": 689,
+      "market cap below $50M": 572
+    },
+    "shortlisted": 40,
+    "watchlist": 37,
+    "eligible": 0,
+    "picked": 0
+  },
+  "watchlist": [
+    {
+      "id": "zcash",
+      "symbol": "ZEC",
+      "name": "Zcash",
+      "rank": 11,
+      "price": 935.96,
+      "mcap": 15947940882,
+      "fdv": 15948868404,
+      "vol": 1065466923,
+      "float": 0.9999418440592829,
+      "fdvToMcap": 1.0000581593578044,
+      "turnover": 0.0668090589803078,
+      "rs7": -21.49473096998381,
+      "rs30": -2.37124577651725,
+      "rs200": 198.26397906161145,
+      "scores": {
+        "heat": 100,
+        "strength": 55,
+        "quality": 98,
+        "supplyRisk": 0,
+        "pickScore": 84
+      },
+      "trending": true,
+      "newsCount": 9,
+      "narratives": [
+        "Privacy coins"
+      ],
+      "tech": {
+        "close": 934.44,
+        "sma20": 1192.0544999999993,
+        "sma50": 1253.8404000000003,
+        "atr14": 118.20939978807607,
+        "above50": false,
+        "atrAboveSma20": -2.17930638732492,
+        "ret7": -29.370148373784023
+      },
+      "depthUsd": 2532791.421720003,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 55 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "avalanche-2",
+      "symbol": "AVAX",
+      "name": "Avalanche",
+      "rank": 25,
+      "price": 8.24,
+      "mcap": 3678738882,
+      "fdv": 3884769715,
+      "vol": 255198219,
+      "float": 0.9469644667541135,
+      "fdvToMcap": 1.0560058323269708,
+      "turnover": 0.06937111526145008,
+      "rs7": 9.47780873248798,
+      "rs30": -1.7715022630815924,
+      "rs200": 0.6693419266840195,
+      "scores": {
+        "heat": 85,
+        "strength": 67,
+        "quality": 91,
+        "supplyRisk": 3,
+        "pickScore": 80
+      },
+      "trending": false,
+      "newsCount": 8,
+      "narratives": [
+        "Layer-1 platforms"
+      ],
+      "tech": {
+        "close": 8.235,
+        "sma20": 8.523199999999997,
+        "sma50": 9.632560000000002,
+        "atr14": 0.5675762161293404,
+        "above50": false,
+        "atrAboveSma20": -0.5077732149620632,
+        "ret7": -1.2944983818770295
+      },
+      "depthUsd": 383803.27182999987,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "tron",
+      "symbol": "TRX",
+      "name": "TRON",
+      "rank": 8,
+      "price": 0.312068,
+      "mcap": 29658427492,
+      "fdv": 29658587507,
+      "vol": 350018390,
+      "float": 0.9999946047456691,
+      "fdvToMcap": 1.0000053952624441,
+      "turnover": 0.011801650309828908,
+      "rs7": 8.84950343434301,
+      "rs30": 12.25398623864724,
+      "rs200": 8.150208999984198,
+      "scores": {
+        "heat": 60,
+        "strength": 76,
+        "quality": 96,
+        "supplyRisk": 0,
+        "pickScore": 77
+      },
+      "trending": false,
+      "newsCount": 5,
+      "narratives": [],
+      "tech": {
+        "close": 0.3122,
+        "sma20": 0.32179000000000035,
+        "sma50": 0.3285680000000003,
+        "atr14": 0.006102633023161485,
+        "above50": false,
+        "atrAboveSma20": -1.571452840700595,
+        "ret7": -1.91643103989948
+      },
+      "depthUsd": 1825686.6824,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "solana",
+      "symbol": "SOL",
+      "name": "Solana",
+      "rank": 7,
+      "price": 78.31,
+      "mcap": 46320615256,
+      "fdv": 49921338570,
+      "vol": 3620568532,
+      "float": 0.927872059976103,
+      "fdvToMcap": 1.077734790310964,
+      "turnover": 0.07816322196909983,
+      "rs7": -3.4879056230768257,
+      "rs30": -10.593277566030945,
+      "rs200": 4.395322736172225,
+      "scores": {
+        "heat": 100,
+        "strength": 37,
+        "quality": 97,
+        "supplyRisk": 5,
+        "pickScore": 76
+      },
+      "trending": true,
+      "newsCount": 22,
+      "narratives": [
+        "Layer-1 platforms"
+      ],
+      "tech": {
+        "close": 78.19,
+        "sma20": 91.88700000000003,
+        "sma50": 103.95059999999991,
+        "atr14": 4.428000354642008,
+        "above50": false,
+        "atrAboveSma20": -3.0932698516252484,
+        "ret7": -13.24753134361477
+      },
+      "depthUsd": 2982040.8956499984,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 37 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "chainlink",
+      "symbol": "LINK",
+      "name": "Chainlink",
+      "rank": 17,
+      "price": 9.87,
+      "mcap": 7572207252,
+      "fdv": 9874431172,
+      "vol": 292077834,
+      "float": 0.766849970424884,
+      "fdvToMcap": 1.3040360417224355,
+      "turnover": 0.03857235073998474,
+      "rs7": 0.6384177463464757,
+      "rs30": -5.189131949548864,
+      "rs200": 19.906486338785466,
+      "scores": {
+        "heat": 100,
+        "strength": 56,
+        "quality": 87,
+        "supplyRisk": 15,
+        "pickScore": 76
+      },
+      "trending": true,
+      "newsCount": 3,
+      "narratives": [
+        "Real-world assets"
+      ],
+      "tech": {
+        "close": 9.858,
+        "sma20": 10.947799999999996,
+        "sma50": 12.28326000000001,
+        "atr14": 0.6486285736527347,
+        "above50": false,
+        "atrAboveSma20": -1.6801603325348666,
+        "ret7": -9.226519337016569
+      },
+      "depthUsd": 608091.7430300004,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 56 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "injective-protocol",
+      "symbol": "INJ",
+      "name": "Injective",
+      "rank": 80,
+      "price": 8.15,
+      "mcap": 814807989,
+      "fdv": 814807989,
+      "vol": 154984752,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.1902101526891141,
+      "rs7": 7.419981086388083,
+      "rs30": 26.199755943353043,
+      "rs200": 156.75585956465673,
+      "scores": {
+        "heat": 50,
+        "strength": 90,
+        "quality": 84,
+        "supplyRisk": 0,
+        "pickScore": 75
+      },
+      "trending": true,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 8.074,
+        "sma20": 7.754499999999993,
+        "sma50": 7.8210399999999956,
+        "atr14": 0.6852947784434783,
+        "above50": true,
+        "atrAboveSma20": 0.4662227264093454,
+        "ret7": -2.687718452452703
+      },
+      "depthUsd": 351112.84898,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "just",
+      "symbol": "JST",
+      "name": "JUST",
+      "rank": 66,
+      "price": 0.144374,
+      "mcap": 1157592290,
+      "fdv": 1157592290,
+      "vol": 22010918,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.019014395819792477,
+      "rs7": 11.807227844570578,
+      "rs30": 21.538656445449988,
+      "rs200": 96.94595809160771,
+      "scores": {
+        "heat": 60,
+        "strength": 90,
+        "quality": 72,
+        "supplyRisk": 0,
+        "pickScore": 74
+      },
+      "trending": false,
+      "newsCount": 7,
+      "narratives": [],
+      "tech": {
+        "close": 0.14438,
+        "sma20": 0.14151699999999995,
+        "sma50": 0.13820680000000005,
+        "atr14": 0.003791523372058809,
+        "above50": true,
+        "atrAboveSma20": 0.755105460010772,
+        "ret7": 0.6834030683403158
+      },
+      "depthUsd": 198543.36386799996,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "pepe",
+      "symbol": "PEPE",
+      "name": "Pepe",
+      "rank": 46,
+      "price": 0.0000044,
+      "mcap": 1852268447,
+      "fdv": 1852268447,
+      "vol": 425176641,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.22954374766175564,
+      "rs7": -1.3466224978636032,
+      "rs30": 28.85605319048492,
+      "rs200": 28.26163049344772,
+      "scores": {
+        "heat": 57,
+        "strength": 68,
+        "quality": 92,
+        "supplyRisk": 0,
+        "pickScore": 72
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Memes"
+      ],
+      "tech": {
+        "close": 0.00000441,
+        "sma20": 0.000004791,
+        "sma50": 0.000004461,
+        "atr14": 4.655940779933989e-7,
+        "above50": false,
+        "atrAboveSma20": -0.8183093772197892,
+        "ret7": -11.623246492985961
+      },
+      "depthUsd": 762434.96580127,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "near",
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "rank": 21,
+      "price": 3.46,
+      "mcap": 4543707674,
+      "fdv": 4543707812,
+      "vol": 626914527,
+      "float": 0.999999969503483,
+      "fdvToMcap": 1.0000000303716723,
+      "turnover": 0.13797422105020746,
+      "rs7": 3.347109228886924,
+      "rs30": -15.684165360927748,
+      "rs200": 186.02263206744,
+      "scores": {
+        "heat": 48,
+        "strength": 61,
+        "quality": 96,
+        "supplyRisk": 0,
+        "pickScore": 68
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "AI & agents"
+      ],
+      "tech": {
+        "close": 3.445,
+        "sma20": 3.9838999999999984,
+        "sma50": 4.599799999999999,
+        "atr14": 0.37286963867566464,
+        "above50": false,
+        "atrAboveSma20": -1.4452772339255895,
+        "ret7": -7.242864835756602
+      },
+      "depthUsd": 985351.1013000002,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 48 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "binancecoin",
+      "symbol": "BNB",
+      "name": "BNB",
+      "rank": 4,
+      "price": 631.12,
+      "mcap": 82998798249,
+      "fdv": 82998798249,
+      "vol": 1054393098,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.0127037152373794,
+      "rs7": 1.0020213783822562,
+      "rs30": 3.199030466444608,
+      "rs200": 13.788466272077105,
+      "scores": {
+        "heat": 40,
+        "strength": 63,
+        "quality": 99,
+        "supplyRisk": 0,
+        "pickScore": 67
+      },
+      "trending": false,
+      "newsCount": 1,
+      "narratives": [],
+      "tech": {
+        "close": 630.31,
+        "sma20": 701.3560000000001,
+        "sma50": 732.4183999999992,
+        "atr14": 23.632429759817818,
+        "above50": false,
+        "atrAboveSma20": -3.006292654714648,
+        "ret7": -9.134026266091944
+      },
+      "depthUsd": 3306070.251409996,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 40 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "dogecoin",
+      "symbol": "DOGE",
+      "name": "Dogecoin",
+      "rank": 12,
+      "price": 0.064662,
+      "mcap": 10134423657,
+      "fdv": 10134915735,
+      "vol": 574138314,
+      "float": 0.9999514472957826,
+      "fdvToMcap": 1.0000485551045284,
+      "turnover": 0.05665229059211808,
+      "rs7": -1.0220240231763822,
+      "rs30": -5.929787699401567,
+      "rs200": -26.277654954688444,
+      "scores": {
+        "heat": 67,
+        "strength": 34,
+        "quality": 97,
+        "supplyRisk": 0,
+        "pickScore": 66
+      },
+      "trending": false,
+      "newsCount": 1,
+      "narratives": [
+        "Memes"
+      ],
+      "tech": {
+        "close": 0.06454,
+        "sma20": 0.07316650000000005,
+        "sma50": 0.08165220000000005,
+        "atr14": 0.00363320144373457,
+        "above50": false,
+        "atrAboveSma20": -2.37435224377013,
+        "ret7": -10.893276266740292
+      },
+      "depthUsd": 1025078.2412499995,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 34 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "bittensor",
+      "symbol": "TAO",
+      "name": "Bittensor",
+      "rank": 37,
+      "price": 215.47,
+      "mcap": 2526126346,
+      "fdv": 2526126346,
+      "vol": 147665960,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.05845549262958362,
+      "rs7": 6.563534511785463,
+      "rs30": -5.234907510658049,
+      "rs200": -1.9270679255594336,
+      "scores": {
+        "heat": 48,
+        "strength": 59,
+        "quality": 90,
+        "supplyRisk": 0,
+        "pickScore": 66
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "AI & agents"
+      ],
+      "tech": {
+        "close": 214.8,
+        "sma20": 230.4099999999999,
+        "sma50": 264.166,
+        "atr14": 15.234485698787477,
+        "above50": false,
+        "atrAboveSma20": -1.0246489647656638,
+        "ret7": -3.8495971351835245
+      },
+      "depthUsd": 460054.0738299999,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 48 < 50",
+        "strength 59 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "united-stables",
+      "symbol": "U",
+      "name": "United Stables",
+      "rank": 54,
+      "price": 0.999378,
+      "mcap": 1628630607,
+      "fdv": 1628630607,
+      "vol": 237077827,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.14556881467228866,
+      "rs7": 11.130027192484349,
+      "rs30": 19.521424277301904,
+      "rs200": 12.848587358831853,
+      "scores": {
+        "heat": 30,
+        "strength": 79,
+        "quality": 89,
+        "supplyRisk": 0,
+        "pickScore": 66
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 1.0004,
+        "sma20": 1.0003250000000004,
+        "sma50": 1.0001919999999993,
+        "atr14": 0.0005825349759582198,
+        "above50": true,
+        "atrAboveSma20": 0.12874763421069202,
+        "ret7": 0.009997000899719666
+      },
+      "depthUsd": 22834394.846900005,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 30 < 50"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "cardano",
+      "symbol": "ADA",
+      "name": "Cardano",
+      "rank": 18,
+      "price": 0.168666,
+      "mcap": 6336277594,
+      "fdv": 7589985018,
+      "vol": 274821338,
+      "float": 0.8348208302447387,
+      "fdvToMcap": 1.1978618211404075,
+      "turnover": 0.0433726796092766,
+      "rs7": 1.108479899008885,
+      "rs30": -12.311474606515427,
+      "rs200": -23.03945368691329,
+      "scores": {
+        "heat": 85,
+        "strength": 33,
+        "quality": 89,
+        "supplyRisk": 11,
+        "pickScore": 65
+      },
+      "trending": false,
+      "newsCount": 3,
+      "narratives": [
+        "Layer-1 platforms"
+      ],
+      "tech": {
+        "close": 0.1686,
+        "sma20": 0.18806500000000015,
+        "sma50": 0.21853199999999995,
+        "atr14": 0.011202815164784472,
+        "above50": false,
+        "atrAboveSma20": -1.7375096985610787,
+        "ret7": -8.419337316675723
+      },
+      "depthUsd": 572010.0396700001,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 33 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "uniswap",
+      "symbol": "UNI",
+      "name": "Uniswap",
+      "rank": 26,
+      "price": 5.77,
+      "mcap": 3506303346,
+      "fdv": 5111883280,
+      "vol": 465102704,
+      "float": 0.6859122467925276,
+      "fdvToMcap": 1.4579124438367974,
+      "turnover": 0.13264759437616552,
+      "rs7": -7.477433127269039,
+      "rs30": -3.9406423637878274,
+      "rs200": 100.39236896005855,
+      "scores": {
+        "heat": 80,
+        "strength": 53,
+        "quality": 84,
+        "supplyRisk": 21,
+        "pickScore": 65
+      },
+      "trending": false,
+      "newsCount": 1,
+      "narratives": [
+        "Perp DEX & DeFi"
+      ],
+      "tech": {
+        "close": 5.747,
+        "sma20": 6.887150000000005,
+        "sma50": 7.572940000000004,
+        "atr14": 0.5624324369889647,
+        "above50": false,
+        "atrAboveSma20": -2.0271768216355133,
+        "ret7": -16.577151981419657
+      },
+      "depthUsd": 787723.12625,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 53 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "shiba-inu",
+      "symbol": "SHIB",
+      "name": "Shiba Inu",
+      "rank": 38,
+      "price": 0.00000426,
+      "mcap": 2510427521,
+      "fdv": 2511524986,
+      "vol": 50997251,
+      "float": 0.9995630285452735,
+      "fdvToMcap": 1.0004371625911601,
+      "turnover": 0.020314169827012504,
+      "rs7": 4.2186689128896,
+      "rs30": 0.05569559132343471,
+      "rs200": -21.54732251938134,
+      "scores": {
+        "heat": 57,
+        "strength": 54,
+        "quality": 84,
+        "supplyRisk": 0,
+        "pickScore": 65
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Memes"
+      ],
+      "tech": {
+        "close": 0.00000426,
+        "sma20": 0.000004609,
+        "sma50": 0.000005099199999999995,
+        "atr14": 2.1818463962246914e-7,
+        "above50": false,
+        "atrAboveSma20": -1.5995626484242182,
+        "ret7": -6.167400881057262
+      },
+      "depthUsd": 242643.43767162,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 54 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "aave",
+      "symbol": "AAVE",
+      "name": "Aave",
+      "rank": 49,
+      "price": 111.92,
+      "mcap": 1728119049,
+      "fdv": 1790700474,
+      "vol": 199417532,
+      "float": 0.9650519860483573,
+      "fdvToMcap": 1.0362136075267578,
+      "turnover": 0.11539571426829402,
+      "rs7": -4.85430851412575,
+      "rs30": -13.196030553693062,
+      "rs200": 28.73326362903461,
+      "scores": {
+        "heat": 70,
+        "strength": 40,
+        "quality": 88,
+        "supplyRisk": 2,
+        "pickScore": 65
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Perp DEX & DeFi"
+      ],
+      "tech": {
+        "close": 111.77,
+        "sma20": 128.1024999999999,
+        "sma50": 147.997,
+        "atr14": 9.103226723679859,
+        "above50": false,
+        "atrAboveSma20": -1.7941440431791986,
+        "ret7": -14.594635898219611
+      },
+      "depthUsd": 201078.50597000011,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 40 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "ether-fi",
+      "symbol": "ETHFI",
+      "name": "Ether.fi",
+      "rank": 95,
+      "price": 0.569568,
+      "mcap": 568733784,
+      "fdv": 568733784,
+      "vol": 45107610,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.0793123448421696,
+      "rs7": 9.236221233696451,
+      "rs30": 7.5125703515395825,
+      "rs200": 49.37164510425156,
+      "scores": {
+        "heat": 30,
+        "strength": 84,
+        "quality": 75,
+        "supplyRisk": 0,
+        "pickScore": 63
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 0.5711,
+        "sma20": 0.6123549999999996,
+        "sma50": 0.6665979999999999,
+        "atr14": 0.05258775088596864,
+        "above50": false,
+        "atrAboveSma20": -0.7844982777349996,
+        "ret7": -2.0579660435602665
+      },
+      "depthUsd": 195777.19483,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 30 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "dash",
+      "symbol": "DASH",
+      "name": "Dash",
+      "rank": 99,
+      "price": 41.2,
+      "mcap": 531190018,
+      "fdv": 531190386,
+      "vol": 43722816,
+      "float": 0.999999308386955,
+      "fdvToMcap": 1.0000006927841028,
+      "turnover": 0.0823110648137217,
+      "rs7": -2.640571364435962,
+      "rs30": 0.23951494637806103,
+      "rs200": 30.89609166642202,
+      "scores": {
+        "heat": 57,
+        "strength": 58,
+        "quality": 74,
+        "supplyRisk": 0,
+        "pickScore": 63
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Privacy coins"
+      ],
+      "tech": {
+        "close": 41.12,
+        "sma20": 47.32150000000001,
+        "sma50": 52.0344,
+        "atr14": 3.8107749633133303,
+        "above50": false,
+        "atrAboveSma20": -1.6273592798584022,
+        "ret7": -12.38014063498829
+      },
+      "depthUsd": 166764.83529999998,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "strength 58 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "litecoin",
+      "symbol": "LTC",
+      "name": "Litecoin",
+      "rank": 24,
+      "price": 49.53,
+      "mcap": 3854699062,
+      "fdv": 3854696276,
+      "vol": 227859213,
+      "float": 1,
+      "fdvToMcap": 0.9999992772457836,
+      "turnover": 0.05911206279272444,
+      "rs7": 4.1015423150394525,
+      "rs30": -0.7184253206978464,
+      "rs200": 0.5241371834796116,
+      "scores": {
+        "heat": 30,
+        "strength": 63,
+        "quality": 93,
+        "supplyRisk": 0,
+        "pickScore": 62
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 49.38,
+        "sma20": 53.7515,
+        "sma50": 60.21420000000001,
+        "atr14": 2.6924888287402498,
+        "above50": false,
+        "atrAboveSma20": -1.6235907660368332,
+        "ret7": -6.121673003802275
+      },
+      "depthUsd": 375753.41140000004,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 30 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "internet-computer",
+      "symbol": "ICP",
+      "name": "Internet Computer",
+      "rank": 59,
+      "price": 2.5,
+      "mcap": 1397768112,
+      "fdv": 1397768154,
+      "vol": 58560241,
+      "float": 0.9999999698267192,
+      "fdvToMcap": 1.0000000300479026,
+      "turnover": 0.0418955336706093,
+      "rs7": 13.784822659885032,
+      "rs30": -2.395508019089476,
+      "rs200": 17.044055977218896,
+      "scores": {
+        "heat": 30,
+        "strength": 75,
+        "quality": 82,
+        "supplyRisk": 0,
+        "pickScore": 62
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 2.501,
+        "sma20": 2.511600000000001,
+        "sma50": 2.875520000000001,
+        "atr14": 0.16873028812196764,
+        "above50": false,
+        "atrAboveSma20": -0.0628221531414608,
+        "ret7": 2.7949034114262306
+      },
+      "depthUsd": 184915.43995999996,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 30 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "quant-network",
+      "symbol": "QNT",
+      "name": "Quant",
+      "rank": 41,
+      "price": 160.33,
+      "mcap": 2333758144,
+      "fdv": 2342786970,
+      "vol": 67525602,
+      "float": 0.9961461171670827,
+      "fdvToMcap": 1.0038687924981484,
+      "turnover": 0.02893427589041549,
+      "rs7": -8.42500286148946,
+      "rs30": -6.391965492637064,
+      "rs200": 159.70500628919453,
+      "scores": {
+        "heat": 48,
+        "strength": 51,
+        "quality": 85,
+        "supplyRisk": 0,
+        "pickScore": 61
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Bank rails / ISO 20022"
+      ],
+      "tech": {
+        "close": 159.95,
+        "sma20": 190.46800000000002,
+        "sma50": 209.09860000000003,
+        "atr14": 17.476532600219464,
+        "above50": false,
+        "atrAboveSma20": -1.7462273952223677,
+        "ret7": -17.57703802947542
+      },
+      "depthUsd": 181341.0123299999,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 48 < 50",
+        "strength 51 < 60",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "render-token",
+      "symbol": "RENDER",
+      "name": "Render",
+      "rank": 78,
+      "price": 1.53,
+      "mcap": 852939724,
+      "fdv": 862290149,
+      "vol": 36105315,
+      "float": 0.9891562895332806,
+      "fdvToMcap": 1.010962585909529,
+      "turnover": 0.04233044139470751,
+      "rs7": 8.064733003586033,
+      "rs30": -5.0037588548221485,
+      "rs200": -3.3079808411035527,
+      "scores": {
+        "heat": 48,
+        "strength": 61,
+        "quality": 75,
+        "supplyRisk": 1,
+        "pickScore": 61
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "AI & agents"
+      ],
+      "tech": {
+        "close": 1.533,
+        "sma20": 1.5852500000000014,
+        "sma50": 1.7915000000000005,
+        "atr14": 0.11495706739834707,
+        "above50": false,
+        "atrAboveSma20": -0.45451750973209626,
+        "ret7": -2.974683544303802
+      },
+      "depthUsd": 311559.88195000007,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 48 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "spacex-bstocks-tokenized-stock",
+      "symbol": "SPCXB",
+      "name": "SpaceX (bStocks Tokenized Stock)",
+      "rank": 156,
+      "price": 136.67,
+      "mcap": 202469052,
+      "fdv": 202469052,
+      "vol": 101838766,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.5029843573327938,
+      "rs7": 12.203946966321123,
+      "rs30": 8.302228660282008,
+      "rs200": 12.911930952095974,
+      "scores": {
+        "heat": 30,
+        "strength": 79,
+        "quality": 73,
+        "supplyRisk": 0,
+        "pickScore": 61
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": {
+        "close": 136.67,
+        "sma20": 139.28200000000007,
+        "sma50": 148.67659999999998,
+        "atr14": 7.49149747443502,
+        "above50": false,
+        "atrAboveSma20": -0.3486619342679638,
+        "ret7": 1.0274985215848575
+      },
+      "depthUsd": 581162.1245400001,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "heat 30 < 50",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    },
+    {
+      "id": "gmx",
+      "symbol": "GMX",
+      "name": "GMX",
+      "rank": 287,
+      "price": 7.67,
+      "mcap": 82325758,
+      "fdv": 82325758,
+      "vol": 5684112,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.06904415019172978,
+      "rs7": 3.5060191291959697,
+      "rs30": 7.963871967070291,
+      "rs200": 20.996989767920795,
+      "scores": {
+        "heat": 70,
+        "strength": 73,
+        "quality": 39,
+        "supplyRisk": 0,
+        "pickScore": 61
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Perp DEX & DeFi"
+      ],
+      "tech": {
+        "close": 7.66,
+        "sma20": 8.085500000000003,
+        "sma50": 8.223600000000006,
+        "atr14": 0.5388356565676694,
+        "above50": false,
+        "atrAboveSma20": -0.7896656333220348,
+        "ret7": -5.896805896805901
+      },
+      "depthUsd": 24460.95109,
+      "eligible": false,
+      "pickFails": [
+        "BTC regime not bullish",
+        "below its 50-day average"
+      ],
+      "bookBlockers": [],
+      "vetoes": []
+    }
+  ],
+  "rejects": [
+    {
+      "id": "monero",
+      "symbol": "XMR",
+      "name": "Monero",
+      "rank": 13,
+      "price": 530.27,
+      "mcap": 9985287515,
+      "fdv": 9985287515,
+      "vol": 152148940,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.01523731187223606,
+      "rs7": -4.668839546562264,
+      "rs30": 14.173691362761165,
+      "rs200": 55.946958491315925,
+      "scores": {
+        "heat": 57,
+        "strength": 64,
+        "quality": 93,
+        "supplyRisk": 0,
+        "pickScore": 71
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [
+        "Privacy coins"
+      ],
+      "tech": null,
+      "depthUsd": 0,
+      "eligible": false,
+      "pickFails": [],
+      "bookBlockers": [],
+      "vetoes": [
+        "thin order book ($0 bids within 2%)"
+      ]
+    },
+    {
+      "id": "beam-2",
+      "symbol": "BEAM",
+      "name": "Beam",
+      "rank": 150,
+      "price": 0.00434783,
+      "mcap": 218765146,
+      "fdv": 249939089,
+      "vol": 8609342,
+      "float": 0.8752738393885553,
+      "fdvToMcap": 1.1424995872057242,
+      "turnover": 0.03935426715551846,
+      "rs7": 21.768544952054782,
+      "rs30": 74.148162224764,
+      "rs200": 147.6159774898774,
+      "scores": {
+        "heat": 30,
+        "strength": 97,
+        "quality": 49,
+        "supplyRisk": 8,
+        "pickScore": 56
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": null,
+      "depthUsd": 0,
+      "eligible": false,
+      "pickFails": [],
+      "bookBlockers": [],
+      "vetoes": [
+        "thin order book ($0 bids within 2%)"
+      ]
+    },
+    {
+      "id": "bittorrent",
+      "symbol": "BTT",
+      "name": "BitTorrent",
+      "rank": 126,
+      "price": 3.22107e-7,
+      "mcap": 311918910,
+      "fdv": 311918910,
+      "vol": 29941820,
+      "float": 1,
+      "fdvToMcap": 1,
+      "turnover": 0.0959923205681887,
+      "rs7": 0.9429024504351124,
+      "rs30": 6.543753906758876,
+      "rs200": 13.399033022223318,
+      "scores": {
+        "heat": 30,
+        "strength": 64,
+        "quality": 68,
+        "supplyRisk": 0,
+        "pickScore": 54
+      },
+      "trending": false,
+      "newsCount": 0,
+      "narratives": [],
+      "tech": null,
+      "depthUsd": 0,
+      "eligible": false,
+      "pickFails": [],
+      "bookBlockers": [],
+      "vetoes": [
+        "thin order book ($0 bids within 2%)"
+      ]
+    }
+  ],
+  "picksToday": [],
+  "book": {
+    "cash": 8588.57,
+    "equity": 8588.57,
+    "returnPct": -14.11,
+    "open": [],
+    "closed": [
+      {
+        "id": "algorand",
+        "symbol": "ALGO",
+        "name": "Algorand",
+        "entryTime": 1791072000,
+        "entryDay": "2026-10-04",
+        "entry": 0.1315314,
+        "qty": 7602.7473287747,
+        "notional": 1000,
+        "initialStop": 0.1132,
+        "stop": 0.1195,
+        "fees": 1.9076,
+        "btcEntry": 84753.57,
+        "lastBarTime": 1791331200,
+        "reason": "heat 66, strength 67, quality 82, supply risk 0 · Bank rails / ISO 20022",
+        "scoresAtEntry": {
+          "heat": 66,
+          "strength": 67,
+          "quality": 82,
+          "supplyRisk": 0,
+          "pickScore": 72
+        },
+        "lastClose": 0.1235,
+        "exit": 0.1193805,
+        "exitTime": 1791331200,
+        "exitReason": "stop hit",
+        "pnl": -94.29,
+        "retPct": -9.43,
+        "r": -0.68,
+        "btcRetPct": -1.69,
+        "vsBtcPct": -7.74
+      },
+      {
+        "id": "avalanche-2",
+        "symbol": "AVAX",
+        "name": "Avalanche",
+        "entryTime": 1790812800,
+        "entryDay": "2026-10-01",
+        "entry": 10.948938,
+        "qty": 91.3330589688,
+        "notional": 1000,
+        "initialStop": 10.207,
+        "stop": 10.616,
+        "fees": 1.9686,
+        "btcEntry": 83623.59,
+        "lastBarTime": 1791417600,
+        "reason": "heat 73, strength 69, quality 93, supply risk 4 · Layer-1 platforms",
+        "scoresAtEntry": {
+          "heat": 73,
+          "strength": 69,
+          "quality": 93,
+          "supplyRisk": 4,
+          "pickScore": 77
+        },
+        "lastClose": 11.13,
+        "exit": 10.605384,
+        "exitTime": 1791417600,
+        "exitReason": "stop hit",
+        "pnl": -33.35,
+        "retPct": -3.33,
+        "r": -0.49,
+        "btcRetPct": -2.24,
+        "vsBtcPct": -1.09
+      },
+      {
+        "id": "near",
+        "symbol": "NEAR",
+        "name": "NEAR Protocol",
+        "entryTime": 1790899200,
+        "entryDay": "2026-10-02",
+        "entry": 4.813809,
+        "qty": 207.7357036808,
+        "notional": 1000,
+        "initialStop": 4.332,
+        "stop": 4.692,
+        "fees": 1.9737,
+        "btcEntry": 84880.05,
+        "lastBarTime": 1791417600,
+        "reason": "heat 100, strength 90, quality 97, supply risk 0 · AI & agents",
+        "scoresAtEntry": {
+          "heat": 100,
+          "strength": 90,
+          "quality": 97,
+          "supplyRisk": 0,
+          "pickScore": 96
+        },
+        "lastClose": 5.335,
+        "exit": 4.687308,
+        "exitTime": 1791417600,
+        "exitReason": "stop hit",
+        "pnl": -28.25,
+        "retPct": -2.83,
+        "r": -0.28,
+        "btcRetPct": -3.68,
+        "vsBtcPct": 0.85
+      },
+      {
+        "id": "quant-network",
+        "symbol": "QNT",
+        "name": "Quant",
+        "entryTime": 1791158400,
+        "entryDay": "2026-10-05",
+        "entry": 252.79254,
+        "qty": 3.9558129366,
+        "notional": 1000,
+        "initialStop": 156.55868979,
+        "stop": 230.71,
+        "fees": 1.9117,
+        "btcEntry": 86530,
+        "lastBarTime": 1791417600,
+        "reason": "heat 83, strength 67, quality 92, supply risk 0 · Bank rails / ISO 20022",
+        "scoresAtEntry": {
+          "heat": 83,
+          "strength": 67,
+          "quality": 92,
+          "supplyRisk": 0,
+          "pickScore": 81
+        },
+        "lastClose": 253.4,
+        "exit": 230.47929,
+        "exitTime": 1791417600,
+        "exitReason": "stop hit",
+        "pnl": -90.18,
+        "retPct": -9.02,
+        "r": -0.24,
+        "btcRetPct": -5.52,
+        "vsBtcPct": -3.5
+      },
+      {
+        "id": "zcash",
+        "symbol": "ZEC",
+        "name": "Zcash",
+        "entryTime": 1791417600,
+        "entryDay": "2026-10-08",
+        "entry": 1329.08776,
+        "qty": 0.7523957635,
+        "notional": 1000,
+        "initialStop": 1301.48,
+        "stop": 1301.48,
+        "fees": 1.9782,
+        "btcEntry": 83321.81,
+        "lastBarTime": 1791417600,
+        "reason": "heat 69, strength 61, quality 98, supply risk 0 · Privacy coins",
+        "scoresAtEntry": {
+          "heat": 69,
+          "strength": 61,
+          "quality": 98,
+          "supplyRisk": 0,
+          "pickScore": 76
+        },
+        "exit": 1300.17852,
+        "exitTime": 1791417600,
+        "exitReason": "stop hit",
+        "pnl": -23.73,
+        "retPct": -2.37,
+        "r": -1.14,
+        "btcRetPct": -1.88,
+        "vsBtcPct": -0.49
+      },
+      {
+        "id": "aave",
+        "symbol": "AAVE",
+        "name": "Aave",
+        "entryTime": 1790985600,
+        "entryDay": "2026-10-03",
+        "entry": 179.7796,
+        "qty": 5.5623663641,
+        "notional": 1000,
+        "initialStop": 150.94832262,
+        "stop": 166.17,
+        "fees": 1.9234,
+        "btcEntry": 84518,
+        "lastBarTime": 1791763200,
+        "reason": "heat 81, strength 80, quality 92, supply risk 2 · Perp DEX & DeFi",
+        "scoresAtEntry": {
+          "heat": 81,
+          "strength": 80,
+          "quality": 92,
+          "supplyRisk": 2,
+          "pickScore": 84
+        },
+        "lastClose": 171.67,
+        "exit": 166.00383,
+        "exitTime": 1791763200,
+        "exitReason": "stop hit",
+        "pnl": -78.55,
+        "retPct": -7.85,
+        "r": -0.49,
+        "btcRetPct": -3.16,
+        "vsBtcPct": -4.69
+      },
+      {
+        "id": "just",
+        "symbol": "JST",
+        "name": "JUST",
+        "entryTime": 1791504000,
+        "entryDay": "2026-10-09",
+        "entry": 0.14007994,
+        "qty": 7138.7808989638,
+        "notional": 1000,
+        "initialStop": 0.12706101,
+        "stop": 0.13592,
+        "fees": 1.9693,
+        "btcEntry": 81754.46,
+        "lastBarTime": 1792022400,
+        "reason": "heat 60, strength 88, quality 77, supply risk 0",
+        "scoresAtEntry": {
+          "heat": 60,
+          "strength": 88,
+          "quality": 77,
+          "supplyRisk": 0,
+          "pickScore": 75
+        },
+        "lastClose": 0.1419,
+        "exit": 0.13578408,
+        "exitTime": 1792022400,
+        "exitReason": "stop hit",
+        "pnl": -32.64,
+        "retPct": -3.26,
+        "r": -0.35,
+        "btcRetPct": 0.6,
+        "vsBtcPct": -3.86
+      },
+      {
+        "id": "render-token",
+        "symbol": "RENDER",
+        "name": "Render",
+        "entryTime": 1791590400,
+        "entryDay": "2026-10-10",
+        "entry": 1.9019,
+        "qty": 525.7899994742,
+        "notional": 1000,
+        "initialStop": 1.828,
+        "stop": 1.828,
+        "fees": 1.9602,
+        "btcEntry": 82635.56,
+        "lastBarTime": 1792022400,
+        "reason": "heat 73, strength 61, quality 78, supply risk 2 · AI & agents",
+        "scoresAtEntry": {
+          "heat": 73,
+          "strength": 61,
+          "quality": 78,
+          "supplyRisk": 2,
+          "pickScore": 70
+        },
+        "lastClose": 1.926,
+        "exit": 1.826172,
+        "exitTime": 1792022400,
+        "exitReason": "stop hit",
+        "pnl": -41.78,
+        "retPct": -4.18,
+        "r": -1.08,
+        "btcRetPct": -0.47,
+        "vsBtcPct": -3.71
+      },
+      {
+        "id": "internet-computer",
+        "symbol": "ICP",
+        "name": "Internet Computer",
+        "entryTime": 1791763200,
+        "entryDay": "2026-10-12",
+        "entry": 3.474471,
+        "qty": 287.8135980988,
+        "notional": 1000,
+        "initialStop": 2.913,
+        "stop": 2.913,
+        "fees": 1.8376,
+        "btcEntry": 83773.12,
+        "lastBarTime": 1792022400,
+        "reason": "heat 50, strength 63, quality 86, supply risk 0",
+        "scoresAtEntry": {
+          "heat": 50,
+          "strength": 63,
+          "quality": 86,
+          "supplyRisk": 0,
+          "pickScore": 66
+        },
+        "lastClose": 3.06,
+        "exit": 2.910087,
+        "exitTime": 1792022400,
+        "exitReason": "stop hit",
+        "pnl": -164.27,
+        "retPct": -16.43,
+        "r": -1.02,
+        "btcRetPct": -1.82,
+        "vsBtcPct": -14.61
+      },
+      {
+        "id": "arbitrum",
+        "symbol": "ARB",
+        "name": "Arbitrum",
+        "entryTime": 1791849600,
+        "entryDay": "2026-10-13",
+        "entry": 0.1797796,
+        "qty": 5562.3663641481,
+        "notional": 1000,
+        "initialStop": 0.1727,
+        "stop": 0.1727,
+        "fees": 1.9597,
+        "btcEntry": 81850.01,
+        "lastBarTime": 1792022400,
+        "reason": "heat 60, strength 66, quality 77, supply risk 22",
+        "scoresAtEntry": {
+          "heat": 60,
+          "strength": 66,
+          "quality": 77,
+          "supplyRisk": 22,
+          "pickScore": 60
+        },
+        "lastClose": 0.1819,
+        "exit": 0.1725273,
+        "exitTime": 1792022400,
+        "exitReason": "stop hit",
+        "pnl": -42.3,
+        "retPct": -4.23,
+        "r": -1.07,
+        "btcRetPct": 0.48,
+        "vsBtcPct": -4.71
+      },
+      {
+        "id": "aptos",
+        "symbol": "APT",
+        "name": "Aptos",
+        "entryTime": 1792195200,
+        "entryDay": "2026-10-17",
+        "entry": 0.8503495,
+        "qty": 1175.9870500306,
+        "notional": 1000,
+        "initialStop": 0.7367,
+        "stop": 0.7367,
+        "fees": 1.8655,
+        "btcEntry": 81615.91,
+        "lastBarTime": 1792281600,
+        "reason": "heat 76, strength 60, quality 73, supply risk 18 · Layer-1 platforms",
+        "scoresAtEntry": {
+          "heat": 76,
+          "strength": 60,
+          "quality": 73,
+          "supplyRisk": 18,
+          "pickScore": 64
+        },
+        "lastClose": 0.7966,
+        "exit": 0.7359633,
+        "exitTime": 1792281600,
+        "exitReason": "stop hit",
+        "pnl": -136.38,
+        "retPct": -13.64,
+        "r": -1.02,
+        "btcRetPct": 0.61,
+        "vsBtcPct": -14.25
+      },
+      {
+        "id": "sei-network",
+        "symbol": "SEI",
+        "name": "Sei",
+        "entryTime": 1792281600,
+        "entryDay": "2026-10-18",
+        "entry": 0.06264258,
+        "qty": 15963.5825982902,
+        "notional": 1000,
+        "initialStop": 0.06234,
+        "stop": 0.06234,
+        "fees": 1.9942,
+        "btcEntry": 81491.04,
+        "lastBarTime": 1792281600,
+        "reason": "heat 71, strength 66, quality 62, supply risk 22 · Layer-1 platforms",
+        "scoresAtEntry": {
+          "heat": 71,
+          "strength": 66,
+          "quality": 62,
+          "supplyRisk": 22,
+          "pickScore": 59
+        },
+        "exit": 0.06227766,
+        "exitTime": 1792281600,
+        "exitReason": "stop hit",
+        "pnl": -7.82,
+        "retPct": -0.78,
+        "r": -1.62,
+        "btcRetPct": 0.77,
+        "vsBtcPct": -1.55
+      },
+      {
+        "id": "sui",
+        "symbol": "SUI",
+        "name": "Sui",
+        "entryTime": 1792368000,
+        "entryDay": "2026-10-19",
+        "entry": 0.997997,
+        "qty": 1002.0070200612,
+        "notional": 1000,
+        "initialStop": 0.9764,
+        "stop": 0.9764,
+        "fees": 1.9774,
+        "btcEntry": 82116,
+        "lastBarTime": 1792454400,
+        "reason": "heat 88, strength 63, quality 75, supply risk 47 · Layer-1 platforms",
+        "scoresAtEntry": {
+          "heat": 88,
+          "strength": 63,
+          "quality": 75,
+          "supplyRisk": 47,
+          "pickScore": 60
+        },
+        "lastClose": 0.9992,
+        "exit": 0.9754236,
+        "exitTime": 1792454400,
+        "exitReason": "stop hit",
+        "pnl": -24.6,
+        "retPct": -2.46,
+        "r": -1.14,
+        "btcRetPct": 1.11,
+        "vsBtcPct": -3.57
+      },
+      {
+        "id": "near",
+        "symbol": "NEAR",
+        "name": "NEAR Protocol",
+        "entryTime": 1792627200,
+        "entryDay": "2026-10-22",
+        "entry": 5.268263,
+        "qty": 189.8158842867,
+        "notional": 1000,
+        "initialStop": 4.863,
+        "stop": 4.863,
+        "fees": 1.9222,
+        "btcEntry": 84093.42,
+        "lastBarTime": 1792627200,
+        "reason": "heat 95, strength 87, quality 97, supply risk 0 · AI & agents",
+        "scoresAtEntry": {
+          "heat": 95,
+          "strength": 87,
+          "quality": 97,
+          "supplyRisk": 0,
+          "pickScore": 93
+        },
+        "exit": 4.858137,
+        "exitTime": 1792627200,
+        "exitReason": "stop hit",
+        "pnl": -79.77,
+        "retPct": -7.98,
+        "r": -1.04,
+        "btcRetPct": -3.18,
+        "vsBtcPct": -4.8
+      },
+      {
+        "id": "celestia",
+        "symbol": "TIA",
+        "name": "Celestia",
+        "entryTime": 1791676800,
+        "entryDay": "2026-10-11",
+        "entry": 0.6025019,
+        "qty": 1659.7458032912,
+        "notional": 1000,
+        "initialStop": 0.47371336,
+        "stop": 0.5527,
+        "fees": 1.9164,
+        "btcEntry": 82988.35,
+        "lastBarTime": 1792713600,
+        "reason": "heat 50, strength 89, quality 78, supply risk 11",
+        "scoresAtEntry": {
+          "heat": 50,
+          "strength": 89,
+          "quality": 78,
+          "supplyRisk": 11,
+          "pickScore": 69
+        },
+        "lastClose": 0.5594,
+        "exit": 0.5521473,
+        "exitTime": 1792713600,
+        "exitReason": "stop hit",
+        "pnl": -85.49,
+        "retPct": -8.55,
+        "r": -0.4,
+        "btcRetPct": -2.17,
+        "vsBtcPct": -6.38
+      },
+      {
+        "id": "injective-protocol",
+        "symbol": "INJ",
+        "name": "Injective",
+        "entryTime": 1792108800,
+        "entryDay": "2026-10-16",
+        "entry": 8.549541,
+        "qty": 116.9653435196,
+        "notional": 1000,
+        "initialStop": 6.757,
+        "stop": 7.665,
+        "fees": 1.8956,
+        "btcEntry": 82245.93,
+        "lastBarTime": 1792713600,
+        "reason": "heat 50, strength 94, quality 88, supply risk 0",
+        "scoresAtEntry": {
+          "heat": 50,
+          "strength": 94,
+          "quality": 88,
+          "supplyRisk": 0,
+          "pickScore": 77
+        },
+        "lastClose": 7.91,
+        "exit": 7.657335,
+        "exitTime": 1792713600,
+        "exitReason": "stop hit",
+        "pnl": -106.25,
+        "retPct": -10.63,
+        "r": -0.51,
+        "btcRetPct": -1.28,
+        "vsBtcPct": -9.35
+      },
+      {
+        "id": "quant-network",
+        "symbol": "QNT",
+        "name": "Quant",
+        "entryTime": 1792713600,
+        "entryDay": "2026-10-23",
+        "entry": 187.47729,
+        "qty": 5.3339793849,
+        "notional": 1000,
+        "initialStop": 187.28,
+        "stop": 187.28,
+        "fees": 1.9979,
+        "btcEntry": 81416.09,
+        "lastBarTime": 1792713600,
+        "reason": "heat 70, strength 70, quality 85, supply risk 0 · Bank rails / ISO 20022",
+        "scoresAtEntry": {
+          "heat": 70,
+          "strength": 70,
+          "quality": 85,
+          "supplyRisk": 0,
+          "pickScore": 75
+        },
+        "exit": 187.09272,
+        "exitTime": 1792713600,
+        "exitReason": "stop hit",
+        "pnl": -4.05,
+        "retPct": -0.4,
+        "r": -3.85,
+        "btcRetPct": -0.28,
+        "vsBtcPct": -0.12
+      },
+      {
+        "id": "jupiter-exchange-solana",
+        "symbol": "JUP",
+        "name": "Jupiter",
+        "entryTime": 1792540800,
+        "entryDay": "2026-10-21",
+        "entry": 0.315315,
+        "qty": 3171.4317428603,
+        "notional": 1000,
+        "initialStop": 0.2895,
+        "stop": 0.2895,
+        "fees": 1.9172,
+        "btcEntry": 83028.14,
+        "lastBarTime": 1792800000,
+        "reason": "heat 77, strength 65, quality 66, supply risk 39 · Perp DEX & DeFi",
+        "scoresAtEntry": {
+          "heat": 77,
+          "strength": 65,
+          "quality": 66,
+          "supplyRisk": 39,
+          "pickScore": 56
+        },
+        "lastClose": 0.2998,
+        "exit": 0.2892105,
+        "exitTime": 1792800000,
+        "exitReason": "stop hit",
+        "pnl": -84.71,
+        "retPct": -8.47,
+        "r": -1.03,
+        "btcRetPct": -2.58,
+        "vsBtcPct": -5.89
+      },
+      {
+        "id": "ethena",
+        "symbol": "ENA",
+        "name": "Ethena",
+        "entryTime": 1792972800,
+        "entryDay": "2026-10-26",
+        "entry": 0.2071069,
+        "qty": 4828.4243547656,
+        "notional": 1000,
+        "initialStop": 0.1883,
+        "stop": 0.1893,
+        "fees": 1.9131,
+        "btcEntry": 80154.09,
+        "lastBarTime": 1793232000,
+        "reason": "heat 50, strength 70, quality 89, supply risk 7",
+        "scoresAtEntry": {
+          "heat": 50,
+          "strength": 70,
+          "quality": 89,
+          "supplyRisk": 7,
+          "pickScore": 67
+        },
+        "lastClose": 0.2097,
+        "exit": 0.1891107,
+        "exitTime": 1793232000,
+        "exitReason": "stop hit",
+        "pnl": -88.81,
+        "retPct": -8.88,
+        "r": -0.98,
+        "btcRetPct": -2.7,
+        "vsBtcPct": -6.18
+      },
+      {
+        "id": "zcash",
+        "symbol": "ZEC",
+        "name": "Zcash",
+        "entryTime": 1793145600,
+        "entryDay": "2026-10-28",
+        "entry": 1310.8095,
+        "qty": 0.7628873608,
+        "notional": 1000,
+        "initialStop": 1130.78,
+        "stop": 1182.98,
+        "fees": 1.9016,
+        "btcEntry": 80909.77,
+        "lastBarTime": 1793318400,
+        "reason": "heat 100, strength 81, quality 98, supply risk 0 · Privacy coins",
+        "scoresAtEntry": {
+          "heat": 100,
+          "strength": 81,
+          "quality": 98,
+          "supplyRisk": 0,
+          "pickScore": 93
+        },
+        "lastClose": 1223,
+        "exit": 1181.79702,
+        "exitTime": 1793318400,
+        "exitReason": "stop hit",
+        "pnl": -100.32,
+        "retPct": -10.03,
+        "r": -0.73,
+        "btcRetPct": -4.38,
+        "vsBtcPct": -5.65
+      },
+      {
+        "id": "just",
+        "symbol": "JST",
+        "name": "JUST",
+        "entryTime": 1793232000,
+        "entryDay": "2026-10-29",
+        "entry": 0.14112098,
+        "qty": 7086.1185912966,
+        "notional": 1000,
+        "initialStop": 0.13903,
+        "stop": 0.13903,
+        "fees": 1.9842,
+        "btcEntry": 81343.51,
+        "lastBarTime": 1793318400,
+        "reason": "heat 60, strength 91, quality 75, supply risk 0",
+        "scoresAtEntry": {
+          "heat": 60,
+          "strength": 91,
+          "quality": 75,
+          "supplyRisk": 0,
+          "pickScore": 75
+        },
+        "lastClose": 0.14174,
+        "exit": 0.13889097,
+        "exitTime": 1793318400,
+        "exitReason": "stop hit",
+        "pnl": -17.79,
+        "retPct": -1.78,
+        "r": -1.2,
+        "btcRetPct": -4.89,
+        "vsBtcPct": 3.11
+      },
+      {
+        "id": "midnight-3",
+        "symbol": "NIGHT",
+        "name": "Midnight",
+        "entryTime": 1793318400,
+        "entryDay": "2026-10-30",
+        "entry": 0.03660657,
+        "qty": 27317.500656303,
+        "notional": 1000,
+        "initialStop": 0.03657,
+        "stop": 0.03657,
+        "fees": 1.998,
+        "btcEntry": 77991.89,
+        "lastBarTime": 1793318400,
+        "reason": "heat 60, strength 73, quality 59, supply risk 21",
+        "scoresAtEntry": {
+          "heat": 60,
+          "strength": 73,
+          "quality": 59,
+          "supplyRisk": 21,
+          "pickScore": 57
+        },
+        "exit": 0.03653343,
+        "exitTime": 1793318400,
+        "exitReason": "stop hit",
+        "pnl": -4,
+        "retPct": -0.4,
+        "r": -4,
+        "btcRetPct": -0.8,
+        "vsBtcPct": 0.4
+      },
+      {
+        "id": "quant-network",
+        "symbol": "QNT",
+        "name": "Quant",
+        "entryTime": 1794009600,
+        "entryDay": "2026-11-07",
+        "entry": 194.2941,
+        "qty": 5.146836677,
+        "notional": 1000,
+        "initialStop": 182.89,
+        "stop": 188.77,
+        "fees": 1.9706,
+        "btcEntry": 75844,
+        "lastBarTime": 1794268800,
+        "reason": "heat 54, strength 75, quality 85, supply risk 0 · Bank rails / ISO 20022",
+        "scoresAtEntry": {
+          "heat": 54,
+          "strength": 75,
+          "quality": 85,
+          "supplyRisk": 0,
+          "pickScore": 71
+        },
+        "lastClose": 194.86,
+        "exit": 188.58123,
+        "exitTime": 1794268800,
+        "exitReason": "stop hit",
+        "pnl": -31.37,
+        "retPct": -3.14,
+        "r": -0.53,
+        "btcRetPct": -2.7,
+        "vsBtcPct": -0.44
+      },
+      {
+        "id": "pepe",
+        "symbol": "PEPE",
+        "name": "Pepe",
+        "entryTime": 1793059200,
+        "entryDay": "2026-10-27",
+        "entry": 0.00000432,
+        "qty": 231250231.25023124,
+        "notional": 1000,
+        "initialStop": 0.00000388,
+        "stop": 0.00000478,
+        "fees": 2.1054,
+        "btcEntry": 80150.56,
+        "lastBarTime": 1794355200,
+        "reason": "heat 55, strength 81, quality 91, supply risk 0 · Memes",
+        "scoresAtEntry": {
+          "heat": 55,
+          "strength": 81,
+          "quality": 91,
+          "supplyRisk": 0,
+          "pickScore": 76
+        },
+        "lastClose": 0.00000538,
+        "exit": 0.00000478,
+        "exitTime": 1794355200,
+        "exitReason": "stop hit",
+        "pnl": 103.27,
+        "retPct": 10.33,
+        "r": 1.01,
+        "btcRetPct": -7.65,
+        "vsBtcPct": 17.98
+      },
+      {
+        "id": "injective-protocol",
+        "symbol": "INJ",
+        "name": "Injective",
+        "entryTime": 1793923200,
+        "entryDay": "2026-11-06",
+        "entry": 8.155147,
+        "qty": 122.6219466062,
+        "notional": 1000,
+        "initialStop": 6.983,
+        "stop": 7.248,
+        "fees": 1.8879,
+        "btcEntry": 76088.01,
+        "lastBarTime": 1794528000,
+        "reason": "heat 50, strength 96, quality 84, supply risk 0",
+        "scoresAtEntry": {
+          "heat": 50,
+          "strength": 96,
+          "quality": 84,
+          "supplyRisk": 0,
+          "pickScore": 77
+        },
+        "lastClose": 7.455,
+        "exit": 7.240752,
+        "exitTime": 1794528000,
+        "exitReason": "stop hit",
+        "pnl": -114.01,
+        "retPct": -11.4,
+        "r": -0.79,
+        "btcRetPct": -10.22,
+        "vsBtcPct": -1.18
+      }
+    ],
+    "stats": {
+      "trades": 25,
+      "winRate": 4,
+      "beatBtcRate": 16,
+      "avgR": -0.99,
+      "totalPnl": -1411.44
+    }
+  },
+  "bookConfig": {
+    "startCash": 10000,
+    "testAmount": 1000,
+    "maxOpen": 5,
+    "maxNewPerDay": 1,
+    "cooldownDays": 14,
+    "feePct": 0.1,
+    "slippagePct": 0.1,
+    "atrMult": 2.5,
+    "trailPeriod": 10
+  },
+  "vetoConfig": {
+    "maxFdvToMcap": 5,
+    "minFloat": 0.2,
+    "maxTurnover": 1,
+    "extendedAtrMult": 3,
+    "extended7dPct": 60,
+    "minDepthMultiple": 20
+  },
+  "explainers": {
+    "zcash": {
+      "at": "2026-11-08T00:28:22.916Z",
+      "ai": false,
+      "text": "Zcash is a privacy-focused cryptocurrency that uses trustless zero-knowledge proofs to enable fully encrypted transactions while maintaining blockchain transparency and security. It was the first cryptocurrency to implement zero-knowledge encryption for private peer-to-peer payments, addressing the fundamental privacy gap in traditional cryptocurrencies that expose transaction details publicly. With a fixed supply of 21 million ZEC and a halving schedule similar to Bitcoin, Zcash allows users to prove transactions are valid without revealing sensitive information like wallet balances, transaction amounts, or participant identities, making it suitable for everyday payments, long-term savings, and cross-border money transfers where financial confidentiality matters. The protocol operates on its own blockchain currently using Proof-of-Work consensus, though it's evolving toward Proof-of-Sta",
+      "homepage": "https://z.cash/",
+      "whitepaper": "https://zips.z.cash/protocol/protocol.pdf",
+      "categories": [
+        "Smart Contract Platform",
+        "Privacy Coins",
+        "Layer 1 (L1)",
+        "Zero Knowledge (ZK)",
+        "Proof of Work (PoW)",
+        "Pantera Capital Portfolio",
+        "Made in USA",
+        "Coinbase 50 Index",
+        "Quantum-Resistant",
+        "Privacy"
+      ]
+    },
+    "avalanche-2": {
+      "at": "2026-11-10T00:34:25.644Z",
+      "ai": false,
+      "text": "Avalanche is a high throughput smart contract blockchain&nbsp;platform. Validators secure the network through a proof-of-stake consensus protocol. It is said to be fast, low cost, and environmental friendly.",
+      "homepage": "https://www.avax.network",
+      "whitepaper": "https://cdn.prod.website-files.com/5d80307810123f5ffbb34d6e/6008d7bbf8b10d1eb01e7e16_Avalanche%20Platform%20Whitepaper.pdf",
+      "categories": [
+        "Smart Contract Platform",
+        "Layer 1 (L1)",
+        "Avalanche Ecosystem",
+        "Proof of Stake (PoS)",
+        "DragonFly Capital Portfolio",
+        "DeFiance Capital Portfolio",
+        "Andreessen Horowitz (a16z) Portfolio",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "Galaxy Digital Portfolio",
+        "GMCI Index",
+        "Polychain Capital Portfolio",
+        "World Liberty Financial Portfolio",
+        "Made in USA",
+        "Coinbase 50 Index"
+      ]
+    },
+    "tron": {
+      "at": "2026-11-13T06:06:09.646Z",
+      "ai": false,
+      "text": "TRON is a decentralized blockchain-based operating system designed to accelerate the decentralization of the internet and its underlying infrastructure. It serves as a global settlement layer for stablecoins and everyday digital purchases, providing a high-throughput environment to support large-scale decentralized applications. The network is governed by a decentralized autonomous organization (DAO), which allows the community to manage the protocol without a central authority. Its primary value proposition includes a unique resource model that utilizes bandwidth and energy to allow for high transaction volumes without traditional fee spikes. The platform functions as a smart contract platform that enables the creation of decentralized applications and is compatible with the Ethereum Virtual Machine, allowing developers to easily migrate applications. TRON operates using a Delegated Pro",
+      "homepage": "https://tron.network",
+      "whitepaper": "https://tron.network/static/doc/white_paper.pdf",
+      "categories": [
+        "Smart Contract Platform",
+        "Layer 1 (L1)",
+        "Alleged SEC Securities",
+        "FTX Holdings",
+        "DWF Labs Portfolio",
+        "Tron Ecosystem",
+        "Proof of Stake (PoS)",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "GMCI Index",
+        "World Liberty Financial Portfolio",
+        "Made in China"
+      ]
+    },
+    "solana": {
+      "at": "2026-11-09T00:31:22.874Z",
+      "ai": false,
+      "text": "Solana is a high-performance Layer 1 blockchain designed for mass adoption by providing a fast, secure, and low-cost environment for decentralized applications. It distinguishes itself by scaling globally without the use of complex sharding or multiple layers, instead maintaining a single, unified ledger to avoid liquidity fragmentation. This architecture allows it to process thousands of transactions per second with sub-second finality, often at a cost of less than a penny per transaction. The network operates on a unique hybrid model that combines Proof of Stake with an innovation called Proof of History, which functions as a decentralized clock to timestamp transactions. This system reduces the need for constant node communication, allowing the Sealevel engine to run non-conflicting smart contracts in parallel across multiple CPU cores. Further efficiency is gained through the Gulf St",
+      "homepage": "https://solana.com/",
+      "whitepaper": "https://solana.com/solana-whitepaper.pdf",
+      "categories": [
+        "Smart Contract Platform",
+        "Solana Ecosystem",
+        "Layer 1 (L1)",
+        "FTX Holdings",
+        "Multicoin Capital Portfolio",
+        "Proof of Stake (PoS)",
+        "Alameda Research Portfolio",
+        "Andreessen Horowitz (a16z) Portfolio",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "Delphi Ventures Portfolio",
+        "GMCI Index",
+        "Polychain Capital Portfolio",
+        "Made in USA",
+        "Coinbase 50 Index",
+        "CoinList Launchpad"
+      ]
+    },
+    "chainlink": {
+      "at": "2026-11-14T00:11:12.210Z",
+      "ai": false,
+      "text": "Chainlink is the industry-standard decentralized oracle network that solves the \"oracle problem\" by connecting smart contracts with real-world data. Blockchains cannot access external information on their own, so Chainlink acts as a secure bridge, enabling smart contracts to react to real-world events using verified, tamper-proof data. It is widely considered one of the first decentralized oracle networks and is the market leader in bringing off-chain data on-chain. The platform operates through a decentralized network of nodes that fetch, validate, and deliver data to smart contracts. When a contract requests information like a stock price, a committee of independent nodes retrieves and aggregates the data to reach consensus, then delivers a single trustworthy answer. Chainlink offers a suite of services including Data Feeds for asset prices, CCIP for cross-chain token transfers and mes",
+      "homepage": "https://chain.link/",
+      "whitepaper": "https://research.chain.link/whitepaper-v2.pdf",
+      "categories": [
+        "Infrastructure",
+        "Decentralized Finance (DeFi)",
+        "Oracle",
+        "BNB Chain Ecosystem",
+        "Solana Ecosystem",
+        "Avalanche Ecosystem",
+        "Polygon Ecosystem",
+        "Near Protocol Ecosystem",
+        "Gnosis Chain Ecosystem",
+        "Fantom Ecosystem",
+        "Harmony Ecosystem",
+        "Arbitrum Ecosystem",
+        "Celo Ecosystem",
+        "Moonriver Ecosystem",
+        "Moonbeam Ecosystem",
+        "Ethereum Ecosystem",
+        "XDC Ecosystem",
+        "Cronos Ecosystem",
+        "Metis Ecosystem",
+        "Optimism Ecosystem",
+        "Kaia Ecosystem",
+        "ZkSync Ecosystem",
+        "Real World Assets (RWA)",
+        "Mantle Ecosystem",
+        "Linea Ecosystem",
+        "Base Ecosystem",
+        "Shibarium Ecosystem",
+        "Ronin Ecosystem",
+        "Starknet Ecosystem",
+        "Osmosis Ecosystem",
+        "Hedera Ecosystem",
+        "Scroll Ecosystem",
+        "Berachain Ecosystem",
+        "Merlin Chain Ecosystem",
+        "Blast Ecosystem",
+        "WEMIX Ecosystem",
+        "Cross-chain Communication",
+        "Mode Ecosystem",
+        "Zora Ecosystem",
+        "Bitlayer Ecosystem",
+        "Core Ecosystem",
+        "Energi Ecosystem",
+        "Sora Ecosystem",
+        "Polygon zkEVM Ecosystem",
+        "Huobi ECO Chain Ecosystem",
+        "Milkomeda (Cardano) Ecosystem",
+        "Astar Ecosystem",
+        "opBNB Ecosystem",
+        "Rootstock Ecosystem",
+        "NEO Ecosystem",
+        "Fraxtal Ecosystem",
+        "X Layer Ecosystem",
+        "GMCI DeFi Index",
+        "GMCI 30 Index",
+        "Sonic Ecosystem",
+        "Etherlink Ecosystem",
+        "RWA Protocol",
+        "GMCI Index",
+        "Zircuit Ecosystem",
+        "Cronos zkEVM Ecosystem",
+        "Sei Network Ecosystem",
+        "Mint Ecosystem",
+        "World Chain Ecosystem",
+        "ApeChain Ecosystem",
+        "Morph L2 Ecosystem",
+        "Bittensor Ecosystem",
+        "Kroma Ecosystem",
+        "BSquared Network Ecosystem",
+        "World Liberty Financial Portfolio",
+        "Abstract Ecosystem",
+        "Ink Ecosystem",
+        "Soneium Ecosystem",
+        "Lisk Ecosystem",
+        "Made in USA",
+        "Unichain Ecosystem",
+        "HyperEVM Ecosystem",
+        "Coinbase 50 Index",
+        "Corn Ecosystem",
+        "Chain Abstraction",
+        "Superseed Ecosystem",
+        "Lens Ecosystem",
+        "Plume Network Ecosystem",
+        "Hydration Ecosystem",
+        "Hemi Ecosystem",
+        "Katana Ecosystem",
+        "Botanix Ecosystem",
+        "TAC Ecosystem",
+        "HashKey Chain Ecosystem",
+        "Plasma Ecosystem",
+        "x402 Ecosystem",
+        "MegaETH Ecosystem",
+        "Monad Ecosystem",
+        "BOB Network Ecosystem",
+        "Stable Ecosystem",
+        "Henesys Ecosystem",
+        "Bittensor EVM Ecosystem",
+        "Privacy Infrastructure",
+        "Base Native",
+        "Privacy",
+        "Tempo Ecosystem",
+        "Arc Ecosystem",
+        "Robinhood Ecosystem",
+        "Pharos Ecosystem",
+        "ADI Chain Ecosystem"
+      ]
+    },
+    "injective-protocol": {
+      "at": "2026-10-16T08:44:06.983Z",
+      "ai": false,
+      "text": "Injective is an interoperable Layer 1 blockchain designed for DeFi applications. It provides developers with on-chain financial infrastructure modules to build dApps such as decentralized exchanges, prediction markets, and lending protocols. Its decentralized cross-chain bridging infrastructure offers compatibility with most blockchains, including EVM chains like Ethereum and non-EVM chains like Solana.",
+      "homepage": "https://injective.com",
+      "whitepaper": "https://injective.com/Injective-A-Finance-Native-Layer-1-Blockchain.pdf",
+      "categories": [
+        "Smart Contract Platform",
+        "Decentralized Finance (DeFi)",
+        "BNB Chain Ecosystem",
+        "Cosmos Ecosystem",
+        "Solana Ecosystem",
+        "Layer 1 (L1)",
+        "Ethereum Ecosystem",
+        "Real World Assets (RWA)",
+        "Binance Launchpad",
+        "Injective Ecosystem",
+        "Osmosis Ecosystem",
+        "Proof of Stake (PoS)",
+        "Pantera Capital Portfolio",
+        "Secret Ecosystem",
+        "GMCI Index",
+        "Privacy Blockchain",
+        "Made in USA",
+        "Coinbase 50 Index"
+      ]
+    },
+    "just": {
+      "at": "2026-11-08T00:28:22.916Z",
+      "ai": false,
+      "text": "",
+      "homepage": "https://www.just.network/#/",
+      "whitepaper": "https://www.just.network/docs/white_paper_en.pdf",
+      "categories": [
+        "Decentralized Finance (DeFi)",
+        "Tron Ecosystem"
+      ]
+    },
+    "pepe": {
+      "at": "2026-10-27T05:50:03.525Z",
+      "ai": false,
+      "text": "What is the project about? Pepe is a community based meme token surround the iconic meme Pepe the frog. Pepe aims to leverage the power of such an iconic meme to become the most memeable memecoin in existence. What makes your project unique? Pepe is here to make memecoins great again. Ushering in a new paradigm for memecoins, Pepe represents the memecoin in it's purest simplicity. With zero taxes, liquidity locked forever, and contract immutable, Pepe is for the people, forever. Pepe is about culture, rallying together a community to have fun and enjoy memes, fueled purely by memetic power. History of your project. Pepe was stealth launched on Friday, April 14th, 2023. What’s next for your project? Pepe will focus on developing a tight-knit community around the token and building resources to enrich the communities knowledge and success in crypto through a token gated group, newsletter, ",
+      "homepage": "https://www.pepe.vip/",
+      "whitepaper": null,
+      "categories": [
+        "BNB Chain Ecosystem",
+        "Avalanche Ecosystem",
+        "Meme",
+        "Arbitrum Ecosystem",
+        "Ethereum Ecosystem",
+        "Frog-Themed",
+        "GMCI Meme Index",
+        "GMCI Index",
+        "The Boy’s Club",
+        "4chan-Themed"
+      ]
+    },
+    "near": {
+      "at": "2026-10-02T04:55:59.976Z",
+      "ai": false,
+      "text": "NEAR Protocol is the blockchain for AI. A high-performance, AI-native platform built to power the next generation of decentralized applications and intelligent agents. It provides the infrastructure AI needs to transact, operate, and interact across Web2 and Web3. NEAR combines three core elements: User-Owned AI, which ensures agents act in users’ best interests; Intents and Chain Abstraction, which eliminate blockchain complexity for seamless, goal-driven transactions across chains; and a sharded blockchain architecture that delivers the scalability, speed, and low-cost execution needed for real-world AI and Web3 use. This integrated stack makes NEAR the foundation for building secure, user-owned, AI-native applications at internet scale.",
+      "homepage": "https://near.org/",
+      "whitepaper": "https://near.org/papers/the-official-near-white-paper/",
+      "categories": [
+        "Artificial Intelligence (AI)",
+        "Smart Contract Platform",
+        "Layer 1 (L1)",
+        "Near Protocol Ecosystem",
+        "Alleged SEC Securities",
+        "FTX Holdings",
+        "Data Availability",
+        "Coinbase Ventures Portfolio",
+        "Multicoin Capital Portfolio",
+        "Proof of Stake (PoS)",
+        "Alameda Research Portfolio",
+        "DragonFly Capital Portfolio",
+        "Pantera Capital Portfolio",
+        "Andreessen Horowitz (a16z) Portfolio",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "Circle Ventures Portfolio",
+        "GMCI Index",
+        "Made in USA",
+        "Coinbase 50 Index",
+        "Chain Abstraction",
+        "CoinList Launchpad",
+        "Privacy Infrastructure",
+        "Privacy"
+      ]
+    },
+    "binancecoin": {
+      "at": "2026-10-31T00:05:16.399Z",
+      "ai": false,
+      "text": "BNB is the native utility token of the BNB Chain ecosystem, acting as a multi-chain asset that powers decentralized applications and facilitates value exchange across its network. It serves as the primary asset for paying transaction gas and smart contract deployment fees while providing users with tiered fee discounts on the Binance exchange. The project’s main value proposition lies in its unified multi-chain architecture, which integrates a smart contract platform, a Layer 2 scaling solution, and a decentralized data storage network into a cohesive settlement and data availability layer. The network operates on a Proof of Staked Authority consensus mechanism, utilizing a group of 21 active validators known as the Cabinet to verify transactions and produce blocks every 3 seconds. Validators are elected daily based on the amount of BNB staked or delegated to them, and the system employs",
+      "homepage": "https://www.binance.com?ref=37754157",
+      "whitepaper": "https://github.com/bnb-chain/whitepaper/blob/master/WHITEPAPER.md",
+      "categories": [
+        "Smart Contract Platform",
+        "Exchange-based Tokens",
+        "BNB Chain Ecosystem",
+        "Centralized Exchange (CEX) Token",
+        "Layer 1 (L1)",
+        "Ethereum Ecosystem",
+        "Alleged SEC Securities",
+        "FTX Holdings",
+        "Proof of Stake (PoS)",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "GMCI Index",
+        "Made in China"
+      ]
+    },
+    "uniswap": {
+      "at": "2026-10-06T01:57:13.473Z",
+      "ai": false,
+      "text": "UNI is the governance token for Uniswap, an Automated Market Marker DEX on the Ethereum blockchain. The UNI token allows token holders to participate in the governance of the protocol. Key decisions such as usage of the treasury or future upgrades can be decided through a governance vote.",
+      "homepage": "https://uniswap.org/",
+      "whitepaper": "https://blog.uniswap.org/uni",
+      "categories": [
+        "Decentralized Exchange (DEX)",
+        "Exchange-based Tokens",
+        "Decentralized Finance (DeFi)",
+        "Yield Farming",
+        "Automated Market Maker (AMM)",
+        "BNB Chain Ecosystem",
+        "Avalanche Ecosystem",
+        "Polygon Ecosystem",
+        "Near Protocol Ecosystem",
+        "Gnosis Chain Ecosystem",
+        "Harmony Ecosystem",
+        "Arbitrum Ecosystem",
+        "Ethereum Ecosystem",
+        "Optimism Ecosystem",
+        "Paradigm Portfolio",
+        "Coinbase Ventures Portfolio",
+        "Index Coop Defi Index",
+        "Andreessen Horowitz (a16z) Portfolio",
+        "Energi Ecosystem",
+        "Sora Ecosystem",
+        "Huobi ECO Chain Ecosystem",
+        "GMCI DeFi Index",
+        "GMCI 30 Index",
+        "Blockchain Capital Portfolio",
+        "GMCI Index",
+        "Polychain Capital Portfolio",
+        "Made in USA",
+        "Unichain Ecosystem",
+        "Coinbase 50 Index",
+        "Governance"
+      ]
+    },
+    "aave": {
+      "at": "2026-11-06T00:22:53.257Z",
+      "ai": false,
+      "text": "Aave is a decentralized money market protocol where users can lend and borrow cryptocurrency across 20 different assets as collateral. The protocol has a native token called AAVE, which is also a governance token that lets the community decide the direction of the protocol in a collective manner. Lenders can&nbsp;earn interest by providing liquidity to the market, while borrowers can borrow by collateralizing their cryptoassets to take out loans from the liquidity pools.",
+      "homepage": "https://aave.com/",
+      "whitepaper": "https://github.com/aave/aave-protocol/blob/master/docs/Aave_Protocol_Whitepaper_v1_0.pdf",
+      "categories": [
+        "Decentralized Finance (DeFi)",
+        "Yield Farming",
+        "BNB Chain Ecosystem",
+        "Lending/Borrowing Protocols",
+        "Solana Ecosystem",
+        "Avalanche Ecosystem",
+        "Polygon Ecosystem",
+        "Near Protocol Ecosystem",
+        "Fantom Ecosystem",
+        "Harmony Ecosystem",
+        "Arbitrum Ecosystem",
+        "Ethereum Ecosystem",
+        "Optimism Ecosystem",
+        "Base Ecosystem",
+        "Index Coop Defi Index",
+        "Stablecoin Issuer",
+        "Energi Ecosystem",
+        "Sora Ecosystem",
+        "Huobi ECO Chain Ecosystem",
+        "GMCI DeFi Index",
+        "Blockchain Capital Portfolio",
+        "GMCI Index",
+        "World Liberty Financial Portfolio",
+        "Coinbase 50 Index",
+        "Hydration Ecosystem",
+        "Governance",
+        "Base Native"
+      ]
+    },
+    "dash": {
+      "at": "2026-11-10T00:34:25.644Z",
+      "ai": false,
+      "text": "Dash (DASH) is digital cash designed to offer financial freedom to everyone. Payments are instant, easy and secure, with near-zero fees. Built to support real life use cases, Dash is the leading decentralized payment solution. Users can purchase goods at thousands of merchants and trade it at major exchanges and brokers around the globe. Since its creation in 2014, Dash has demonstrated leadership in innovation and pioneered groundbreaking features such as: -Two-tier network with incentivized nodes and decentralized project governance (Masternodes) -Instantly settled payments (InstantSend) -Instantly immutable blockchain (ChainLocks) -Optional privacy (PrivateSend)",
+      "homepage": "https://www.dash.org",
+      "whitepaper": "https://docs.dash.org/en/stable/",
+      "categories": [
+        "Smart Contract Platform",
+        "Masternodes",
+        "Payment Solutions",
+        "Alleged SEC Securities",
+        "Proof of Stake (PoS)",
+        "Proof of Work (PoW)",
+        "Made in USA",
+        "Privacy"
+      ]
+    },
+    "internet-computer": {
+      "at": "2026-10-12T01:04:52.949Z",
+      "ai": false,
+      "text": "Sovereign frontier cloud for AI that builds AI agents are starting to build and operate real software. Agentic organizations are starting to coordinate people, code, data, payments, and governance. Both need a cloud that is sovereign, tamperproof, and always on. The Internet Computer is that cloud. Built on more than USD 500 million in R&amp;D, ICP uses advanced blockchain technology and cryptography to run entire software systems end-to-end on the network: websites, apps, services, data, payments, and governance. Code and data are protected by the protocol, replicated across independent nodes, and cannot be silently changed by a cloud provider, backend operator, or attacker. Cloud engines make this infrastructure sovereign. They let organizations run ICP-powered compute across chosen providers, locations, and jurisdictions while keeping the same tamperproof and always-on guarantees of t",
+      "homepage": "https://internetcomputer.org/",
+      "whitepaper": "https://internetcomputer.org/whitepaper.pdf",
+      "categories": [
+        "Artificial Intelligence (AI)",
+        "Infrastructure",
+        "Smart Contract Platform",
+        "Layer 1 (L1)",
+        "Ethereum Ecosystem",
+        "Internet Computer Ecosystem",
+        "Base Ecosystem",
+        "Alleged SEC Securities",
+        "Multicoin Capital Portfolio",
+        "Layer 0 (L0)",
+        "Andreessen Horowitz (a16z) Portfolio",
+        "GMCI Layer 1 Index",
+        "GMCI 30 Index",
+        "Blockchain Capital Portfolio",
+        "GMCI Index",
+        "Polychain Capital Portfolio",
+        "Coinbase 50 Index",
+        "Governance",
+        "Base Native"
+      ]
+    },
+    "quant-network": {
+      "at": "2026-11-05T00:20:10.639Z",
+      "ai": false,
+      "text": "London-based Quant Network is set to revolutionise blockchain technology with the development of their blockchain operating system Overledger. The experienced team are determined to fulfil the original vision of the internet by creating an open trusted network for people, machines, and data to operate securely and safely. Overledger -the first interoperable blockchain operating system that facilitates internet-scale development of decentralised, multi-chain applications. Overledger has the ability to unlock and distribute value and applications across current and future blockchains. It is an agnostic platform that connects the world's networks to blockchains and ensures you're not limited to any single a vendor or technology. Overledger is the only platform that facilitates the development of internet-scales development of decentralised, multi-chain applications.",
+      "homepage": "https://www.quant.network",
+      "whitepaper": "http://files.quant.network/files.quant.network/Quant_Overledger_Whitepaper_v0.1.pdf",
+      "categories": [
+        "Infrastructure",
+        "Ethereum Ecosystem",
+        "Real World Assets (RWA)",
+        "Energi Ecosystem",
+        "Coinbase 50 Index"
+      ]
+    },
+    "render-token": {
+      "at": "2026-10-02T04:55:59.976Z",
+      "ai": false,
+      "text": "The Render Network is a leading decentralized GPU compute platform for applications ranging from 3D rendering to machine learning and generative AI. The network connects node operators looking to monetize their idle GPU compute power with artists and developers looking to scale intensive 3D rendering work and machine learning applications in the cloud. Through a decentralized peer-to-peer network, the Render Network achieves unprecedented levels of scale, speed, and economic efficiency. Facilitated by the Render Network Foundation, the ecosystem empowers artists and developers to build services and applications for the emerging digital economy.",
+      "homepage": "http://renderfoundation.com",
+      "whitepaper": "http://renderfoundation.com/whitepaper",
+      "categories": [
+        "Artificial Intelligence (AI)",
+        "NFT",
+        "Metaverse",
+        "Solana Ecosystem",
+        "Ethereum Ecosystem",
+        "DePIN",
+        "Multicoin Capital Portfolio",
+        "Alameda Research Portfolio",
+        "GMCI DePIN Index",
+        "GMCI 30 Index",
+        "GMCI Index",
+        "Made in USA",
+        "Coinbase 50 Index"
+      ]
+    }
+  },
+  "newsUpdatedAt": "2026-11-14T17:48:48.484Z",
+  "newsHealth": [
+    {
+      "name": "CoinDesk",
+      "ok": true,
+      "items": 25
+    },
+    {
+      "name": "Cointelegraph",
+      "ok": true,
+      "items": 30
+    },
+    {
+      "name": "Decrypt",
+      "ok": true,
+      "items": 40
+    },
+    {
+      "name": "The Block",
+      "ok": true,
+      "items": 20
+    },
+    {
+      "name": "Blockworks",
+      "ok": true,
+      "items": 50
+    },
+    {
+      "name": "CryptoSlate",
+      "ok": true,
+      "items": 10
+    }
+  ],
+  "news": [
+    {
+      "title": "Binance says stolen crypto has been replaced but some customers have to wait",
+      "link": "https://cryptoslate.com/binance-says-stolen-crypto-has-been-replaced-but-some-customers-have-to-wait/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T17:20:40.000Z",
+      "summary": "The 198-token reserve snapshot expands Binance's disclosed scope, while proof availability, phased withdrawals and SAFU restoration remain separate tests. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "hack"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T17:48:48.484Z"
+    },
+    {
+      "title": "OpenAI, Anthropic, Google and Other AI Giants Face Lawsuit Demanding Development Freeze",
+      "link": "https://decrypt.co/383270/openai-anthropic-google-ai-giants-lawsuit-development-freeze",
+      "source": "Decrypt",
+      "published": "2026-11-14T17:01:02.000Z",
+      "summary": "Four nonprofit advocacy groups want a California court to stop major AI developers from building stronger models, alleging their technology could cause catastrophic harm worldwide.",
+      "coins": [
+        "four"
+      ],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-14T17:48:48.484Z"
+    },
+    {
+      "title": "Bitcoin slides to 3-month low of $65,000 as analyst flags fourth capitulation wave",
+      "link": "https://www.coindesk.com/markets/2026/11/14/bitcoin-drifts-back-to-usd65-000-deep-value-zone-says-analyst",
+      "source": "CoinDesk",
+      "published": "2026-11-14T16:33:29.000Z",
+      "summary": "\"They are now selling at the very price they wish they had taken advantage of three months ago,\" wrote James Check.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-14T16:48:43.503Z"
+    },
+    {
+      "title": "Ethereum scaling project MegaETH slashes staff by 20% as it pursues AI business",
+      "link": "https://www.coindesk.com/business/2026/11/14/ethereum-scaling-project-megaeth-slashes-staff-by-20-as-it-pursues-ai-business",
+      "source": "CoinDesk",
+      "published": "2026-11-14T16:33:23.000Z",
+      "summary": "Decentralized Finance total value locked on MegaETH dropped significantly from over $245 million to $8.8 million.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T16:48:43.503Z"
+    },
+    {
+      "title": "Bitcoin’s $67,000 crash puts $57 billion holder cluster at risk as ETF investors flee",
+      "link": "https://cryptoslate.com/bitcoins-67000-crash-puts-57-billion-holder-cluster-at-risk-as-etf-investors-flee/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T16:20:11.000Z",
+      "summary": "Coinbase’s November 10 distribution placed roughly 855,000 BTC near current prices, leaving sustained buying central to the support case. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "etf"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T16:48:43.503Z"
+    },
+    {
+      "title": "What Is Canton Network? The Privacy Blockchain Built for Wall Street",
+      "link": "https://decrypt.co/resources/what-is-canton-network-the-privacy-blockchain-built-for-wall-street",
+      "source": "Decrypt",
+      "published": "2026-11-14T16:01:02.000Z",
+      "summary": "Canton Network is a privacy-enabled blockchain built for banks and tokenized assets. Here's how it works and what Canton Coin (CC) does.",
+      "coins": [
+        "canton-network"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T16:48:43.503Z"
+    },
+    {
+      "title": "Kazakhstan plans tokenized government bonds in first quarter after $22 million note sale",
+      "link": "https://www.coindesk.com/business/2026/11/14/kazakhstan-plans-tokenized-government-bonds-in-first-quarter-after-usd22-million-note-sale",
+      "source": "CoinDesk",
+      "published": "2026-11-14T15:38:27.000Z",
+      "summary": "The plan follows Kazakhstan's first sale of tokenized central bank notes as the country expands its crypto market.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T15:48:38.729Z"
+    },
+    {
+      "title": "Wall Street wants 24/7 trading, but somebody has to bankroll the weekend",
+      "link": "https://cryptoslate.com/wall-street-wants-24-7-trading-but-somebody-has-to-bankroll-the-weekend/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T15:20:06.000Z",
+      "summary": "Wall Street's move toward round-the-clock trading includes a key decision about who supplies cash when the main wholesale payment systems are closed. If you want to adjust a position on Saturday, being able to trade saves you from waiting until Monday. The companies behind your trade still have to manage what they owe until they… Read the full story on CryptoSlate Understand the crypto stories tha",
+      "coins": [
+        "cash-4"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T15:48:38.729Z"
+    },
+    {
+      "title": "UK, Singapore, and Thailand central banks test cross-border FX settlement as stablecoins gain ground",
+      "link": "https://www.coindesk.com/policy/2026/11/14/uk-singapore-and-thailand-central-banks-test-cross-border-fx-settlement-as-stablecoins-gain-ground",
+      "source": "CoinDesk",
+      "published": "2026-11-14T15:00:00.000Z",
+      "summary": "Project Meridian FX APAC said it demonstrated how transactions can be coordinated across conventional settlement systems and those built using blockchain technology.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-14T15:48:38.729Z"
+    },
+    {
+      "title": "OpenAI Launches ChatGPT Wallet to Let AI Agents Shop—Without Crypto",
+      "link": "https://decrypt.co/383278/openai-chatgpt-wallet-ai-agents-shop-without-crypto",
+      "source": "Decrypt",
+      "published": "2026-11-14T14:01:02.000Z",
+      "summary": "OpenAI’s new wallet lets AI agents buy products using ordinary cards, challenging crypto payment tools from Coinbase and Circle as companies compete to control everyday online shopping by autonomous software.",
+      "coins": [],
+      "narratives": [
+        "ai"
+      ],
+      "types": [
+        "launch"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T14:48:34.013Z"
+    },
+    {
+      "title": "Microsoft found a way to turn a helpful AI into a sleeper agent",
+      "link": "https://cryptoslate.com/microsoft-found-a-way-to-turn-a-helpful-ai-into-a-sleeper-agent/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T13:20:37.000Z",
+      "summary": "Seven neurons controlled a harmless marker, while a separate 60-neuron test predicted a destructive command format. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T13:48:30.033Z"
+    },
+    {
+      "title": "Britain could turn wasted Scottish wind power into bitcoin to cut its $1.3 billion grid bill",
+      "link": "https://www.coindesk.com/policy/2026/11/13/britain-could-turn-wasted-scottish-wind-power-into-bitcoin-to-cut-its-usd1-3-billion-grid-bill",
+      "source": "CoinDesk",
+      "published": "2026-11-14T13:00:00.000Z",
+      "summary": "Britain could use bitcoin mining to absorb surplus Scottish wind power and reduce payments to wind farms to halt generation, according to a Bitcoin Policy Institute report.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-14T13:48:30.033Z"
+    },
+    {
+      "title": "A behind the scenes force may amplify bitcoin and ether price volatility",
+      "link": "https://www.coindesk.com/markets/2026/11/14/a-behind-the-scenes-force-may-amplify-bitcoin-and-ether-price-volatility",
+      "source": "CoinDesk",
+      "published": "2026-11-14T12:57:00.000Z",
+      "summary": "Both bitcoin and ether are trading in price ranges where market makers and dealers may add to market volatility.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T13:48:30.033Z"
+    },
+    {
+      "title": "50,000 people installed this Bitcoin browser extension. Now control of it is up for sale",
+      "link": "https://cryptoslate.com/50000-people-installed-this-bitcoin-browser-extension-now-control-of-it-is-up-for-sale/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T11:34:23.000Z",
+      "summary": "The current offer is separate from documented malware cases, but it shows how buyers can acquire an audience and future update control. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T11:48:21.466Z"
+    },
+    {
+      "title": "Microsoft confirms global outage resolved, rules out cyberattack",
+      "link": "https://cointelegraph.com/news/microsoft-365-outage-resolved-cyberattack-ruled-out?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-14T10:34:06.000Z",
+      "summary": "Microsoft attributed the outage to a network capacity upgrade issue, confirming that the disruption was unrelated to cyberattacks or AI agents.",
+      "coins": [],
+      "narratives": [
+        "ai"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T10:48:16.358Z"
+    },
+    {
+      "title": "MegaETH parent cuts 20% of staff amid restructuring, AI push",
+      "link": "https://cointelegraph.com/news/megaeth-parent-cuts-20-percent-staff-ai-push?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-14T08:12:30.000Z",
+      "summary": "MegaETH co-founder Shuyao Kong said the restructuring affected employees who helped build the project’s blockchain, wallet and ecosystem.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Elizabeth Warren could reopen crypto’s banking fight without changing a single law",
+      "link": "https://cryptoslate.com/warren-could-reopen-crypto-banking-fight-without-changing-a-single-law/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T08:10:11.000Z",
+      "summary": "Elizabeth Warren's next confrontation with crypto could put companies and regulators under serious pressure without changing a single law. With Democrats taking control of the Senate, she's expected to chair the Senate Banking Committee in January, giving her more say over which hearings it holds and what it investigates. She's already asked for crypto companies'… Read the full story on CryptoSlat",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Bitcoin ETFs shed $2.35B in 2 weeks, BlackRock’s losing streak hits 11",
+      "link": "https://cointelegraph.com/markets/bitcoin-etf-outflows-2-35-billion-blackrock-11-session-streak?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-14T06:33:13.000Z",
+      "summary": "US spot Bitcoin ETFs recorded $185.4 million in net outflows Friday, with BlackRock’s IBIT accounting for $143.5 million and Fidelity’s FBTC shedding $41.9 million.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "etf"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Meta tests prediction-market app, DOJ moves to seize $1.2 billion from Binance hack, and more",
+      "link": "https://www.theblock.co/newsletters/the-daily/2026-11-14-meta-prediction-market-app-doj-binance-hack-more-crypto-news-440304",
+      "source": "The Block",
+      "published": "2026-11-14T05:40:00.000Z",
+      "summary": "In today's newsletter, Meta tests prediction-market app using points instead of cash; DOJ moves to seize $1.2 billion from Binance hack, disrupts North Korean deepfake scheme; and more.",
+      "coins": [
+        "cash-4"
+      ],
+      "narratives": [],
+      "types": [
+        "hack"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Coinbase AI trading tool pauses bots, but leaves orders open",
+      "link": "https://cryptoslate.com/coinbase-ai-trading-tool-pauses-bots-but-leaves-orders-open/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T04:30:03.000Z",
+      "summary": "Armstrong is promoting Coinbase’s new controls, but pausing an agent does not confirm that orders are canceled or positions closed. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Satoshi-era wallet served in a $260 billion lawsuit moves 75 BTC it held since 2011",
+      "link": "https://www.coindesk.com/markets/2026/11/13/satoshi-era-wallet-served-in-a-usd260-billion-lawsuit-moves-75-btc-it-held-since-2011",
+      "source": "CoinDesk",
+      "published": "2026-11-14T04:30:00.000Z",
+      "summary": "The roughly $5 million transfer also spent the tiny payment used to deliver a court notice to the address in May.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "Unocoin halts all services after hackers bypass BitGo freeze",
+      "link": "https://cryptoslate.com/unocoin-halts-all-services-after-hackers-bypass-bitgo-freeze/",
+      "source": "CryptoSlate",
+      "published": "2026-11-14T02:10:17.000Z",
+      "summary": "Unocoin says disputed transfers were signed outside BitGo while it investigates suspected misuse of a backup mechanism. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "hack"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T08:48:06.967Z"
+    },
+    {
+      "title": "US courts target $1.2B in stolen Binance funds, yet victims face a new hurdle",
+      "link": "https://cryptoslate.com/binance-funds-theft-us-court-orders-cover-over-1-2-billion-with-return-unresolved/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T23:40:49.000Z",
+      "summary": "DOJ's Nov. 12 release reports seizure or restraint authority within more than $2.7 billion frozen, without a return timetable. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "hack",
+        "regulation"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-14T00:11:12.210Z"
+    },
+    {
+      "title": "Bitcoin miners pay Paraguay $350 million a year, but AI is pushing them out",
+      "link": "https://www.coindesk.com/tech/2026/11/13/bitcoin-miners-pay-paraguay-usd350-million-a-year-but-ai-is-pushing-them-out",
+      "source": "CoinDesk",
+      "published": "2026-11-13T23:30:00.000Z",
+      "summary": "Contracts that sell power to a 4% slice of the world’s bitcoin mining at $44 a megawatt-hour expire on Dec. 31, 2027. Paraguay’s state utility calls the date final, and it has just signed a 15-year deal to power a Founders Fund-backed AI campus.",
+      "coins": [
+        "just"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-14T00:11:12.210Z"
+    },
+    {
+      "title": "Diesel prices plunge 8%, yet Bitcoin traders face a squeeze",
+      "link": "https://cryptoslate.com/diesel-prices-plunge-8-yet-bitcoin-traders-face-a-squeeze/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T22:20:46.000Z",
+      "summary": "October’s PPI slowed at the headline level, but higher freight prices and firm underlying inflation leave financing relief uncertain. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T23:11:07.946Z"
+    },
+    {
+      "title": "Could a Former Nvidia Executive Replace Jensen Huang? Arm’s Rene Haas Emerges as Candidate",
+      "link": "https://decrypt.co/383276/nvidia-arm-ceo-rene-haas-replace-jensen-huang",
+      "source": "Decrypt",
+      "published": "2026-11-13T22:16:03.000Z",
+      "summary": "Nvidia's board has reportedly approached Arm's chief executive as it searches for a replacement for Jensen Huang, while some employees are pushing to bring the chipmaker's founder back as CEO.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T23:11:07.946Z"
+    },
+    {
+      "title": "OpenAI launches AI payments in ChatGPT with Visa, Mastercard and Amex",
+      "link": "https://cointelegraph.com/news/openai-ai-payments-chatgpt-wallet-visa-mastercard-amex?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T22:01:03.000Z",
+      "summary": "OpenAI’s new payment wallet lets AI agents complete purchases using existing card networks, with plans to eventually allow preauthorized transactions.",
+      "coins": [],
+      "narratives": [
+        "ai"
+      ],
+      "types": [
+        "launch"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-13T22:11:03.206Z"
+    },
+    {
+      "title": "Adam Back makes case for simpler security as Blockstream launches Bitcoin custody system",
+      "link": "https://cointelegraph.com/news/adam-back-simpler-security-blockstream-bitcoin-custody-system?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T21:49:27.000Z",
+      "summary": "Blockstream’s new custody system, developed with Thales, uses dedicated hardware for transaction signing as Adam Back advocates for offline security to reduce cyber risks.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "launch"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-13T22:11:03.206Z"
+    },
+    {
+      "title": "Should Government Officials Be Banned From Prediction Markets? House Oversight Says Maybe",
+      "link": "https://decrypt.co/383271/government-officials-banned-prediction-markets-house-oversight",
+      "source": "Decrypt",
+      "published": "2026-11-13T21:36:03.000Z",
+      "summary": "A House Oversight staff memorandum, citing suspicious trades by officials, military personnel and clearance holders, recommends Congress weigh new limits on federal personnel betting on platforms like Kalshi and Polymarket.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T22:11:03.206Z"
+    },
+    {
+      "title": "Kraken parent Payward gains market share as slower trading weighs on earnings",
+      "link": "https://cointelegraph.com/news/kraken-parent-payward-gains-market-share-slower-trading-earnings?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T21:01:39.000Z",
+      "summary": "Payward’s adjusted EBITDA fell 66% year over year to $60 million, even as its share of global spot trading nearly doubled and fee-based services expanded.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "Meta tests prediction market app using ‘cred’ points instead of cash: WSJ",
+      "link": "https://www.theblock.co/news/markets/2026-11-13-meta-tests-prediction-market-app-using-cred-points-instead-cash-wsj-440215",
+      "source": "The Block",
+      "published": "2026-11-13T20:55:26.000Z",
+      "summary": "Meta employees are testing Takes, a prediction app that rewards correct calls with credibility points.",
+      "coins": [
+        "cash-4"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "US regulators move ahead on crypto trust charters as Senate scrutiny grows",
+      "link": "https://cointelegraph.com/news/us-regulators-crypto-trust-charters-senate-scrutiny-grows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T20:53:20.000Z",
+      "summary": "Coinbase’s trust company received final clearance as lawmakers seek records on crypto firms’ compliance and potential conflicts of interest.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "XRP loans trigger 883 liquidations, and $53M remains at risk",
+      "link": "https://cryptoslate.com/xrp-loans-trigger-883-liquidations-and-53m-remains-at-risk/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T20:50:08.000Z",
+      "summary": "Borrowers surrendered 4.18 million cbXRP on Base, while the records leave a native XRP selling link unproven. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [
+        "ripple"
+      ],
+      "narratives": [
+        "bank-rails"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "China’s $3.2 Billion AI Pipeline Still Calls for Nvidia Chips Washington Restricts",
+      "link": "https://decrypt.co/383266/china-ai-pipeline-nvidia-chips-washington-restricts",
+      "source": "Decrypt",
+      "published": "2026-11-13T20:45:03.000Z",
+      "summary": "Chinese data center projects are still being designed around restricted Nvidia processors, even as Beijing pushes domestic alternatives.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "JPMorgan’s Bitcoin and Crypto-Linked Holdings Approach $1 Billion",
+      "link": "https://decrypt.co/383267/jpmorgan-bitcoin-crypto-linked-holdings-approach-1-billion",
+      "source": "Decrypt",
+      "published": "2026-11-13T20:16:03.000Z",
+      "summary": "The bank’s Q3 13F shows roughly $981 million across Bitcoin ETFs, Strategy and Coinbase—likely over $1 billion counting Robinhood and miners.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T21:10:58.616Z"
+    },
+    {
+      "title": "Dormant Bitcoin Wallets Wake Up After 16 Years, Moving $6.9 Million",
+      "link": "https://decrypt.co/383264/dormant-bitcoin-wallets-wake-up-after-16-years",
+      "source": "Decrypt",
+      "published": "2026-11-13T19:36:03.000Z",
+      "summary": "Two Bitcoin mining rewards from September 2010 moved minutes apart. The coins are worth nearly 1.15 million times their original market value.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T20:10:54.110Z"
+    },
+    {
+      "title": "FBI warns active $400M crypto scam targets your friends by replacing your face in videos",
+      "link": "https://cryptoslate.com/fbi-warns-facestealer-turns-crypto-victims-into-bait-for-the-next-attack/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T19:30:01.000Z",
+      "summary": "The FBI says North Korean hackers reuse stolen accounts and webcam footage to draw the next contact into a fake meeting. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T20:10:54.110Z"
+    },
+    {
+      "title": "MEGA cuts 20% of workforce as former MegaETH Foundation restructures",
+      "link": "https://www.theblock.co/news/business/2026-11-13-megaeth-mega-layoffs-20-percent-restructuring-440206",
+      "source": "The Block",
+      "published": "2026-11-13T19:26:53.000Z",
+      "summary": "MEGA, formerly the MegaETH Foundation, laid off 20% of staff days after its rebrand and $30 million push into AI inference products.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T20:10:54.110Z"
+    },
+    {
+      "title": "House Oversight Chair calls for possible ban on government officials’ prediction market bets over insider trading concerns",
+      "link": "https://www.theblock.co/news/regulation/2026-11-13-house-oversight-chair-possible-ban-government-officials-prediction-market-bets-insider-trading-concerns-440207",
+      "source": "The Block",
+      "published": "2026-11-13T19:09:12.000Z",
+      "summary": "The House Oversight Committee is calling for new limits on government officials’ use of prediction markets, including a potential ban.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "CFTC’s Selig accuses states of trying to ‘lock up’ prediction market founders",
+      "link": "https://www.theblock.co/news/regulation/2026-11-13-cftcs-selig-accuses-states-trying-lock-up-prediction-market-founders-440199",
+      "source": "The Block",
+      "published": "2026-11-13T18:51:03.000Z",
+      "summary": "CFTC Chairman Michael Selig says disputes over whether event contracts are gambling shouldn’t put executives at risk of jail.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "Bitcoin plunges to $68,000 as Anthropic IPO frenzy adds to market jitters",
+      "link": "https://www.coindesk.com/markets/2026/11/13/bitcoin-slides-to-usd68k-as-nvidia-turmoil-anthropic-ipo-fuel-broader-market-sell-off",
+      "source": "CoinDesk",
+      "published": "2026-11-13T18:39:58.000Z",
+      "summary": "Analysts see no direct link between Nvidia and bitcoin's decline, pointing instead to investor capital headed into Anthropic as well as a broader risk-off move.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "Fed Chair Warsh Wants Answers on AI Inflation—and Bitcoin May Feel the Impact",
+      "link": "https://decrypt.co/383259/fed-chair-warsh-wants-answers-ai-inflation-bitcoin",
+      "source": "Decrypt",
+      "published": "2026-11-13T18:36:02.000Z",
+      "summary": "The Federal Reserve is examining whether AI will lower prices or keep inflation elevated, a question that could shape interest rates and the outlook for crypto.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "Aave plan could cut some lenders’ share of interest by 60%",
+      "link": "https://cryptoslate.com/aave-lenders-interest-share-cut-proposal/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T18:30:35.000Z",
+      "summary": "TokenLogic’s proposed interest split would hit some stablecoin lenders harder, while a major Plasma revenue component remains conditional. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [
+        "plasma"
+      ],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "Metaplanet swings to $170M loss as Bitcoin sale hits earnings",
+      "link": "https://cointelegraph.com/news/metaplanet-swings-170m-loss-bitcoin-sale-earnings?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T18:28:29.000Z",
+      "summary": "Bitcoin sales, valuation losses and rising borrowing costs weighed on the Japanese company’s earnings despite higher revenue and operating profit.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T19:10:49.674Z"
+    },
+    {
+      "title": "Trump’s First Democratic Picks for SEC and CFTC Could Reshape Crypto’s Regulators",
+      "link": "https://decrypt.co/383260/trump-first-democratic-picks-sec-cftc-could-reshape-crypto",
+      "source": "Decrypt",
+      "published": "2026-11-13T17:56:03.000Z",
+      "summary": "The bipartisan slate—two Republicans and two Democrats, Trump’s first Democratic picks for either agency—would refill commissions that have driven crypto policy since the Clarity Act’s collapse.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation",
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T18:10:45.096Z"
+    },
+    {
+      "title": "Amazon says no human wrote or reviewed the code for its new cloud testing tool",
+      "link": "https://cryptoslate.com/amazon-ai-written-aws-emulator-code/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T17:30:52.000Z",
+      "summary": "People built the development guardrails, while AWS requires application security to be tested on the real cloud. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T18:10:45.096Z"
+    },
+    {
+      "title": "Bitcoin Hits 12-Week Low as Fed Rate Fears Undo Most of Summer Rally",
+      "link": "https://decrypt.co/383231/bitcoin-hits-12-week-low-fed-rate-fears-undo-summer-rally",
+      "source": "Decrypt",
+      "published": "2026-11-13T17:22:54.000Z",
+      "summary": "Bitcoin is back near August levels as persistent inflation, growing expectations of another interest-rate hike and ETF withdrawals pressure prices.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T18:10:45.096Z"
+    },
+    {
+      "title": "U.S. Senate Banking Committee races toward hearing on new SEC nominations",
+      "link": "https://www.coindesk.com/policy/2026/11/13/u-s-senate-banking-committee-races-toward-hearing-on-new-sec-nominations",
+      "source": "CoinDesk",
+      "published": "2026-11-13T17:05:43.000Z",
+      "summary": "The committee that needs to advance President Donald Trump's nominees responded quickly to set his SEC picks for review next week.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-13T17:10:39.824Z"
+    },
+    {
+      "title": "Bitcoin holds below $70K as stocks slip despite a cooler US PPI print",
+      "link": "https://cointelegraph.com/markets/bitcoin-below-70k-stocks-slip-cooler-us-ppi-print?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T16:39:11.000Z",
+      "summary": "Bitcoin was down about 4% on the day amid a tepid market reaction to October’s US PPI reading, which came in below expected levels.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T17:10:39.824Z"
+    },
+    {
+      "title": "Hyperliquid leapfrogs Bybit, Kraken and OKX in open interest as Q3 positions grow 80%",
+      "link": "https://www.theblock.co/news/markets/2026-11-13-hyperliquid-leapfrogs-bybit-kraken-okx-open-interest-q3-positions-grow-440053",
+      "source": "The Block",
+      "published": "2026-11-13T16:37:26.000Z",
+      "summary": "Hyperliquid’s share of open interest reached 11.7% across the platform and eight major centralized rivals.",
+      "coins": [
+        "hyperliquid"
+      ],
+      "narratives": [
+        "perp-defi"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T17:10:39.824Z"
+    },
+    {
+      "title": "Lido Earn’s new safety net still leaves depositors on the hook for losses",
+      "link": "https://cryptoslate.com/lido-earn-loss-protection-depositors/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T16:30:25.000Z",
+      "summary": "Lido’s November 5 illustration implies potential cushions of 7.2% for EarnETH and 12.1% for EarnUSD, subject to eligibility, approval and capital. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T17:10:39.824Z"
+    },
+    {
+      "title": "Bitcoin heads for sixth weekly loss as Anthropic’s blockbuster IPO looms",
+      "link": "https://www.coindesk.com/markets/2026/11/13/bitcoin-heads-for-sixth-weekly-loss-as-anthropic-s-blockbuster-ipo-looms",
+      "source": "CoinDesk",
+      "published": "2026-11-13T16:01:27.000Z",
+      "summary": "Bitcoin is down 21% this year as investors weigh Anthropic’s anticipated listing, Nvidia’s leadership upheaval and rising Fed rate hike expectations.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T16:10:35.034Z"
+    },
+    {
+      "title": "Kraken parent Payward posts 66% drop in Q3 adjusted EBITDA, plans US prediction markets and personal finance AI agent",
+      "link": "https://www.theblock.co/news/business/2026-11-13-kraken-parent-payward-posts-66-drop-in-q3-adjusted-ebitda-plans-us-prediction-markets-and-personal-finance-ai-agent-439721",
+      "source": "The Block",
+      "published": "2026-11-13T15:31:22.000Z",
+      "summary": "Kraken parent Payward’s third-quarter adjusted EBITDA fell about two-thirds year over year to $60 million, while funded accounts grew 37%.",
+      "coins": [],
+      "narratives": [
+        "ai"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T16:10:35.034Z"
+    },
+    {
+      "title": "New US report reveals yen rescue used euros, not dollars. That matters for Bitcoin",
+      "link": "https://cryptoslate.com/yen-intervention-euros-bitcoin-liquidity/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T15:30:50.000Z",
+      "summary": "The November 12 report confirms a Treasury reserve-currency trade, leaving leveraged yen borrowing as a potential Bitcoin risk. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T16:10:35.034Z"
+    },
+    {
+      "title": "Tether-backed Twenty One Capital reports $1.09 billion Q3 net income on bitcoin gains",
+      "link": "https://www.theblock.co/news/business/2026-11-13-tether-backed-twenty-one-capital-reports-1-09-billion-q3-net-income-on-bitcoin-gains-439711",
+      "source": "The Block",
+      "published": "2026-11-13T14:50:49.000Z",
+      "summary": "Twenty One Capital reported $1.09 billion in Q3 net income, driven by Bitcoin gains, while posting a $4.8 million operating loss.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T15:10:30.501Z"
+    },
+    {
+      "title": "The cost of a $70,000 Bitcoin hedge more than doubled in a day",
+      "link": "https://cryptoslate.com/bitcoin-hedge-cost-more-than-doubled/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T14:30:05.000Z",
+      "summary": "A November 27 put rose 127.6% between two BTC-denominated trades while its reported implied volatility fell. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T15:10:30.501Z"
+    },
+    {
+      "title": "Ethereum and Layer 1s Explained",
+      "link": "https://www.theblock.co/learn/campus/ethereum-and-layer-1s-explained-435883",
+      "source": "The Block",
+      "published": "2026-11-13T14:12:23.000Z",
+      "summary": "Ethereum 101 explains how Ethereum made blockchains programmable. It covers smart contracts, accounts and the EVM, ETH and gas fees, Proof of Stake, network upgrades, and how alternative Layer 1s trade off security, decentralization and scalability.",
+      "coins": [],
+      "narratives": [
+        "l1"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T15:10:30.501Z"
+    },
+    {
+      "title": "Kraken parent Payward says expansion outside crypto trading helps cushion revenue decline",
+      "link": "https://www.coindesk.com/business/2026/11/13/kraken-parent-payward-says-expansion-outside-crypto-trading-helps-cushion-revenue-decline",
+      "source": "CoinDesk",
+      "published": "2026-11-13T14:02:00.000Z",
+      "summary": "While earnings and the company’s newly introduced financial performance measure remained below year-earlier levels, there are signs of improvement from the second quarter.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "Crypto Laundering a 'Material Risk' for UK Ahead of FATF Review: RUSI",
+      "link": "https://decrypt.co/383227/crypto-laundering-a-material-risk-for-uk-ahead-of-fatf-review-rusi",
+      "source": "Decrypt",
+      "published": "2026-11-13T13:55:25.000Z",
+      "summary": "Assessors visit in June 2027, months before full crypto rules take effect, leaving the UK to prove it can enforce against crypto laundering.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "Arthur Hayes ‘flattered’ as Coinbase backs US stock perps",
+      "link": "https://cointelegraph.com/news/arthur-hayes-coinbase-us-stock-perps-cftc?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T13:41:26.000Z",
+      "summary": "Arthur Hayes said he was “flattered” by Coinbase’s defense of US stock perpetual futures, a decade after BitMEX launched perpetual swaps.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "‘Roadmap is Complete,' Cardano Founder Charles Hoskinson Says",
+      "link": "https://decrypt.co/383221/roadmap-is-complete-cardano-founder-charles-hoskinson-says",
+      "source": "Decrypt",
+      "published": "2026-11-13T13:36:29.000Z",
+      "summary": "Cardano's ADA token is down almost 95% from its all-time high, and investors don't seem to be happy that the roadmap is complete.",
+      "coins": [
+        "cardano"
+      ],
+      "narratives": [
+        "l1"
+      ],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "From $6 to $6.9 million: Two dormant Bitcoin addresses wake up to move 100 BTC after more than 16 years",
+      "link": "https://www.theblock.co/news/markets/2026-11-13-from-6-to-6-9-million-two-dormant-bitcoin-addresses-wake-up-to-move-100-btc-after-more-than-16-years-439698",
+      "source": "The Block",
+      "published": "2026-11-13T13:34:46.000Z",
+      "summary": "Two Bitcoin whale addresses moved 100 BTC worth $6.89 million after more than 16 years of dormancy on Friday.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "Bitcoin’s futures pile has a problem: less cash to fuel a rebound",
+      "link": "https://cryptoslate.com/bitcoins-futures-pile-has-a-problem-less-cash-to-fuel-a-rebound/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T13:30:48.000Z",
+      "summary": "DWF Labs' Martin Lee noted that Bitcoin futures open interest stood at 704,000 BTC this week, the highest since Sept. 24, while spot market liquidity continued to thin. Meanwhile, the Treasury's $25 billion 30-year bond auction on Nov. 12 drew a 2.36 bid-to-cover ratio, down from 2.54 in October, and cleared at 5.441% against a… Read the full story on CryptoSlate Understand the crypto stories that",
+      "coins": [
+        "cash-4"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "Nakamoto shares fall 6% premarket after Q3 revenue turns negative",
+      "link": "https://cointelegraph.com/markets/nakamoto-shares-fall-after-negative-q3-revenue?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T13:04:19.000Z",
+      "summary": "A $5.8 million loss on Bitcoin options pushed operating revenue below zero, and higher Bitcoin prices lifted net income to $85.5 million.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T14:10:24.764Z"
+    },
+    {
+      "title": "Morning Minute: Crypto Plummets as Jensen Huang Exits Nvidia",
+      "link": "https://decrypt.co/383222/morning-minute-crypto-plummets-as-jensen-huang-exits-nvidia",
+      "source": "Decrypt",
+      "published": "2026-11-13T13:03:40.000Z",
+      "summary": "Bitcoin fell all the way to $68,000 overnight and hit a new three-month low. But are there reasons for hope?",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T13:10:20.268Z"
+    },
+    {
+      "title": "The catch in crypto’s Anthropic IPO rush: lock up your money and you could still miss out",
+      "link": "https://cryptoslate.com/the-catch-in-cryptos-anthropic-ipo-rush-lock-up-your-money-and-you-could-still-miss-out/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T12:30:32.000Z",
+      "summary": "Kraken, Bitget and BigONE disclose uncertain fills, while successful allocations carry extra charges and different delivery schedules. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T13:10:20.268Z"
+    },
+    {
+      "title": "UK, Singapore, and Thailand central banks complete foreign exchange settlement trial linking traditional and tokenized systems",
+      "link": "https://www.theblock.co/news/regulation/2026-11-13-uk-singapore-and-thailand-central-banks-complete-foreign-exchange-settlement-trial-linking-traditional-and-tokenized-systems-439692",
+      "source": "The Block",
+      "published": "2026-11-13T12:27:41.000Z",
+      "summary": "Three central banks published findings from a cross-border FX settlement trial using Partior's synchronization prototype.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "regulation"
+      ],
+      "grade": "B",
+      "firstSeen": "2026-11-13T13:10:20.268Z"
+    },
+    {
+      "title": "Israeli police arrest five in $5M WhatsApp crypto trading probe",
+      "link": "https://cointelegraph.com/news/israel-police-arrest-five-5m-whatsapp-crypto-scheme?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T12:19:01.000Z",
+      "summary": "Police suspect the group drew up fictitious loan agreements to disguise crypto trading proceeds it transferred directly into bank accounts.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T13:10:20.268Z"
+    },
+    {
+      "title": "Bitcoin's momentum gauge is turning red, could send prices back below $60,000",
+      "link": "https://www.coindesk.com/daybook-us/2026/11/13/bitcoin-s-momentum-gauge-is-turning-red-could-send-prices-back-below-usd60-000",
+      "source": "CoinDesk",
+      "published": "2026-11-13T12:14:22.000Z",
+      "summary": "Your day-ahead look for Nov. 13, 2026",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T13:10:20.268Z"
+    },
+    {
+      "title": "Nvidia Employees Push Board to Bring Back Jensen Huang: Report",
+      "link": "https://decrypt.co/383217/nvidia-employees-push-board-to-bring-back-jensen-huang-report",
+      "source": "Decrypt",
+      "published": "2026-11-13T11:58:47.000Z",
+      "summary": "An internal post urging Nvidia's board to weigh staff sentiment has drawn more than 1,600 comments, including calls to reinstate Huang.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T12:10:16.076Z"
+    },
+    {
+      "title": "Bitcoin falls below $70,000 as $870 million in bullish bets are liquidated",
+      "link": "https://cryptoslate.com/bitcoin-falls-below-70000-as-870-million-in-bullish-bets-are-liquidated/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T11:58:35.000Z",
+      "summary": "CoinGlass's 24-hour figures showed heavy pressure on bullish positions amid rate and NVIDIA uncertainty, while Microsoft's outage continued. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T12:10:16.076Z"
+    },
+    {
+      "title": "Bitcoin hits 12-week low as dollar rallies on interest-rate outlook, liquidations top $1.6 billion",
+      "link": "https://www.coindesk.com/markets/2026/11/13/bitcoin-hits-12-week-low-as-dollar-rallies-on-interest-rate-outlook-liquidations-top-usd1-6-billion",
+      "source": "CoinDesk",
+      "published": "2026-11-13T11:52:25.000Z",
+      "summary": "Bitcoin (BTC) fell below $70,000 for the first time since August and is down 3.5% since midnight UTC, as the dollar climbs and liquidations top $1.6 billion.",
+      "coins": [
+        "midnight-3"
+      ],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T12:10:16.076Z"
+    },
+    {
+      "title": "AI helped find 66 security flaws, with no fixes planned for some older devices",
+      "link": "https://cryptoslate.com/ai-helped-find-66-security-flaws-with-no-fixes-planned-for-some-older-devices/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T11:30:31.000Z",
+      "summary": "The research paired commercially available models with expert validation, while earlier Siemens advisories show uneven remediation for affected devices. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T12:10:16.076Z"
+    },
+    {
+      "title": "Bitcoin Drops to $69K On 'Concentrated Liquidation' and 'Weakening' Demand",
+      "link": "https://decrypt.co/383214/bitcoin-drops-to-69k-on-concentrated-liquidation-and-weakening-demand",
+      "source": "Decrypt",
+      "published": "2026-11-13T11:20:44.000Z",
+      "summary": "BTC dropped 5% on Friday, falling below $69,000. Experts say it was triggered by a \"concentrated liquidation\" and \"weakening\" demand.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T12:10:16.076Z"
+    },
+    {
+      "title": "Congress Summons Ex-Nvidia CEO Jensen Huang, Lutnick Over Chip Exports to China",
+      "link": "https://decrypt.co/383211/congress-summons-ex-nvidia-ceo-jensen-huang-lutnick-over-chip-exports-to-china",
+      "source": "Decrypt",
+      "published": "2026-11-13T10:55:54.000Z",
+      "summary": "House panels requested December interviews with Huang and Nvidia's top lawyer as scrutiny shifts to Commerce's oversight of chip exports.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T11:10:11.687Z"
+    },
+    {
+      "title": "Google’s new AI can make 100 decisions in under a second, without writing an answer",
+      "link": "https://cryptoslate.com/googles-new-ai-can-make-100-decisions-in-under-a-second-without-writing-an-answer/",
+      "source": "CryptoSlate",
+      "published": "2026-11-13T10:30:16.000Z",
+      "summary": "The Decisions API returns fixed choices at $0.10 per million input tokens, while confidence and consequential actions still need checks. Read the full story on CryptoSlate Understand the crypto stories that matter and what to watch next. Get The Catalyst in your inbox",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T11:10:11.687Z"
+    },
+    {
+      "title": "Thailand seeks $148,000 daily cap on certain stablecoin transfers to curb money laundering",
+      "link": "https://www.theblock.co/news/regulation/2026-11-13-thailand-seeks-daily-stablecoin-cap-439676",
+      "source": "The Block",
+      "published": "2026-11-13T10:16:04.000Z",
+      "summary": "The draft rules also require that stablecoins be transferred only between accounts or wallets belonging to the same person.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T11:10:11.687Z"
+    },
+    {
+      "title": "JPMorgan reports 36% rise in Strategy share holdings and $540 million in BlackRock’s bitcoin ETF",
+      "link": "https://www.theblock.co/news/business/2026-11-13-jpmorgan-reports-36-rise-in-strategy-share-holdings-and-540-million-in-blackrocks-bitcoin-etf-439671",
+      "source": "The Block",
+      "published": "2026-11-13T09:59:16.000Z",
+      "summary": "JPMorgan reported 224,545 more Strategy shares in the third quarter as its BlackRock bitcoin ETF holdings climbed to 11.4 million shares.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "etf"
+      ],
+      "grade": "A",
+      "firstSeen": "2026-11-13T10:10:07.163Z"
+    },
+    {
+      "title": "Unocoin keeps deposits and withdrawals halted over suspect transfers",
+      "link": "https://cointelegraph.com/news/unocoin-withdrawals-halted-bitgo-wallet-transfer-probe?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T09:58:21.000Z",
+      "summary": "Unocoin said the transfers were signed outside BitGo’s platform while its account was frozen, possibly via a wallet recovery feature.",
+      "coins": [],
+      "narratives": [],
+      "types": [],
+      "grade": "B",
+      "firstSeen": "2026-11-13T10:10:07.163Z"
+    },
+    {
+      "title": "Bitcoin returns to 200-week trend line as analyst sees risk of $57.7K next",
+      "link": "https://cointelegraph.com/markets/bitcoin-returns-200-week-trend-line-analyst-sees-risk-57k-next?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "source": "Cointelegraph",
+      "published": "2026-11-13T09:39:05.000Z",
+      "summary": "Bitcoin price action interacted with its 200-week simple moving average for the first time since mid-August as it fell below $68,000.",
+      "coins": [],
+      "narratives": [],
+      "types": [
+        "opinion"
+      ],
+      "grade": "C",
+      "firstSeen": "2026-11-13T10:10:07.163Z"
+    }
+  ],
+  "publish": {
+    "ok": true,
+    "at": "2026-11-14T16:48:43.503Z"
+  }
+}
